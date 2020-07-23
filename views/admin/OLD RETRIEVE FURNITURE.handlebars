@@ -1,0 +1,171 @@
+<div class="container mb-4">
+
+{{#if furnitures}}
+	<div class="card card-body">
+		<h3 class="text-primary">Furniture List</h3>
+		{{#each furnitures}}
+            <br>
+            <div class="card border-primary mb-2 w-100 mx-auto">
+				<div class="card-header">
+					<h5 class="card-title">{{furnitureName}}</h5>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-2">
+							<a href="{{imageURL}}" data-title="{{furnitureName}}" data-toggle="lightbox">
+								<img src="{{imageURL}}" alt="Image unavailable" class="img-thumbnail img-fluid">
+							</a>
+						</div>
+                        {{!-- change from here --}}
+						<div class="col-sm-12 col-md-12 col-lg-8">
+							<div class="row">
+								<div class="col-sm-12 col-md-6 col-lg-1">
+									<p class="font-italic">ID</p>
+									<p class="text-info">
+                                        {{id}}
+									</p>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-2">
+									<p class="font-italic">Cost</p>
+									<p class="text-info">${{cost}}</p>
+								</div>
+								<div class="col-sm-12 col-md-12 col-lg-5">
+									<p class="font-italic">Dimensions: (L x W x H) </p>
+									<p class="text-info">{{lengthmm}}mm x {{widthmm}}mm x {{heightmm}}mm</p>
+								</div>
+								<div class="col-sm-12 col-md-2 col-lg-2">
+									<p class="font-italic">Added by (User ID)</p>
+									<p class="text-info">{{addedBy}}</p>
+								</div>
+								<div class="col-sm-12 col-md-2 col-lg-2">
+									<p class="font-italic">Last Edit by (User ID)</p>
+									<p class="text-info">{{lastEditedBy}}</p>
+								</div>
+                            </div>
+						</div>
+                        {{!-- inner data /\--}}
+						<div class="col-sm-12 col-md-6 col-lg-2">
+							<p class="font-italic"></p>
+							<a href="/admin/editFurniture/{{id}}" class="card-link">
+								<i class="fas fa-pencil-alt"></i>
+								Edit
+							</a>
+							<a href="/admin/deleteFurniture/{{id}}" class="card-link" data-toggle="confirmation" data-title="Confirm delete?">
+								<i class="far fa-trash-alt"></i>
+								Delete
+							</a>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- Exercise 5 fix accordion -->
+				<div class="accordion" id="descriptionAccordion{{id}}">
+					<div class="card-header" id="heading{{id}}">
+						<button class="btn btn-link" type="button" data-toggle="collapse"
+								data-target="#collapse{{id}}"
+								aria-expanded="false" aria-controls="collapse{{id}}"
+						>
+							Description <i class="fas fa-chevron-down"></i>
+						</button>
+
+					</div>
+
+					<div id="collapse{{id}}" class="collapse" aria-labelledby="heading{{id}}"
+						 data-parent="#descriptionAccordion{{id}}"
+					>
+						<div class="card-body">
+						  {{description}}
+						</div>
+					</div>
+				</div>
+
+			</div>
+		{{/each}}
+		<div class="row">
+		{{#each furnitures}}
+			<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+				<div class="position-relative furnitureSearchImage">
+					<btn class="furnitureDetailsButton" data-toggle="modal" data-target="#modal{{id}}">Details</btn>
+					<img id="image" src="{{imageURL}}" alt="" class="img-fluid mt-1" style="width:100%; max-height: 600px;">
+				</div>
+				<hr class="my-2">
+				<div class="container">
+					<p class="font-weight-bold">{{furnitureName}}</p>
+					{{!-- <a href="/addToCart/{{id}}" class="btn furnitureCartButton" style="padding-top: 5px; padding-bottom: 5px;"><i class="fas fa-plus"></i> Add To Cart</a> --}}
+				</div>
+			</div>
+
+			<div class="modal fade" id="modal{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-xl" role="document">
+					<div class="modal-content">
+						<div class="modal-body">
+							
+							<div class="d-flex h-100">
+
+								<div class="border col-5 flex-grow-1 d-flex align-items-center">
+									<img src="{{imageURL}}" alt="Image unavailable" class="img-fluid">
+								</div>
+
+								<div class="border col-7 p-4 d-flex flex-column h-100">
+									<h5 class="font-weight-bold border-bottom pb-1 mb-4">{{furnitureName}}</h5>
+
+									<div class="d-flex border-bottom pb-1 mb-4">
+										<div class="col-5">
+											<p class="font-italic">ID: <span class="text-info">{{id}}</span></p>
+										</div class="col-5">
+										<div>
+											<p class="font-italic">Cost: <span class="text-info">${{cost}}</span></p>
+										</div>
+									</div>
+
+									<div class="container border-bottom pb-1 mb-4">
+										<p class="font-italic">Dimensions: (L x W x H): </p>
+										<p class="text-info">{{lengthmm}}mm x {{widthmm}}mm x {{heightmm}}mm</p>
+									</div>
+									
+									<div>
+										<p class="font-italic col-12">(User Id)</p>
+										<div class="d-flex border-bottom pb-1 mb-4">
+											<div class="col-5">
+												<p class="font-italic">Added by: <span class="text-info">{{addedBy}}</span></p>
+											</div>
+											<div class="col-5">
+												<p class="font-italic">Last Edit by: <span class="text-info">{{lastEditedBy}}</span></p>
+											</div>
+										</div>
+									</div>
+
+									{{!-- Edit and delete --}}
+									<div class="mt-auto d-flex border-top pt-2">
+										<p>Admin Actions: </p>
+										<div class="ml-auto">
+											<a href="/admin/editFurniture/{{id}}" class="card-link">
+												<i class="fas fa-pencil-alt"></i>
+												Edit
+											</a>
+											<a href="/admin/deleteFurniture/{{id}}" class="card-link" data-toggle="confirmation" data-title="Confirm delete?">
+												<i class="far fa-trash-alt"></i>
+												Delete
+											</a>
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		{{/each}}
+
+		</div>
+	</div>
+
+{{else}}
+	<h3>No Furniture in datbase</h3>
+{{/if}}
+
+</div>

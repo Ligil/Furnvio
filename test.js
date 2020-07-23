@@ -1,0 +1,2 @@
+var array = [{firstName:"John", lastName:"Doe", age:50, eyeColor:"blue"}, {firstName:"John2", lastName:"Doe", age:50, eyeColor:"blue"}, {firstName:"John3", lastName:"Doe", age:50, eyeColor:"blue"}];
+console.log(array(2).firstName)

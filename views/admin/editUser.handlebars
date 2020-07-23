@@ -1,0 +1,49 @@
+<!--.col-	.col-sm-	.col-md-	.col-lg-	.col-xl- -->
+<div class="container">
+	<div class="card card-body">
+		<h3>Edit User Account - ID: {{user.id}}</h3>
+		<form action="/admin/saveEditedUser/{{user.id}}?_method=PUT" method="post">
+            <input type="hidden" name="_method" value="PUT">
+            <br>
+            
+            <div class="form-group">
+                <label class="font-italic" for="name">Name</label>
+                <input class="form-control" id="name" name="name" value="{{user.name}}"></textarea>
+            </div>
+            <div class="form-group row">
+                <label class="font-italic col-sm-1 col-form-label" for="email">Email</label>
+                <div class="col-sm-11">
+                    <input class="form-control-plaintext" id="email" name="email" value="{{user.email}}" readonly></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="font-italic col-sm-3 col-form-label" for="password">Password (Encrypted and Hashed)</label>
+                <div class="col-sm-9">
+                    <input class="form-control-plaintext" id="password" name="password" value="{{user.password}}" readonly></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-3">
+                    <label class="font-italic" for="verified">Verfiied</label>
+                    <select class="custom-select" id="verified" name="verified">
+                        <option {{#ifCond user.verified '==' 0 }}selected{{/ifCond}} value=0>Not Verified</option>
+                        <option {{#ifCond user.verified '==' 1 }}selected{{/ifCond}} value=1>Verified</option>
+                    </select>
+                </div>
+                <div class="form-group col-lg-3">
+                    <label class="font-italic" for="admin">Admin</label>
+                    <select class="custom-select" id="admin" name="admin">
+                        <option {{#ifCond user.admin '==' 0 }}selected{{/ifCond}} value=0>Normal User</option>
+                        <option {{#ifCond user.admin '==' 1 }}selected{{/ifCond}} value=1>Admin</option>
+                    </select>
+                </div>
+            </div>
+
+			<br>
+			<button id="butEditUser" type="submit" class="btn btn-yellow">Save</button>
+		</form>
+	</div>
+</div>
+
+<script>
+</script>

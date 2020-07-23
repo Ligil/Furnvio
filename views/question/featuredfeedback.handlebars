@@ -1,0 +1,30 @@
+<h1>Featured Questions</h1>
+<br>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Feedback Type</th>
+                <th>Feedback</th>
+                <th>Answer</th>
+                <th>Remove Question</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each feedbacks}}
+            <tr>
+                <td>{{ feedbacktype }}</td>
+                <td>{{ feedback }}</td>
+                <td>{{ answer }}</td>
+                <td>
+                    <a href="/admin/deleteFeedback/{{id}}" class="card-link">
+                        <i class="fas fa-trash"></i>
+                        Delete Question
+                    </a>
+                </td>
+
+             </tr>
+             {{/each}}
+        </tbody>
+    </table>
+</div>

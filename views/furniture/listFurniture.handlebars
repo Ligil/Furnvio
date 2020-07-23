@@ -1,0 +1,191 @@
+
+
+<div id="furniture-summary">
+    {{!-- {{furnitures.length}} test --}}
+    Search Results for: "{{searchInputEnter}}"
+</div>
+
+{{#if furnitures}}
+<div class="d-flex">
+    <div class="col-md-3 pt-2">
+        <div class="mb-4">
+            <h5 class="font-weight-bold border-bottom">Themes</h5>
+            <div class="btn-group-toggle" id="furniture-search-themes" data-toggle="buttons">
+                {{#each themes}}
+                <label class="btn btn-yellow btn-sm {{#ifIn this @root.queryThemes}}active{{/ifIn}}" id="{{this}}" onclick="tagChange(this)">
+                    <input type="checkbox" name="Theme:{{this}}" {{#ifIn this @root.queryThemes}}checked{{/ifIn}}> {{this}}
+                </label>
+                {{/each}}
+            </div>
+        </div>
+        
+        <div class="mb-4">
+            <h5 class="font-weight-bold border-bottom">Categories</h5>
+            <div class="btn-group-toggle" id="furniture-search-categories" data-toggle="buttons">
+                {{#each categories}}
+                <label class="btn btn-yellow btn-sm {{#ifIn this @root.queryCategories}}active{{/ifIn}}" id="{{this}}" onclick="tagChange(this)">
+                    <input type="checkbox" name="Category:{{this}}" {{#ifIn this @root.queryCategories}}checked{{/ifIn}}> {{this}}
+                </label>
+                {{/each}}
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-9">    
+        <div class="my-3 container d-flex justify-content-end">
+            Sort Order: 
+            <select class="ml-1" id="sortOrderSelect" onchange="refreshPage()">
+                <option value="recent" {{#ifCond sort "==" "recent"}}selected{{/ifCond}}>Recent</option>
+                <option value="cost-ASC" {{#ifCond sort "==" "cost-ASC"}}selected{{/ifCond}}>Price - Ascending</option>
+                <option value="cost-DESC" {{#ifCond sort "==" "cost-DESC"}}selected{{/ifCond}}>Price - Descending</option>
+                <option value="rating-DESC" {{#ifCond sort "==" "rating-DESC"}}selected{{/ifCond}}>Rating - Descending</option>
+                <option value="rating-ASC" {{#ifCond sort "==" "rating-ASC"}}selected{{/ifCond}}>Rating - Ascending</option>
+            </select>
+        </div>
+        <hr>
+        <div class="row">
+            {{#each furnitures}}
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="position-relative furnitureSearchImage">
+                        <btn class="furnitureDetailsButton" data-toggle="modal" data-target="#modal{{id}}">Details</btn>
+                        <img id="image" src="{{imageURL}}" alt="" class="img-fluid mt-1" style="width:100%; max-height: 600px;">
+                    </div>
+                    <hr class="my-2">
+                    <div class="container">
+                        <p class="font-weight-bold">{{furnitureName}}</p>
+                        <a href="/addToCart/{{id}}" class="btn furnitureCartButton" style="padding-top: 5px; padding-bottom: 5px;"><i class="fas fa-plus"></i> Add To Cart</a>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modal{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                
+                                <div class="d-flex h-100">
+
+                                    <div class="border col-6 flex-grow-1 d-flex align-items-center" style="flex: 1">
+                                        <img src="{{imageURL}}" alt="Image unavailable" class="img-fluid">
+                                    </div>
+
+                                    <div class="border col-6 p-4 d-flex flex-column h-100">
+                                        <h5 class="font-weight-bold border-bottom pb-2 mb-4">{{furnitureName}}</h5>
+
+                                        <div class="overflow-auto">
+                                            <div class="d-flex border-bottom pb-1 mb-4">
+                                                <div class="col-5">
+                                                    <p class="font-italic">ID: <span class="text-info">{{id}}</span></p>
+                                                </div class="col-5">
+                                                <div>
+                                                    <p class="font-italic">Cost: <span class="text-info">${{cost}}</span></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="container border-bottom pb-1 mb-4">
+                                                <p class="font-italic">Dimensions: (L x W x H): </p>
+                                                <p class="text-info">{{lengthmm}}mm x {{widthmm}}mm x {{heightmm}}mm</p>
+                                            </div>
+                                            
+                                            
+                                            <div>
+                                                <p class="font-italic col-12">Themes</p>
+                                                <div class="d-flex border-bottom pb-1 mb-4">
+                                                    {{#each themes}}
+                                                        <div class="col-4">
+                                                            <p class="font-italic">{{this.dataValues.theme}}</p>
+                                                        </div>
+                                                    {{/each}}
+                                                </div>
+                                            </div>				
+
+                                            <div>
+                                                <p class="font-italic col-12">Categories</p>
+                                                <div class="d-flex border-bottom pb-1 mb-4">
+                                                    {{#each categories}}
+                                                    <div class="col-4">
+                                                        <p class="font-italic">{{this.dataValues.category}}</p>
+                                                    </div>
+                                                    {{/each}}
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <p class="font-italic col-12">Description</p>
+                                                <div class="border container rounded p-2">
+                                                    {{description}}
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="row mt-2">
+    <div class="m-auto shadow mt-5 p-3">
+        <div> - No Furniture Found - </div>
+    </div>
+
+</div>
+{{/if}}
+
+<script>
+    function tagChange(thisVal){
+        if (thisVal.getElementsByTagName('INPUT')[0].checked){
+            thisVal.getElementsByTagName('INPUT')[0].checked = false
+        } else {
+            thisVal.getElementsByTagName('INPUT')[0].checked = true
+        }
+        refreshPage()
+    }
+
+  function refreshPage(){
+    //get search value
+    var urlParams = JSON.parse('{"' + location.search.substring(1).replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { return key===""?value:decodeURIComponent(value) }) 
+    var search = urlParams.searchInput
+    //OBJECTIVE: GET COOKIES FOR THEME AND CATEGORIES TO INSERT IN
+    //select div containing themes and get al id of child nodes that has active
+    var themes = []
+    $("#furniture-search-themes").children("label").map(function(){
+      if ($(this).children(':checkbox').prop("checked") == true){
+        themes.push($(this).attr('id'))
+      }
+    });
+    
+    var categories = []
+    $("#furniture-search-categories").children("label").map(function(){
+      if ($(this).children(':checkbox').prop("checked") == true){
+        categories.push($(this).attr('id'))
+      }
+    });
+
+    var sortOrder = document.getElementById("sortOrderSelect").value
+
+    //CREATE object of {theme: [monochrome, wood], category: [wood]}
+    var searchThemeAndCategories = {"searchInput": search, "themes": themes, "categories": categories, "order": sortOrder};
+
+    //Set cookie for page reload to save y-axis
+    var page_y = document.documentElement.scrollTop || document.body.scrollTop;
+    document.cookie = "page_y="+page_y.toString()+";max-age=60;domain=;path=/"
+    //CONVERT object to url using var queries = $.param(sear1ched)
+    window.location.replace( window.location.origin+ "/furniture/search?" + $.param(searchThemeAndCategories) ); //return page with cookie
+  }
+
+  //Reload on proper y-axis on page load
+  window.onload = function () {
+    var page_y_cookie = getCookie("page_y") //function in main.js, cookie is page y value
+    if ( page_y_cookie ) {
+      document.cookie = "page_y=0;expires=Thu, 01 Jan 1970 00:00:00;domain=;path=/" //set cookie to none
+      document.documentElement.scrollTop = document.body.scrollTop = page_y_cookie; //set page y to cookie y
+    }
+  }
+</script>

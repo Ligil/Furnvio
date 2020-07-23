@@ -1,0 +1,94 @@
+<nav class="navbar navbar-expand-lg navbar-dark aqua-gradient mb-4">
+	<div class="container">
+		<a class="navbar-brand" href="/">BRANDNAME</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+				  aria-expanded="false"
+				  aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" href="/">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/furniture/listFurniture">Furniture</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/about">About</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Feedback</a>
+					<div class="dropdown-menu">
+						<a href="/feedback" class="dropdown-item">Submit Feedback</a>
+						<a href="/feedback/userfeedback" class="dropdown-item">My Feedbacks</a>
+						<a href="/feedback/featuredFeedback" class="dropdown-item">Common Feedbacks</a>
+					</div>
+				</li>
+			</ul>
+			{{!-- Middle --}}
+			<form class="form-inline mx-auto" autocomplete="off">
+				<div class="autocomplete" id="autoComplete">
+					<input class="form-control" id="searchInput" type="text" name="searchInput" placeholder="Search here">
+					<div class="search-div" id="search-div" style="display: none">
+						
+					</div>
+				</div>
+				<button class="btn teal lighten-1 text-white btn-rounded btn-sm my-0 ml-sm-2" type="submit"><i class="fas fa-search"></i></button>
+			</form>
+
+			{{!-- Right Side--}}
+			<ul class="navbar-nav ml-auto">
+
+				{{!-- Hello there, mortal --}}
+				{{#if user}} 
+					<li class="nav-item">
+						<a class="nav-link" href="/cart">Cart</a>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Video Jots</a>
+						<ul class="dropdown-menu">
+							<a href="/video/listVideos" class="dropdown-item">Videos</a>
+							<a href="/video/showAddVideo" class="dropdown-item">Add Video</a>
+						</ul>
+					</li>
+
+					{{#if user.admin}}
+					<li class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Admin Functions</a>
+						<ul class="dropdown-menu">
+							<a href="/admin/listUsers" class="dropdown-item">User List</a>
+							
+							{{!-- Copy from here --}}
+							<li class="dropdown-submenu dropright">
+								<a class="test dropdown-item" tabindex="-1" href="#">Furniture > </a>
+								<ul class="dropdown-menu">
+									<li><a href="/admin/addFurniture" class="dropdown-item">Add Furniture</a></li>
+									<li><a href="/admin/retrieveFurniture" class="dropdown-item">Retrieve Furniture</a></li>
+								</ul>
+							</li>
+							{{!-- to here, also make sure dropdown=menu is ul--}}
+							<a href="/admin/rfeedback" class = "dropdown-item">Retrieve Questions</a>
+						</ul>
+					</li>
+					{{/if}}
+
+					<li class="nav-item">
+						<a href="/logout" class="nav-link">Logout</a>
+					</li>
+					
+				{{else}}
+					<li class="nav-item">
+						<a href="/user/login" class="nav-link">Login</a>
+					</li>
+					<li class="nav-item">
+						<a href="/user/register" class="nav-link">Register</a>
+					</li>
+				{{/if}}
+
+
+			</ul>
+		</div>
+	</div>
+</nav>

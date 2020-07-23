@@ -1,0 +1,132 @@
+<div class="sticky-top" style="background-color: white">
+  {{!-- That top part if we plan to add something --}}
+  <div style="background-color:#d4af37; color:#FFFFFF; height: 20px;">
+  </div>
+
+  {{!-- Top Half --}}
+  <div class="d-flex container my-3">
+    {{!-- Logo thing --}}
+    <a class="mr-3 col-2" style="padding: 0px;" href="/">
+      {{!-- <h1 class="my-auto" style="font-size:40px; color:#d4af37;" >
+        FURNVIO
+      </h1> --}}
+			<img class="logo w-100" src="/img/FURNVIOLOGO.png">
+    </a>
+
+    {{!-- Search --}}
+    <form class="m-auto d-flex col-7" autocomplete="off" action="/furniture/search"method="GET" >
+
+      <div class="autocomplete col-10" id="autoComplete">
+        <input required class="form-control" id="searchInput" type="text" name="searchInput" placeholder="Search here" value="{{#if searchInputEnter}}{{searchInputEnter}}{{/if}}">
+        <div class="search-div" id="search-div" style="display: none">
+          
+        </div>
+      </div>
+
+      <button class="btn text-white btn-rounded btn-sm my-0 col-2" id="searchButton" type="submit"><i class="fas fa-search" style="color:#d4af37"></i></button>
+
+    </form>
+    
+    {{!-- Profile --}}
+
+    {{#if user}}
+
+    <div class="m-auto col-2" id="profile-dropdown">
+
+      <button class="dropbtn dropdown-toggle" id="profile-dropdown-btn">Account</button>
+      <div id="profile-dropdown-content">
+        <a href="/cart" class="nav-link">Cart</a>
+				<a href="/logout" class="nav-link">Logout</a>
+      </div>
+
+    </div>
+      
+    {{else}}
+    <div class="m-auto col-2" id="profile-dropdown">
+      <button class="dropbtn dropdown-toggle" id="profile-dropdown-btn">Account</button>
+      <div id="profile-dropdown-content">
+        <a href="/user/login" class="nav-link">Login</a>
+        <a href="/user/register" class="nav-link">Register</a>
+      </div>
+    </div>
+    {{/if}}
+
+  </div>
+
+  {{!-- Bottom Half --}}
+  <nav class="navbar navbar-expand-lg navbar-light border" style="padding:0px;">
+    <div class="container">
+      <ul class="navbar-nav navbar-contents">
+        
+        {{!-- Item 1 --}}
+        {{!-- <li class="nav-item">
+            <a class="nav-link" href="/furniture/listFurniture">Furniture</a>
+        </li> --}} 
+
+        {{!-- Item 2 --}}
+        <li class="nav-item m-auto">
+            <a class="nav-link" href="/about">About</a>
+        </li>
+
+        {{!-- Item 3 --}}
+        <li class="nav-item m-auto dropdown" id="feedback-dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="feedback-dropdown-btn">Feedback</a>
+        </li>
+      </ul>
+      {{#if user.admin}}
+      <ul class="navbar-nav navbar-contents">
+        <li class="nav-item m-auto dropdown" id="admin-function-dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="admin-function-dropdown-btn">Admin Functions</a>
+        </li>
+
+        <li class="nav-item m-auto">
+            <a href="/alertTest" class="nav-link">Alert Test</a>
+        </li>
+
+        <li class="nav-item m-auto">
+          <form action="/pay"  method='post'>
+            <button class="btn" style="padding: 0px;" type="submit">Paypal button</button>
+          </form>
+        </li>
+
+        <li class="nav-item m-auto dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Video Jots (Click me because im lazy)</a>
+          <ul class="dropdown-menu">
+            <a href="/video/listVideos" class="dropdown-item">Videos</a>
+            <a href="/video/showAddVideo" class="dropdown-item">Add Video</a>
+          </ul> 
+        </li>
+			</ul>
+      {{/if}} 
+
+    </div>
+  </nav>
+  {{!-- Bottom, bottom nav --}}
+  <div class="container">
+    {{!-- Feedback --}}
+    <div id="feedback-dropdown-content">
+      <div class="row">
+        <a href="/feedback">Submit Feedback</a>
+        <a href="/feedback/userfeedback">My Feedbacks</a>
+        <a href="/feedback/featuredFeedback">Common Feedbacks</a>
+      </div>
+    </div>
+
+    <div id="admin-function-dropdown-content">
+      <div class="row container">
+        <div>
+          <a href="/admin/listUsers">User List</a>
+          <a href="#" id="admin-function-dropdown-content-furniture1">Furniture > </a>
+          <a href="/admin/rfeedback" >Retrieve Questions</a>   
+        </div>
+        <div class="w-75" id="admin-function-dropdown-content-furniture2">
+          <a href="/admin/addFurniture">Add Furniture</a>
+          <a href="/admin/retrieveFurniture">Retrieve Furniture</a>
+        </div>
+      </div>  
+       
+    </div>
+  </div>
+
+</div>
+

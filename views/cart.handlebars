@@ -1,0 +1,149 @@
+<button onclick="topFunction()" id="topbutton" title="Go to top">
+	<i class="fas fa-arrow-circle-up"></i>
+</button>
+
+<div class="container border" style="padding-left: 0px; padding-right: 0px">
+	<div class="card-header aqua-gradient text-white d-flex justify-content-between align-items-center">
+		<div class="col-sm-9">
+			<i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping cart
+			<br>
+			<a href="/furniture/listFurniture" class="btn btn-outline-white light-blue lighten-2 btn-sm">Continue shopping</a>
+		</div>
+
+		<div class="col-sm-3">
+			<a href="" class="btn btn-success pull-right" style="padding:">Checkout</a>
+			<div class="pull-right border-bottom" style="margin: 5px">
+				Total price: <b class="pull-right">S${{numberFormat total}}</b>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+	<div class="d-flex w-100">
+		<div id="yes" class="card-body w-100" style="padding: 0px;">
+			{{#each cart}}
+			<div>
+				<div class="d-flex w-100" style="padding: 0px">
+					<div class="col-sm-8">
+						<hr>
+					</div>
+					<div class="col-sm-4 light-blue lighten-5">
+						<br>
+					</div>
+				</div>
+
+				<div class="d-flex">
+					<div class="d-flex col-sm-8">
+						<div class="col-12 col-sm-12 col-md-3 text-center">
+							<img class="img-responsive" src="{{'furniture.imageURL'}}" alt="prewiew" width="120"
+								height="80">
+						</div>
+
+						<div class="col-12 text-sm-center col-sm-12 text-md-left col-md-5 pull-right indigo-text">
+							<h4 class="product-name mx-auto"><strong>{{'furniture.furnitureName'}}</strong></h4>
+							<h4>
+								<small>{{'furniture.description'}}</small>
+							</h4>
+						</div>
+
+
+						<div class="col-2 col-sm-2 col-md-2">
+							<div class="quantity">
+								<input type="button" value="+" class="plus">
+								<!-- function for increase quant-->
+								<input class="qty" id="{{furnitureId}}" type="number" step="1" max="99" min="1"
+									value="{{quantity}}" title="Qty" size="4">
+								<input type="button" value="-" class="minus">
+							</div>
+						</div>
+
+						<div class="col-2 col-sm-2 col-md-2 text-right">
+							<button type="button" class="btn btn-outline-danger w-100; card-link"
+								data-toggle="confirmation" data-title="Delete Item?" style="margin: auto; padding:8px;"
+								href="deleteFromCart/{{id}}">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+							</button>
+						</div>
+					</div>
+
+					<div class="light-blue lighten-5 indigo-text card-body" style="padding: 0px;">
+						<div class="text-sm-center text-md-right d-flex justify-content-center"
+							style="height: 80px; padding:10px;">
+							<p>S${{'furniture.cost'}} &nbsp; x {{quantity}} = &nbsp; + S${{numberFormat totalPrice}}</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			{{/each}}
+
+			<div class="d-flex w-100" style="padding: 0px">
+				<div class="col-sm-8">
+					<hr>
+				</div>
+				<div class="col-sm-4 light-blue lighten-5">
+					<br>
+				</div>
+			</div>
+
+			<div class="blue-gradient d-flex align-items-center" style="padding:10px;">
+				<div class="col-sm-8">
+					<a href="" class="btn btn-outline-white">Continue shopping</a>
+					<a onclick="updateCart()" class="btn btn-outline-white pull-right">Update shopping cart</a>
+				</div>
+				<div class="col-sm-4">
+					<div class="border-bottom text-white" style="margin: 5px">
+						Total price: <b class="pull-right">S${{numberFormat total}}</b>
+					</div>
+					<a href="" class="btn btn-success pull-right" style="padding:">Checkout</a>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+<br>
+<script>
+
+	$(function () {
+		$('.plus').on('click', function () {
+			var $qty = $(this).closest('div').find('.qty');
+			var currentVal = parseInt($qty.val());
+			if (!isNaN(currentVal)) {
+				$qty.val(currentVal + 1);
+			}
+		});
+		$('.minus').on('click', function () {
+			var $qty = $(this).closest('div').find('.qty');
+			var currentVal = parseInt($qty.val());
+			if (!isNaN(currentVal) && currentVal > 1) {
+				$qty.val(currentVal - 1);
+			}
+		});
+	});
+
+	function updateCart() {
+		var items = $('input.qty')
+		var data = {}
+		for (information of items) {
+			data[parseInt(information.id)] = parseInt(information.value)
+		}
+		fetch('http://localhost:5000/updateCart', {
+			method: 'POST', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+				location.reload();
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+	}
+</script>
+</script>

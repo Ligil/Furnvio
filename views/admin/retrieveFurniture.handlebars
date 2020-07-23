@@ -1,0 +1,174 @@
+<div class="card card-body mb-4">
+	{{!-- https://getbootstrap.com/docs/4.0/components/navs/#javascript-behavior --}}
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" id="furnitureList-tab" data-toggle="tab" href="#furnitureList" role="tab" aria-controls="furnitureList"
+				aria-selected="true">Furniture</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="theme-tab" data-toggle="tab" href="#theme" role="tab" aria-controls="theme"
+				aria-selected="false">Themes</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="category-tab" data-toggle="tab" href="#category" role="tab" aria-controls="category"
+				aria-selected="false">Categories</a>
+		</li>
+	</ul>
+	<div class="tab-content" id="myTabContent">
+		<div class="tab-pane fade show active" id="furnitureList" role="tabpanel" aria-labelledby="furnitureList-tab">
+			<div class="pt-3 container">
+				<div class="d-flex border-bottom">
+					<h3 class="font-weight-bold">Furniture Items</h3>
+					<a class="ml-auto underlineHover" href="/admin/addFurniture">Add Furniture</a>
+				</div>
+				{{!-- Furniture Content --}}
+				{{#if furnitures}}
+					<div class="row">
+					{{#each furnitures}}
+						<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+							<div class="position-relative furnitureSearchImage">
+								<btn class="furnitureDetailsButton" data-toggle="modal" data-target="#modal{{id}}">Details</btn>
+								<img id="image" src="{{imageURL}}" alt="" class="img-fluid mt-1" style="width:100%; max-height: 600px;">
+							</div>
+							<hr class="my-2">
+							<div class="container">
+								<p class="font-weight-bold">{{furnitureName}}</p>
+								{{!-- <a href="/addToCart/{{id}}" class="btn furnitureCartButton" style="padding-top: 5px; padding-bottom: 5px;"><i class="fas fa-plus"></i> Add To Cart</a> --}}
+							</div>
+						</div>
+
+						<div class="modal fade" id="modal{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-xl" role="document">
+								<div class="modal-content">
+									<div class="modal-body">
+										
+										<div class="d-flex h-100">
+
+											<div class="border col-6 flex-grow-1 d-flex align-items-center" style="flex: 1">
+												<img src="{{imageURL}}" alt="Image unavailable" class="img-fluid">
+											</div>
+
+											<div class="border col-6 p-4 d-flex flex-column h-100">
+												<h5 class="font-weight-bold border-bottom pb-2 mb-4">{{furnitureName}}</h5>
+
+												<div class="overflow-auto">
+													<div class="d-flex border-bottom pb-1 mb-4">
+														<div class="col-5">
+															<p class="font-italic">ID: <span class="text-info">{{id}}</span></p>
+														</div class="col-5">
+														<div>
+															<p class="font-italic">Cost: <span class="text-info">${{cost}}</span></p>
+														</div>
+													</div>
+
+													<div class="container border-bottom pb-1 mb-4">
+														<p class="font-italic">Dimensions: (L x W x H): </p>
+														<p class="text-info">{{lengthmm}}mm x {{widthmm}}mm x {{heightmm}}mm</p>
+													</div>
+													
+													<div>
+														<p class="font-italic col-12">(User Id)</p>
+														<div class="d-flex border-bottom pb-1 mb-4">
+															<div class="col-5">
+																<p class="font-italic">Added by: <span class="text-info">{{addedBy}}</span></p>
+															</div>
+															<div class="col-5">
+																<p class="font-italic">Last Edit by: <span class="text-info">{{lastEditedBy}}</span></p>
+															</div>
+														</div>
+													</div>
+													
+													<div>
+														<p class="font-italic col-12">Themes</p>
+														<div class="d-flex border-bottom pb-1 mb-4">
+															{{#each themes}}
+																<div class="col-4">
+																	<p class="font-italic">{{this.dataValues.theme}}</p>
+																</div>
+															{{/each}}
+														</div>
+													</div>				
+
+													<div>
+														<p class="font-italic col-12">Categories</p>
+														<div class="d-flex border-bottom pb-1 mb-4">
+															{{#each categories}}
+															<div class="col-4">
+																<p class="font-italic">{{this.dataValues.category}}</p>
+															</div>
+															{{/each}}
+														</div>
+													</div>
+
+													<div class="mb-4">
+														<p class="font-italic col-12">Description</p>
+														<div class="border container rounded p-2">
+															{{description}}
+														</div>
+													</div>
+												</div>
+
+
+												{{!-- Edit and delete --}}
+												<div class="mt-auto d-flex border-top pt-2">
+													<p>Admin Actions: </p>
+													<div class="ml-auto">
+														<a href="/admin/editFurniture/{{id}}" class="card-link">
+															<i class="fas fa-pencil-alt"></i>
+															Edit
+														</a>
+														<a href="/admin/deleteFurniture/{{id}}" class="card-link" data-toggle="confirmation" data-title="Confirm delete?">
+															<i class="far fa-trash-alt"></i>
+															Delete
+														</a>
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					{{/each}}
+					</div>
+
+				{{else}}
+					<p>No Furniture in datbase</p>
+				{{/if}}
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="theme" role="tabpanel" aria-labelledby="theme-tab">
+			<div class="pt-3 container">
+				<h3 class="font-weight-bold border-bottom">Themes List</h3>
+				{{#each themes}}
+					<a href="/">
+						<div class="btn amber text-white">
+							{{this}}
+						</div>
+					</a>
+				{{else}}
+					<p>No Themes in datbase</p>
+				{{/each}}
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="category" role="tabpanel" aria-labelledby="category-tab">
+			<div class="pt-3 container">
+				<h3 class="font-weight-bold border-bottom">Category List</h3>
+				{{#each categories}}
+					<a href="/">
+						<div class="btn btn-yellow text-white">
+							{{this}}
+						</div>
+					</a>
+				{{else}}
+					<p>No Categories in datbase</p>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+
+</div>

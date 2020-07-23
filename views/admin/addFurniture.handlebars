@@ -1,0 +1,162 @@
+<div class="container mb-4">
+	<div class="card card-body">
+		<h3>Add Furniture</h3>
+		<form action="" method="post" id="addVideo" autocomplete="off">
+
+			<div class="row">
+				<div class="col-lg-7">
+					<div class="form-group mb-4">
+						<label class="font-italic" for="furnitureName">Furniture Name</label>
+						<input class="form-control" id="furnitureName" name="furnitureName" onblur='titleCase(this)' required>
+                    </div>
+
+					<div class="form-group mb-4">
+						<label class="font-italic" for="description">Description</label>
+						<textarea class="form-control" id="description" name="description" rows="7" required></textarea>
+					</div>
+
+					<div class="form-group mb-4">
+						<label class="font-italic" for="cost">Cost</label>
+						<input class="form-control" id="cost" name="cost" rows="7" required>
+					</div>
+
+                    <div class="row form-group mb-4">
+                        <div class="col-sm-4">
+                            <label class="font-italic" for="length">Length (mm)</label>
+                            <input class="form-control" id="length" name="length" rows="7" required>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="font-italic" for="width">Width (mm)</label>
+                            <input class="form-control" id="width" name="width" rows="7" required>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="font-italic" for="height">Height (mm)</label>
+                            <input class="form-control" id="height" name="height" rows="7" required>
+                        </div>
+                    </div>
+
+					{{!-- Themes --}}
+					<div class="mb-4">
+						<label class="font-italic">Themes</label>
+						<div id="themeDivs" class="btn-group-toggle border p-2 pb-3" data-toggle="buttons">
+							{{#each themes}}
+								<label class="btn btn-amber">
+									<input type="checkbox" name="Theme:{{this}}"> {{this}}
+								</label>
+							{{/each}}
+						</div>  
+						<div class="my-2">
+							<button class="btn btn-sm btn-yellow" type="button" data-toggle="collapse" data-target="#themeCreate" aria-expanded="false" aria-controls="themeCreate">
+								Create Theme
+							</button>
+							<div class="collapse border rounded p-2" id="themeCreate">
+								<div class="d-flex p-1">
+									<input id="themeCreateInput" class="col-9 my-2">
+									<button id="themeCreateAdd" class="btn btn-sm col-3 m-1" type="button" onclick="addTheme()">Add</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					{{!-- Categories --}}
+					<div>
+						<label class="font-italic">Categories</label>
+						<div id="categoryDivs" class="btn-group-toggle border p-2 pb-3" data-toggle="buttons">
+							{{#each categories}}
+								<label class="btn btn-amber">
+									<input type="checkbox" name="Category:{{this}}"> {{this}}
+								</label>
+							{{/each}}
+						</div>
+						<div class="my-2">
+							<button class="btn btn-sm btn-yellow" type="button" data-toggle="collapse" data-target="#categoryCreate" aria-expanded="false" aria-controls="categoryCreate">
+								Create Category
+							</button>
+							<div class="collapse border rounded p-2" id="categoryCreate">
+								<div class="d-flex p-1">
+									<input id="categoryCreateInput" class="col-9 my-2">
+									<button id="categoryCreateAdd" class="btn btn-sm col-3 m-1" type="button" onclick="addCategory()">Add</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- Image -->
+				<div class="col-lg-5">
+
+                    <br>
+					<img id="image" src="/img/no-image.jpg" alt="" class="border img-thumbnail img-fluid" style="width:100%">
+                    <div class="container">
+                        <br>
+					    <input required type="file" id="imageUpload" name="imageUpload" accept="image/png, image/jpeg, image/jpg, image/gif, image/webp">
+                        
+                        {{!—- Hidden field to submit URL of image to the server --}}
+                        <input id="imageURL" type="hidden" name="imageURL">
+                        <div class="font-weight-bold text-danger small" id="imageErr" style="display:none"></div>
+                    </div>
+
+				</div>
+			</div>
+
+
+			<br>
+			<button id="butAddFurniture" type="submit" class="btn btn-yellow text-white">Submit</button>
+
+		</form>
+	</div>
+</div>
+	{{!-- <label class="btn btn-amber">
+			<input type="checkbox" name="Theme:{{this}}"> {{this}}
+		</label> --}}
+<script>
+	$(document).ready(function(){
+		$('#themeCreateInput').keypress(function(e){
+			if(e.keyCode==13){
+    			e.preventDefault();
+				addTheme()
+			}
+		});
+		$('#categoryCreateInput').keypress(function(e){
+			if(e.keyCode==13)
+    		e.preventDefault();
+			addCategory()
+		});
+	});
+
+	function addTheme(){
+		var themeName = document.getElementById("themeCreateInput").value;
+		console.log(themeName)
+		$("#themeDivs > label").map(function() {
+			console.log(this.value)
+		})
+
+		if (themeName.length == 0){
+			alert("Missing theme input");
+		} else {
+			document.getElementById("themeCreateInput").value = "";
+			$('#themeCreate').collapse();
+			themeDiv = document.createElement("label");
+			themeDiv.setAttribute('class', 'btn btn-amber');
+			themeDiv.innerHTML = "<input type='checkbox' name='Theme:"+themeName+"'>"+themeName;
+			console.log(themeDiv)
+			document.getElementById("themeDivs").appendChild(themeDiv);
+		}
+	}
+
+	function addCategory(){
+		var categoryName = document.getElementById("categoryCreateInput").value;
+
+		console.log(categoryName)
+		$("#categoryDivs > label").map(function() {
+			console.log(this.value)
+		})
+
+		document.getElementById("categoryCreateInput").value = "";
+		$('#categoryCreate').collapse();
+		categoryDiv = document.createElement("label");
+		categoryDiv.setAttribute('class', 'btn btn-amber');
+		categoryDiv.innerHTML = "<input type='checkbox' name='Category:"+categoryName+"'>"+categoryName;
+		document.getElementById("categoryDivs").appendChild(categoryDiv);
+	}
+</script>

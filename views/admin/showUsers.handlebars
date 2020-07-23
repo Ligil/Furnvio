@@ -1,0 +1,65 @@
+<h1 class="display-4">User List</h1>
+{{!-- <div>
+ {% if count == 0 %}
+    <h3>There are no users.</h3>
+ {% elif count == 1 %}
+    <h3>There is 1 user.</h3>
+ {% else %}
+    <h3>There are {{ count }} users.</h3>
+ {% endif %}
+</div> --}}
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                {{!-- <th>First Name</th>
+                <th>Last Name</th> --}}
+                <th>Verified</th>
+                <th>Admin?</th>
+                <th>Update User</th>
+                {{!-- <th>Gender</th>
+                <th>Update</th>
+                <th>Force Reset</th>
+                <th>Delete</th> --}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td align="center">{{ id }}</td>
+                <td>{{ name }}</td>
+                <td>{{ email }}</td>
+                {{!-- <td>{{ user.get_firstName() }}</td>
+                <td>{{ user.get_lastName() }}</td> --}}
+                <td>{{ verified }}</td>
+
+                <td>{{ admin }}</td>
+                
+                <td>
+                    <a href="/admin/userEdit/{{id}}" class="card-link">
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
+                    </a>
+                </td>
+
+                {{!-- <td>{{ user.get_gender() }}</td>
+
+                <td>
+                    <form action="{{url_for('resetUserPassword', id=user.get_userID())}}" method="POST">
+                        <input type="submit" value="RESET" class="button alt small" onclick="return confirm('Are you sure you want to reset this user's password?');">
+                    </form>
+                </td>
+
+                <td>
+                    <form action="{{url_for('deleteUser', id=user.get_userID())}}" method="POST">
+                        <input type="submit" value="DELETE" class="button alt small" onclick="return confirm('Are you sure you want to delete this user?');">
+                    </form>
+                </td> --}}
+             </tr>
+             {{/each}}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,381 @@
+.logo{
+  width:130px;
+  margin:auto;
+}
+
+html, body {
+  height: 100%
+}
+
+p, a {
+  font-family: "Lato,HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+a {
+  text-decoration: inherit;
+}
+
+#overlay {
+  display:none;
+  position: absolute;    
+  width:100%;
+  height:100%;
+  background-color: black;
+  opacity: .2;
+  z-index: 1;
+}
+
+.underlineHover:hover{
+  text-decoration: underline;
+}
+
+/* NAVBAR */
+.navbar {
+  box-shadow: none !important;
+}
+
+.nav-item{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.nav-link{
+  font-weight: 500;
+}
+
+#searchButton{
+  border: 1px solid #CCCCCC;
+  box-shadow: none !important;
+}
+
+
+.autocomplete {
+  /*the container must be positioned relative:*/
+  padding:0px;
+  position: relative;
+  display: inline-block;
+}
+
+.search-div {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.search-div div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+
+#searchInput{
+  width:100%;
+}
+
+/* Dropdown Profile */
+#profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+#profile-dropdown-btn {
+  color: black;
+  background-color: white;
+  border: 0;
+  transition-duration: 0.5s;
+}
+#profile-dropdown-btn:focus{
+  outline: none;
+}
+
+#profile-dropdown:hover > #profile-dropdown-btn {
+  transition-duration: 0.5s;
+  color: #d4af37 !important;
+}
+
+#profile-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  z-index: 1;
+  border: 1px solid #CCCCCC; 
+  border-radius: 5px;
+}
+
+#profile-dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+#profile-dropdown-content a:hover {
+  color: #d4af37;
+}
+
+#profile-dropdown:hover #profile-dropdown-content {display: block;}
+
+/* Dropdown navbar items */
+
+.navbar-contents li a:hover {
+  color: #d4af37;
+}
+  /* Dropdown Feedback */
+  #feedback-dropdown {
+    display: inline-block;
+  }
+
+  #feedback-dropdown-btn {
+    color: black;
+    background-color: white;
+    border: 0;
+    transition-duration: 0.5s;
+  }
+  #feedback-dropdown-btn:focus{
+    outline: none;
+  }
+
+  #feedback-dropdown:hover > #feedback-dropdown-btn {
+    transition-duration: 0.5s;
+    color: #d4af37 !important;
+  }
+
+  #feedback-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 80%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 1;
+    border: 1px solid #CCCCCC; 
+    border-radius: 5px;
+    padding: 30px;
+  }
+
+  #feedback-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    max-width: 200px;
+    margin: 0;
+  }
+
+  #feedback-dropdown-content a:hover {
+    color: #d4af37;
+  }
+
+  /* Dropdown Admin-functions */
+  #admin-function-dropdown {
+    display: inline-block;
+  }
+  
+  #admin-function-dropdown-btn {
+    color: black;
+    background-color: white;
+    border: 0;
+    transition-duration: 0.5s;
+  }
+  #admin-function-dropdown-btn:focus{
+    outline: none;
+  }
+  
+  #admin-function-dropdown:hover > #admin-function-dropdown-btn {
+    transition-duration: 0.5s;
+    color: #d4af37 !important;
+  }
+  
+  #admin-function-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 80%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 1;
+    border: 1px solid #CCCCCC; 
+    border-radius: 5px;
+  }
+  
+  #admin-function-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    margin: 0;
+  }
+  
+  #admin-function-dropdown-content a:hover {
+    color: #d4af37;
+  }
+
+  #admin-function-dropdown-content-furniture2 {
+    border-left: #CCCCCC 1px solid;
+    display: none;
+  }  
+  #admin-function-dropdown-content-furniture2 a{
+    width: 100%;
+  }
+/* NAVBAR END */
+
+/* Furniture */
+#furniture-summary{
+  border-bottom:1px solid #d4af37;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.furnitureCartButton{
+  color:white !important;
+  background-color: #d4af37;
+  width: 100%;
+  margin: 0px !important;
+  border-radius: 5px;
+}
+
+.furnitureSearchImage:hover {
+  border: 2px solid #CCCCCC !important;
+}
+
+.furnitureSearchImage:hover > .furnitureDetailsButton{
+  display: block;
+}
+
+.furnitureDetailsButton{
+  position: absolute !important; 
+  left: 50%; 
+  transform: translate(-50%);
+  bottom: 5%;
+  width: 100%;
+  cursor: pointer;
+  display: none;
+
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  background-color: #AAAAAA;
+  padding: 5px;
+  opacity: 0.8;
+}
+
+.modal-body {
+  height: calc(100vh - 60px) ;
+  overflow-y: auto ; 
+}
+
+/* Furniture END */
+
+/* TEST2 */
+.catthemebtn {
+  background-color:red;
+  padding: 0px;
+}
+/* Vajons Stuff */
+.quantity {
+  float: left;
+  margin-right: 15px;
+  background-color: #eee;
+  position: relative;
+  width: 80px;
+  overflow: hidden
+}
+
+.quantity input {
+  margin: 0;
+  text-align: center;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  float: right;
+  color: #000;
+  font-size: 20px;
+  border: 0;
+  outline: 0;
+  background-color: #F6F6F6
+}
+
+.quantity input.qty {
+  position: relative;
+  border: 0;
+  width: 100%;
+  height: 40px;
+  padding: 10px 25px 10px 10px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 15px;
+  border-radius: 0;
+  background-clip: padding-box
+}
+
+.quantity .minus, .quantity .plus {
+  line-height: 0;
+  background-clip: padding-box;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-background-size: 6px 30px;
+  -moz-background-size: 6px 30px;
+  color: #bbb;
+  font-size: 20px;
+  position: absolute;
+  height: 50%;  
+  border: 0;
+  right: 0;
+  padding: 0;
+  width: 25px;
+  z-index: 3
+}
+
+.quantity .minus:hover, .quantity .plus:hover {
+  background-color: #dad8da
+}
+
+.quantity .minus {
+  bottom: 0
+}
+.shopping-cart {
+  margin-top: 20px;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+#topbutton {
+  position: fixed; /* Fixed/sticky position */
+  bottom: 30px; /* Place the button at the bottom of the page */
+  right: 50px; /* Place the button 30px from the right */
+  z-index: 99; /* Make sure it does not overlap */
+  border: none; /* Remove borders */
+  outline: none; /* Remove outline */
+  background-color: turquoise; /* Set a background color */
+  color: white; /* Text color */
+  cursor: pointer; /* Add a mouse pointer on hover */
+  padding: 10px; /* Some padding */
+  border-radius: 10px; /* Rounded corners */
+  font-size: 18px; /* Increase font size */
+}
+
+#topbutton:hover {
+  background-color: #555; /* Add a dark-grey background on hover */
+}

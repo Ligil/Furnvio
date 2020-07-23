@@ -1,0 +1,41 @@
+<!--.col-	.col-sm-	.col-md-	.col-lg-	.col-xl- -->
+<div class="container">
+	<div class="card card-body">
+		<h3>Answer Question {{id}}</h3>
+		<form action="/feedback/saveAnsweredFeedback/{{id}}?_method=PUT" method="post">
+            <input type="hidden" name="_method" value="PUT">
+			<br>
+            <label class="font-italic" for="feedbacktype">ID</label>
+                <input class="form-control" id="ID" name="ID" value="{{id}}" readonly></select>
+			<br>
+            <label class="font-italic" for="feedbacktype">Name</label>
+                <input class="form-control" id="name" name="name" value="{{user.name}}" readonly>
+			<br>
+            <label class="font-italic" for="email">Email</label>
+                <input class="form-control" id="email" name="email" value="{{user.email}}" readonly>
+			<br>
+            <label class="font-italic" for="feedbacktype">Feedback Type</label>
+                <input class="form-control" id="feedbacktype" name="feedbacktype" value="{{feedback.feedbacktype}}" readonly>
+			<br>
+            <label class="font-italic" for="feedbacktype">Feedback</label>
+                <input class="form-control" id="feedbacktype" name="feedbacktype" value="{{feedback.feedback}}" readonly>
+			<br>
+            <label class="font-italic" for="featured">Feature Feedback</label>
+                <select class="custom-select" id="featured" name="featured">
+                    <option {{#ifCond feedback.featured '==' 0 }}selected{{/ifCond}} value=0>Not Featured</option>
+                    <option {{#ifCond feedback.featured '==' 1 }}selected{{/ifCond}} value=1>Featured</option>
+                </select>
+            <br>
+            <br>
+            <label class="font-italic" for="answer">Answer</label>
+                <input class="form-control" id="answer" name="answer" value="{{feedback.answer}}">
+			<br>
+
+            
+			<button id="butAnswer" type="submit" class="btn btn-primary">Save</button>
+		</form>
+	</div>
+</div>
+
+<script>
+</script>
