@@ -1,3 +1,8 @@
+<style>
+    td {
+        max-width: 200px;
+    }
+</style>
 <h1>Featured Questions</h1>
 <br>
 <div>
@@ -6,8 +11,12 @@
             <tr>
                 <th>Feedback Type</th>
                 <th>Feedback</th>
+                {{#if user}}
                 <th>Answer</th>
-                <th>Remove Question</th>
+                {{/if}}
+                {{#if user}}
+                <th>Remove Feedback</th>
+                {{/if}}
             </tr>
         </thead>
         <tbody>
@@ -16,13 +25,14 @@
                 <td>{{ feedbacktype }}</td>
                 <td>{{ feedback }}</td>
                 <td>{{ answer }}</td>
+                {{#if (ifCheck user.admin)}}
                 <td>
-                    <a href="/admin/deleteFeedback/{{id}}" class="card-link">
+                    <a href="/" class="card-link">
                         <i class="fas fa-trash"></i>
-                        Delete Question
+                        Remove Feedback
                     </a>
                 </td>
-
+                {{/if}}
              </tr>
              {{/each}}
         </tbody>

@@ -1,28 +1,32 @@
+<style>
+    td {
+        max-width: 200px;
+    }
+
+
+</style>
 <h1 class="display-4">Question List</h1>
 <div>
-    <table class="table table-striped">
+    <table class="table table-striped" id="MyTable">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
                 <th>Feedback Type</th>
                 <th>Feedback</th>
                 <th>Answer</th>
             </tr>
         </thead>
-        <br>
         <tbody>
             {{#each feedbacks}}
             <tr>
-                <td align="center">{{ id }}</td>
-                <td>{{ 'user.name' }}</td>
-                <td>{{ 'user.email' }}</td>
                 <td>{{ feedbacktype }}</td>
                 <td>{{ feedback }}</td>
-                <td>{{ answer }}</td>
-             </tr>
-             {{/each}}
+                <td>
+                    <div>
+                        {{ answer }}
+                    </div>
+                </td>
+            </tr>
+            {{/each}}
         </tbody>
     </table>
 </div>
