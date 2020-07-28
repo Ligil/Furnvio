@@ -1,5 +1,4 @@
 // import { Json } from "sequelize/types/lib/utils";
-
 // this is for navbar
 
 $('#searchInput').on('focusin', function(){
@@ -13,8 +12,29 @@ $('#searchInput').on('focusout', function(){
 });
 
 
+function getIndicesOf(searchStr, str, caseSensitive) {
+    var searchStrLen = searchStr.length;
+    if (searchStrLen == 0) {
+        return [];
+    }
+    var startIndex = 0, original=str,  index, indices = [];
+    if (!caseSensitive) {
+        str = str.toLowerCase();
+        searchStr = searchStr.toLowerCase();
+    }
+    while ((index = str.indexOf(searchStr, startIndex)) > -1) { //when found
+        originalString = original.substring(index, index+searchStrLen) //original casing
+        indices.push([index, originalString, index+searchStrLen]); //add index
+        startIndex = index + searchStrLen; //search next
+    }
+    return indices;
+}
+
 $('#searchInput').on('keyup', function(){
-    let searchInput = {searchInput: this.value.split(" ")}
+    let searchInput = {searchInput: this.value.split(' ')}
+    searchInput.searchInput = searchInput.searchInput.filter(function(searchValue){
+        return (searchValue != '')
+    })
     a = document.getElementById('search-div')
     a.style.display = 'block'
 
@@ -29,19 +49,60 @@ $('#searchInput').on('keyup', function(){
             if (data.length != 0){
 
                 data.forEach((object)=>{
-                    b = document.createElement("DIV");
+                    b = document.createElement("DIV"); //each item
                     /*make the matching letters bold:*/
-                    b.innerHTML = "<strong>" + object.furnitureName + "</strong>";
+                    
+                    //Part 1: getting data
+                    var searchData = searchInput.searchInput
+                    var boldedTest = object.furnitureName
+                    console.log(boldedTest)
 
-                    // b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                    // b.innerHTML += arr[i].substr(val.length);
+                    var word, allIndexes = []
+                    for (i in searchData){
+                        searchLength = searchData[i].length
+                        word = searchData[i]
+                        allIndexes = allIndexes.concat(getIndicesOf(word, boldedTest))
+                    } 
+                    allIndexes = allIndexes.sort(function(arrayOne, arrayTwo) { return arrayOne[0]-arrayTwo[0]} ) //sorted array of all data
+                    
+                    //Part 2: combining parts
+                    var indexPart2 = 0, newArray = []
+                    while (indexPart2 < (allIndexes.length)-1 ){
+                        if (allIndexes[indexPart2][2] > allIndexes[indexPart2+1][0]){ //if end index > start index (which means combine)
+                            if (allIndexes[indexPart2[2] >= allIndexes[indexPart2+1][2]]){ // if contained e.g search = Hello ello
+                                //No change, remove second index
+                                allIndexes = allIndexes.splice(indexPart2+1, 1)
+                            } else { //if not contained e.g search = Hello lover
+                                //combine them
+                                newArray = [allIndexes[indexPart2][0],
+                                allIndexes[indexPart2][1].substring( allIndexes[indexPart2][0], allIndexes[indexPart2+1][0] ) + allIndexes[indexPart2+1][1],
+                                allIndexes[indexPart2+1][2]] //create new Array
+                                // allIndexes = allIndexes.splice(indexPart2, 2, newArray) //remove first two, replace array
+                                allIndexes.splice(indexPart2, 2, newArray)
+                            }
+                        } else { //if no need change, move on
+                            indexPart2 += 1
+                        }
+                    }
 
+                    //Part 3: replacing parts
+                    console.log(allIndexes)
+                    var singleArray=[], part3Counter = 0
+                    console.log("NAME", boldedTest)
+                    for (i in allIndexes){
+                        singleArray = allIndexes[i]
+                        boldedTest = boldedTest.substring(0, singleArray[0]+(part3Counter*32)) + "<b class='font-weight-bold'>" + singleArray[1] + "</b>" + boldedTest.substring(singleArray[2]+(part3Counter*32)) 
+                        console.log(boldedTest)
+                        part3Counter += 1
+                    }
+
+                    //28 and 4
+                    b.innerHTML = boldedTest
                     a.appendChild(b);
                 })
 
-            } else { 
+            } else {  
                 b = document.createElement("DIV");
-                /*make the matching letters bold:*/
                 b.innerHTML = "<strong>-No items found-</strong>";
                 a.appendChild(b);
             }
