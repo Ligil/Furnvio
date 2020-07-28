@@ -1,51 +1,46 @@
 <style>
     td {
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    }   
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 </style>
 <h1 class="display-4">Question List</h1>
-<div style = "width: max-content;">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Feedback Type</th>
-                <th>Feedback</th>
-                <th>Answer</th>
-                <th>Add Answer</th>
-                <th>Delete Question</th>
-            </tr>
-        </thead>
-        <br>
-        <tbody>
-            {{#each feedbacks}}
-            <tr>
-                <td align="center">{{ id }}</td>
-                <td>{{ 'user.name' }}</td>
-                <td>{{ 'user.email' }}</td>
-                <td>{{ feedbacktype }}</td>
-                <td>{{ feedback }}</td>
-                <td>{{ answer }}</td>
-                <td>
-                    <a href="/admin/answerFeedback/{{id}}" class="card-link">
-                        <i class="fas fa-pencil-alt"></i>
-                        Answer Question
-                    </a>
-                </td>
-                <td>
-                    <a href="/admin/deleteFeedback/{{id}}" class="card-link">
-                        <i class="fas fa-trash"></i>
-                        Delete Question
-                    </a>
-                </td>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Feedback Type</th>
+            <th>Feedback</th>
+            <th>Answer</th>
+            <th>Add Answer</th>
+            <th>Delete Question</th>
+        </tr>
+    </thead>
+    <br>
+    <tbody>
+        {{#each feedbacks}}
+        <tr>
+            <td>{{ 'user.email' }}</td>
+            <td>{{ feedbacktype }}</td>
+            <td>{{ feedback }}</td>
+            <td>{{ answer }}</td>
+            <td>
+                <a href="/admin/answerFeedback/{{id}}" class="card-link">
+                    <i class="fas fa-pencil-alt"></i>
+                    Answer Question
+                </a>
+            </td>
+            <td>
+                <a href="/admin/deleteFeedback/{{id}}" class="card-link">
+                    <i class="fas fa-trash"></i>
+                    Delete Question
+                </a>
+            </td>
 
-             </tr>
-             {{/each}}
-        </tbody>
-    </table>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 </div>

@@ -89,7 +89,7 @@
 					<img id="image" src="{{furniture.imageURL}}" alt="" class="border img-thumbnail img-fluid" style="width:100%">
                     <div class="container">
                         <br>
-					    <input required type="file" id="imageUpload" name="imageUpload" accept="image/png, image/jpeg, image/jpg, image/gif, image/webp">
+					    <input type="file" id="imageUpload" name="imageUpload" accept="image/png, image/jpeg, image/jpg, image/gif, image/webp">
 
                         {{!—- Hidden field to submit URL of image to the server --}}
                         <input id="imageURL" type="hidden" name="imageURL" value="{{furniture.imageURL}}">

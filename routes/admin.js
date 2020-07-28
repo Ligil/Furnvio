@@ -290,24 +290,7 @@ router.get('/deleteFurniture/:id', ensureAdmin, (req, res) => {
 });
 
 //FEEDBACK - JUN LENG
-//FEEDBACK - Retrieve Feedback
-router.get('/rfeedback', ensureAuthenticated, (req, res) => {
-	Feedback.findAll({
-		include: [{model: User, as: 'user'}],
-		order: [
-			['id', 'ASC'] 
-		],
-		raw: true
-	})
-	.then((feedbacks) => {
-		const title = 'BRANDNAME - Retrieve Feedback';
-		res.render('question/rfeedback', {
-			feedbacks,
-			title: title
-		});
-	})
-	.catch(err => console.log(err));
-});
+
 
 //FEEDBACK - Answer feedback
 router.get('/answerFeedback/:id', ensureAuthenticated, (req, res) => {
@@ -321,50 +304,7 @@ router.get('/answerFeedback/:id', ensureAuthenticated, (req, res) => {
     }).catch(err => console.log(err)); // To catch no video ID
 });
 
-//FEEDBACK - Answer feedback PUT (save)
-router.put('/saveAnsweredFeedback/:id', ensureAuthenticated, (req, res) => {
-	let id = req.params.id;
-	let {answer, featured} = req.body;
-	console.log(id)
-	Feedback.update({
-		answer, 
-		featured
-    }, {
-        where: {
-            id: id
-        }
-        }).then(() => {
-			alertMessage(res, 'success', 'Question Answered!', 'fas fa-exclamation-circle', true);
-            res.redirect('../rfeedback');
-        }).catch(err => console.log(err));
 
-}); 
-
-//FEEDBACK - Delete Feedback 
-router.get('/deleteFeedback/:id', ensureAuthenticated, (req, res) => {
-	Feedback.findOne({
-        where: {
-			id: req.params.id,
-        }
-    }).then((feedbacks) => {
-        if (feedbacks == null){
-            //req.logout();
-            alertMessage(res, 'danger', 'Unauthorized access to feedbacks', 'fas fa-exclamation-circle', true);
-            res.redirect('/rfeedback');
-            return
-		}
-		else {
-        	Feedback.destroy({
-            where: {
-                id: feedbacks.id
-            }
-        }).then((feedbacks) =>{ 
-            alertMessage(res, 'success', 'Successfuly Deleted', 'fas fa-exclamation-circle', true);
-            res.redirect('/rfeedback');
-		})
-	}
-	});
-});
 
 //TEST
 //ensure admin test
