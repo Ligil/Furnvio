@@ -4,6 +4,7 @@ const sequelize = require('../config/DBConfig')
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const url = require('url');
+const passport = require('passport');
 
 const {ensureAuthenticated, ensureAdmin} = require('../helpers/auth')
 
@@ -48,14 +49,29 @@ router.get('/alertTest', (req, res) => {
 		errors: errors
 	}) 
 });
+
+router.get('/auth/google',
+	passport.authenticate('google', { 
+		scope: ['email', 'profile', 'openid'] 
+	})
+);
+
+router.get('/auth/google/callback',
+	passport.authenticate('google', { 
+		successRedirect: '/user/profile',
+		failureRedirect: '/login',
+		failureFlash: true 
+	}),
+	function(req, res) {
+	  res.redirect('/');
+});
+
 //SOME ROUTES END
 
 //VAJON PART
 router.get('/addToCart/:furnitureId', (req, res) => {
 	let furnitureId = req.params.furnitureId;
 	let userId = req.user.id
-
-
 
 	Cart.findOne({
 		where: {

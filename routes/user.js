@@ -31,6 +31,14 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
+router.get('/profile', (req, res) => {
+	const title = 'FURNVIO - Profile';
+    User.findOne({ where: {email: req.user.email} })
+    .then(user => {
+        res.render('user/profile', {title: title, user: user}) // renders views/profile.handlebars
+    })
+}); 
+
 router.get('/register', (req, res) => {
 	const title = 'FURNVIO - Register';
 	res.render('user/register', {title: title}) // renders views/register.handlebars
