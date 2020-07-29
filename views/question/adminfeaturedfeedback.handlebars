@@ -13,7 +13,7 @@
                 <th>Feedback Type</th>
                 <th>Feedback</th>
                 <th>Answer</th>
-                <th>Remove Feedback</th>
+                <th>Unfeature Feedback</th>
             </tr>
         </thead>
         <tbody>
@@ -23,9 +23,9 @@
                 <td>{{ feedback }}</td>
                 <td>{{ answer }}</td>
                 <td>
-                    <a href="/" class="card-link">
+                    <a href="/feedback/deleteFeedback/{{id}}" class="card-link">
                         <i class="fas fa-trash"></i>
-                        Remove Feedback
+                        Unfeature Feedback
                     </a>
                 </td>
 
