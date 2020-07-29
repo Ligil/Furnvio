@@ -21,6 +21,9 @@ const User = db.define('user', {
     },
     passwordResetToken: { //this is for storing token, for 1 use
         type: Sequelize.STRING
+    }, 
+    googleId: {
+        type: Sequelize.STRING
     }
 });
 module.exports = User;

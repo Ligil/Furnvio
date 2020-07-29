@@ -42,8 +42,11 @@ FURNVIODB.setUpDB(false);
 // Passport Config
 const authenticate = require('./config/passport');
 authenticate.localStrategy(passport);
+authenticate.googleStrategy(passport); //to be honest idk why here
 
 
+
+//APP INITIALIZATION
 const app = express();
 const Handlebars = require("handlebars");
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
