@@ -1,0 +1,46 @@
+.rating{
+    display: flex;
+    flex-direction: row-reverse;
+    width: 175px;
+    height: 50px;
+    padding: 10px;
+}
+.rating input{
+    display: none;
+}
+.rating label{
+    display: block;
+    cursor: pointer;
+    width: 35px;
+    height: 50px;
+    position: relative;
+
+}
+.rating label:before{
+    content: '\f005';
+    font-family: fontAwesome;
+    position: absolute;
+    display: block;
+    font-size: 30px;
+    color: #C0C0C0;
+}
+.rating label:after{
+    content: '\f005';
+    font-family: fontAwesome;
+    display: block;
+    font-size: 30px;
+    color: Orange;
+    position: absolute;
+    opacity: 0;
+    transition: .2s;
+    text-shadow: 0 2px 5px rgba (0,0,0,.5);
+}
+.rating label:hover:after,
+.rating label:hover ~ label:after,
+.rating input:checked ~ label:after{
+    opacity: 1;
+}
+
+.checked {
+  color: orange;
+}

@@ -6,10 +6,12 @@ const url = require('url');
 const Furniture = require('../models/Furniture'); //Models
 const Themes = require('../models/Themes');
 const Categories = require('../models/Categories');
+const Reviews = require('../models/Review');
 //extras
 const {ensureAuthenticated, ensureAdmin} = require('../helpers/auth')
 const alertMessage = require('../helpers/messenger');
 const sequelize = require('../config/DBConfig');
+const Review = require('../models/Review');
 
 router.get('/search', (req, res) => {    
     //check if searchInput not null to access page      
@@ -272,6 +274,70 @@ router.get('/search', (req, res) => {
         res.redirect('/');
     }
 });
+
+
+router.get('/item/:id', (req, res) => {
+    Furniture.findOne({
+        where: {id: req.params.id},
+        include:[ {model: Themes, attributes: ['theme']}, {model: Categories, attributes: ['category']} ],
+    }).then(item => {
+        if (item){
+            //to display all reviews
+            // reviews.findAll({
+            //     where: {furnitureId: item.id}
+            // }).then(reviews){
+            //     dump here
+            // }
+
+            //copy this inside ^
+            res.render('furniture/furnitureItem', {
+                furniture: item,
+                review: {
+                    
+                }
+            })
+
+
+        } else {
+            res.redirect('/')
+        }
+    })
+}); 
+
+
+router.post('/item/reviewSubmit/:furnitureId', (req, res) => {
+    let date_ob = new Date();
+
+    // adjust 0 before single digit date
+    let date = ("0" + date_ob.getDate()).slice(-2);
+
+    // current month
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+    // current year
+    let year = date_ob.getFullYear();
+
+    let fulldate = (date + '-' + month + '-' + year)
+
+    // prints date in DD-MM-YYYY format
+    console.log(fulldate);
+
+
+    let {star, reviewText} = req.body;
+    let furnitureId = req.params.furnitureId;
+    let userId = req.user.id;
+    let imageUrl = null //ignore this for now
+
+    //Review.Create({
+    //     reviewText,
+    //     rating: star,
+    //     imageUrl,
+    //     time: fulldate,
+    //     furnitureId,
+    //     userId,
+    // }).then(createdItem => {
+    //     res.redirect('/item/'+req.params.furnitureId)
+    })
 
 
 
