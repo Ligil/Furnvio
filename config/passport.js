@@ -61,7 +61,6 @@ function googleStrategy(passport){
                 name: profile.displayName,
                 email: profile.emails[0].value,
                 verified: 1,
-                admin: false,
                 googleId: profile.id
             }
         }).then((err, user) => {
