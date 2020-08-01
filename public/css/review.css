@@ -1,8 +1,9 @@
+/* smolu rating */
 .rating{
     display: flex;
     flex-direction: row-reverse;
-    width: 175px;
-    height: 50px;
+    width: 195px;
+    height: 65px;
     padding: 10px;
 }
 .rating input{
@@ -12,23 +13,22 @@
     display: block;
     cursor: pointer;
     width: 35px;
-    height: 50px;
+    height: 35px;
     position: relative;
-
 }
 .rating label:before{
     content: '\f005';
     font-family: fontAwesome;
     position: absolute;
     display: block;
-    font-size: 30px;
+    font-size: 35px;
     color: #C0C0C0;
 }
 .rating label:after{
     content: '\f005';
     font-family: fontAwesome;
     display: block;
-    font-size: 30px;
+    font-size: 35px;
     color: Orange;
     position: absolute;
     opacity: 0;
