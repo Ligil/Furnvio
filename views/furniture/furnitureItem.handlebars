@@ -19,6 +19,12 @@
     <div class = "col-5 h-100">
         <div class="p-4 mx-2" style = "background-color: #F8F8F8;">
             <h4>{{furniture.furnitureName}}</h4>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span style="font-weight:100">(3 out of 5)</span>
             <hr>
 
             <div class="d-flex">
@@ -37,51 +43,64 @@
 
 
 <div class="border p-3 mx-3">
+    <h3>Reviews</h3>
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star"></span>
     <span class="fa fa-star"></span>
-{{!-- 
-    <div class="rating">
-        <input type="radio" name="star" id="star5" value="5">
-        <label for="star5"></label>
-        <input type="radio" name="star" id="star4" value="4">
-        <label for="star4"></label>
-        <input type="radio" name="star" id="star3" value="3">
-        <label for="star3"></label>
-        <input type="radio" name="star" id="star2" value="2">
-        <label for="star2"></label>
-        <input checked type="radio" name="star" id="star1" value="1">
-        <label for="star1"></label>
-    </div>   --}}
-    {{#each review}}
-        <p>{{review}}</p>
-    {{/each}}
+    <span style="font-weight:100">(3 out of 5)</span>
+    <hr>
+    {{#if review}}
+        <p>{{reviewLength}} review(s)</p>
+        {{#each review}}
+            <div class="card card-body">
+                <div class="d-flex">
+                    <span>Trillium Tay{{!-- Username --}}</span> 
+
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                </div>
+                <hr>
+                {{this.reviewText}}
+            </div>
+        {{/each}}
+    {{else}}
+        <p>No reviews yet</p>
+    {{/if}}
+
+    <hr>        
+    <hr>
+    {{!-- If made review --}}
+    <form class="card card-body" method="post" action="/furniture/item/reviewSubmit/{{furniture.id}}">
+        <h2>Make a review!</h2>
+        <hr>
+        <span>Review for {{furniture.furnitureName}}:</span>
+        <div class="rating">
+            <input type="radio" name="star" id="star5" value="5">
+            <label for="star5"></label>
+            <input type="radio" name="star" id="star4" value="4">
+            <label for="star4"></label>
+            <input type="radio" name="star" id="star3" value="3">
+            <label for="star3"></label>
+            <input type="radio" name="star" id="star2" value="2">
+            <label for="star2"></label>
+            <input checked type="radio" name="star" id="star1" value="1">
+            <label for="star1"></label>
+        </div>
+        <textarea class="form-control" name="reviewText" rows="3" required></textarea>
+        
+
+        <input class="btn btn-primary" type="submit" value="Submit">
+    </form>
+    {{!-- Else --}}
+    {{!-- purchase item to make a review --}}
 </div>
 
 
-<form method="post" action="/furniture/item/reviewSubmit/{{furniture.id}}">
 
-    <div class="rating">
-        <input type="radio" name="star" id="star5" value="5">
-        <label for="star5"></label>
-        <input type="radio" name="star" id="star4" value="4">
-        <label for="star4"></label>
-        <input type="radio" name="star" id="star3" value="3">
-        <label for="star3"></label>
-        <input type="radio" name="star" id="star2" value="2">
-        <label for="star2"></label>
-        <input checked type="radio" name="star" id="star1" value="1">
-        <label for="star1"></label>
-    </div>
 
-    <hr>
-
-    <p>Review for {{furniture.furnitureName}}:</p>
-    <textarea class="form-control" name="reviewText" rows="3" required></textarea>
-    
-
-    <input class="btn btn-primary" type="submit" value="Submit">
-</form>
 

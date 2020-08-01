@@ -284,6 +284,7 @@ router.get('/item/:id', (req, res) => {
         if (item){
             //to display all reviews
             // reviews.findAll({
+            //     include: {model: Users, attributes: ['theme']},
             //     where: {furnitureId: item.id}
             // }).then(reviews){
             //     dump here
@@ -292,9 +293,15 @@ router.get('/item/:id', (req, res) => {
             //copy this inside ^
             res.render('furniture/furnitureItem', {
                 furniture: item,
-                review: {
-                    
-                }
+                review: [{
+                    id: 1,
+                    reviewText: "Amazing, cool",
+                    imageUrl: "/img/gold.png",
+                    time: "1/8/2020",
+                    furnitureId: 1,
+                    userId: 2
+                }],
+                reviewLength: 1
             })
 
 
@@ -337,6 +344,7 @@ router.post('/item/reviewSubmit/:furnitureId', (req, res) => {
     //     userId,
     // }).then(createdItem => {
     //     res.redirect('/item/'+req.params.furnitureId)
+    //})
     })
 
 
