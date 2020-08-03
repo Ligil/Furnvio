@@ -1,0 +1,30 @@
+Furniture: do discount input 
+Furniture: do sort items by DONE
+Furniture: do clickable tags DONE
+Furniture: display total search results, and if more than 21 items, next furniture page, saving parameters for sorting (pagination undone)
+https://stackoverflow.com/questions/38211170/sequelize-pagination
+
+Furniture: do furniture details modal
+Theme/Categories: do basic crud for admin using navbar cards format: https://getbootstrap.com/docs/4.3/components/card/
+Main: complete search function format, and clickable to search
+Main: do home page 
+
+Error/Small Fix:
+Input validation for furniture, and maybe user too? unchecked
+FIX FURNITURE ON DELETE REMOVE THEME/CATEGORIES TOO
+Make sure add new theme/category dosent work if already exist, in javascript somehow in add and edit furniture
+
+FIX EDIT FURNITURE IMAGE SOURCE
+SHOW THEMES/CATEGORIES ON INVALID
+SORT NOTES
+
+Extra
+Admin: do audit log
+Admin Furniture: Search specific name of item to edit
+
+
+var search = location.search.substring(1); 
+var searched = JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { return key===""?value:decodeURIComponent(value) }) 
+//gets object form of url params
+$.param(searched)
+//converts back to url

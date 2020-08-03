@@ -19,6 +19,7 @@
                 <th>Last Name</th> --}}
                 <th>Verified</th>
                 <th>Admin?</th>
+                <th>Google Account?</th>
                 <th>Update User</th>
                 {{!-- <th>Gender</th>
                 <th>Update</th>
@@ -37,6 +38,8 @@
                 <td>{{ verified }}</td>
 
                 <td>{{ admin }}</td>
+
+                <td>{{#if googleId}}Yes{{else}}No{{/if}}</td>
                 
                 <td>
                     <a href="/admin/userEdit/{{id}}" class="card-link">
