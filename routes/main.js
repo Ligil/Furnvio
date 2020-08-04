@@ -306,7 +306,7 @@ router.get('/featuredFeedback', ensureAuthenticated, (req, res) => {
 //FOR SEARCHING ITEMS IN NAVBAR 
 router.post('/searchValue', (req, res) => {
 	if (req.body.searchInput == '') {
-		res.json([])
+		res.json({furniture: [], category: []})
 	} else {
 		let searchVals = req.body.searchInput;
 
@@ -318,16 +318,43 @@ router.post('/searchValue', (req, res) => {
 				}
 			});
 		}
-
+		
 		Furniture.findAll({
 			limit: 3,
 			where: {
 				[require("sequelize").Op.or]: conditions
 			},
 			raw: true
-		}).then(result => {
-			res.json(result)
-		})
+		}).then(furnitureResult => {
+
+			let conditions2 = []
+			for (var x in searchVals) {
+				conditions2.push({
+					category: {
+						[require("sequelize").Op.startsWith]: searchVals[x]
+					}
+				});
+			}
+
+			Categories.findAll({
+				limit: 3,
+				where: {
+					[require("sequelize").Op.or]: conditions2
+				},
+				raw: true,
+				group: ['category'],
+				attributes: ['category']
+			}).then(categoryResult => {
+
+				Furniture.count({ where: { [require("sequelize").Op.or]: conditions }
+				}).then(furnitureCountResult => {
+					categoryResultMapped = categoryResult.map(category => category['category'])
+					categoryAndFurniture = {furniture: furnitureResult, furnitureCount: furnitureCountResult, category: categoryResultMapped}
+					res.json(categoryAndFurniture)
+				}).catch(err => console.log(err))
+
+			}).catch(err => console.log(err))
+		}).catch(err => console.log(err))
 
 
 	}

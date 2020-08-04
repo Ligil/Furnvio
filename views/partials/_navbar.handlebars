@@ -18,9 +18,30 @@
     <form class="m-auto d-flex col-7" autocomplete="off" action="/furniture/search"method="GET" >
 
       <div class="autocomplete col-10" id="autoComplete">
-        <input required class="form-control" id="searchInput" type="text" name="searchInput" placeholder="Search here" value="{{#if searchInputEnter}}{{searchInputEnter}}{{/if}}">
+        <input required class="form-control" id="searchInput" type="text" name="searchInput" placeholder="Search here" style="border: 1px solid #e6a3a9ff;" value="{{#if searchInputEnter}}{{searchInputEnter}}{{/if}}">
         <div class="search-div" id="search-div" style="display: none">
-          
+
+          <div class="search-header" id="search-category-header"> {{!-- Header 'Categories', ignore for now --}}
+            <strong>Categories</strong>
+          </div>
+
+          <div class="search-items" id="search-category-items">
+            
+          </div>
+
+          <div class="search-header" id="search-products-header"> {{!-- Header 'Products' --}}
+            <strong>Products</strong>
+          </div>
+
+          <div class="search-items" id="search-products-items">
+            
+          </div>
+
+          {{!-- Footer --}}
+          <div class="search-footer" id="search-footer">
+            <input id="search-seeAll" class="search-seeAll" type="submit" value="See all () results matching 'a'">
+          </div>
+
         </div>
       </div>
 

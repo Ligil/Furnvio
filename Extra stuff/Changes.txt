@@ -1,0 +1,3 @@
+v1: Basic user login and forget password
+v2: admin implemented
+v3: create and retrieve furniture, and furniture page, with a bunch of models

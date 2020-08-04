@@ -118,9 +118,10 @@
 			}
 		});
 		$('#categoryCreateInput').keypress(function(e){
-			if(e.keyCode==13)
-    		e.preventDefault();
-			addCategory()
+			if(e.keyCode==13){
+				e.preventDefault();
+				addCategory()
+			}
 		});
 	});
 
@@ -152,11 +153,15 @@
 			console.log(this.value)
 		})
 
-		document.getElementById("categoryCreateInput").value = "";
-		$('#categoryCreate').collapse();
-		categoryDiv = document.createElement("label");
-		categoryDiv.setAttribute('class', 'btn btn-amber');
-		categoryDiv.innerHTML = "<input type='checkbox' name='Category:"+categoryName+"'>"+categoryName;
-		document.getElementById("categoryDivs").appendChild(categoryDiv);
+		if (categoryName.length == 0){
+			alert("Missing theme input");
+		} else {
+			document.getElementById("categoryCreateInput").value = "";
+			$('#categoryCreate').collapse();
+			categoryDiv = document.createElement("label");
+			categoryDiv.setAttribute('class', 'btn btn-amber');
+			categoryDiv.innerHTML = "<input type='checkbox' name='Category:"+categoryName+"'>"+categoryName;
+			document.getElementById("categoryDivs").appendChild(categoryDiv);
+		}
 	}
 </script>

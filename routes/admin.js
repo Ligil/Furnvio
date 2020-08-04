@@ -67,14 +67,13 @@ router.get('/retrieveFurniture', ensureAdmin, (req, res) => {
             ['id', 'ASC'] 
         ]
     }).then((furnitures) => {
-        Themes.aggregate('theme', 'DISTINCT', { plain: false })
+        Themes.aggregate('theme', 'DISTINCT', { plain: false, order: [["theme", "ASC"]] })
         .then(themes => {
-            finalThemes = themes.map(object => object["DISTINCT"])
-
-            Categories.aggregate('category', 'DISTINCT', { plain: false })
+            finalThemes = themes.map(object => object["DISTINCT"]);
+            Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
             .then(categories => {
-                finalCategories = categories.map(object => object["DISTINCT"])
-
+                finalCategories = categories.map(object => object["DISTINCT"]);
+                
                 res.render('admin/retrieveFurniture', {
                     furnitures: furnitures,
                     themes: finalThemes,

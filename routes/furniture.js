@@ -70,24 +70,6 @@ router.get('/search', (req, res) => {
         sortOrder = sortOrder.split('-')
         console.log("Sort Order: ",sortOrder)
         
-        //might not be necessary as I can just count themes/categories.length?
-        async function themeCount(){
-            themeCount = await Furniture.count({
-                include:[ themeConditions, categoryConditions ],
-                where: { [require("sequelize").Op.or]: conditions },
-                group: ["categories.category"]
-            })
-            return themeCount.length
-        }   
-        async function categoryCount(){
-            categoryCount = await Furniture.count({
-                include:[ themeConditions, categoryConditions ],
-                where: { [require("sequelize").Op.or]: conditions },
-                group: ["themes.theme"]
-            })
-            return categoryCount.length
-        }   
-
         if (themes.length >= 2 && categories.length == 0){
             Furniture.findAll({
                 include:[ themeConditions ],
@@ -109,13 +91,12 @@ router.get('/search', (req, res) => {
                     order: [sortOrder]
                 }).then((furnitureArray2) => {
                     //collect array of themes and categories as tags
-                    Themes.aggregate('theme', 'DISTINCT', { plain: false })
+                    Themes.aggregate('theme', 'DISTINCT', { plain: false, order: [["theme", "ASC"]] })
                     .then(themes2 => {
-                        finalThemes = themes2.map(object => object["DISTINCT"])    
-                        Categories.aggregate('category', 'DISTINCT', { plain: false })
+                        finalThemes = themes2.map(object => object["DISTINCT"]);
+                        Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
                         .then(categories2 => {
-                            finalCategories = categories2.map(object => object["DISTINCT"])
-                            
+                            finalCategories = categories2.map(object => object["DISTINCT"]);
                             //RENDER PAGE
                             res.render('furniture/listFurniture', {
                                 searchInputEnter: searchInput,
@@ -152,13 +133,12 @@ router.get('/search', (req, res) => {
                     order: [sortOrder]
                 }).then((furnitureArray2) => {
                     //collect array of themes and categories as tags
-                    Themes.aggregate('theme', 'DISTINCT', { plain: false })
+                    Themes.aggregate('theme', 'DISTINCT', { plain: false, order: [["theme", "ASC"]] })
                     .then(themes2 => {
-                        finalThemes = themes2.map(object => object["DISTINCT"])    
-                        Categories.aggregate('category', 'DISTINCT', { plain: false })
+                        finalThemes = themes2.map(object => object["DISTINCT"]);
+                        Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
                         .then(categories2 => {
-                            finalCategories = categories2.map(object => object["DISTINCT"])
-                            
+                            finalCategories = categories2.map(object => object["DISTINCT"]);
                             //RENDER PAGE
                             res.render('furniture/listFurniture', {
                                 searchInputEnter: searchInput,
@@ -177,56 +157,66 @@ router.get('/search', (req, res) => {
             }).catch(err => console.log(err));
 
         } else if (themes.length + categories.length >=2){
+            //might not be necessary as I can just count themes/categories.length?
+            // async function themeCount(){
+            //     themeCount = await Furniture.count({
+            //         include:[ themeConditions, categoryConditions ],
+            //         where: { [require("sequelize").Op.or]: conditions },
+            //         group: ["categories.category"]
+            //     })
+            //     return themeCount.length
+            // }   
+            // async function categoryCount(){
+            //     categoryCount = await Furniture.count({
+            //         include:[ themeConditions, categoryConditions ],
+            //         where: { [require("sequelize").Op.or]: conditions },
+            //         group: ["themes.theme"]
+            //     })
+            //     return categoryCount.length
+            // }   
 
-            themeCount().then(themeLength => {
-                categoryCount().then(categoryLength => {
-                    countCheck = themeLength * categoryLength
-
-                    Furniture.findAll({
-                        include:[ themeConditions, categoryConditions ],
-                        where: { [require("sequelize").Op.or]: conditions },
-                        group: ["furniture.id"],
-                        having: sequelize.where(
-                            sequelize.fn('count', sequelize.col('furniture.id')), { [require("sequelize").Op.gte]:  countCheck} 
-                        )
-                    }).then((furnituresId) => {
-                        
-                        let furnitureArray = []
-                        furnituresId.map(function(object) {
-                            furnitureArray.push(object.dataValues.id)
+            countCheck = themes.length * categories.length
+            Furniture.findAll({
+                include:[ themeConditions, categoryConditions ],
+                where: { [require("sequelize").Op.or]: conditions },
+                group: ["furniture.id"],
+                having: sequelize.where(
+                    sequelize.fn('count', sequelize.col('furniture.id')), { [require("sequelize").Op.gte]:  countCheck} 
+                )
+            }).then((furnituresId) => {
+                
+                let furnitureArray = []
+                furnituresId.map(function(object) {
+                    furnitureArray.push(object.dataValues.id)
+                })
+                Furniture.findAll({
+                    include:[ {model: Themes, attributes: ['theme']}, {model: Categories, attributes: ['category']} ],
+                    where: { id: { [require("sequelize").Op.in]: furnitureArray } },
+                    order: [sortOrder]
+                }).then((furnitureArray2) => {
+                    //collect array of themes and categories as tags
+                    Themes.aggregate('theme', 'DISTINCT', { plain: false, order: [["theme", "ASC"]] })
+                    .then(themes2 => {
+                        finalThemes = themes2.map(object => object["DISTINCT"]);
+                        Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
+                        .then(categories2 => {
+                            finalCategories = categories2.map(object => object["DISTINCT"]);
+                            //RENDER PAGE
+                            res.render('furniture/listFurniture', {
+                                searchInputEnter: searchInput,
+                                furnitures: furnitureArray2,
+                                themes: finalThemes,
+                                categories: finalCategories,
+                                queryThemes: themes,
+                                queryCategories: categories,
+                                sort: sortRES
+                            });
+    
                         })
-                        Furniture.findAll({
-                            include:[ {model: Themes, attributes: ['theme']}, {model: Categories, attributes: ['category']} ],
-                            where: { id: { [require("sequelize").Op.in]: furnitureArray } },
-                            order: [sortOrder]
-                        }).then((furnitureArray2) => {
-                            //collect array of themes and categories as tags
-                            Themes.aggregate('theme', 'DISTINCT', { plain: false })
-                            .then(themes2 => {
-                                finalThemes = themes2.map(object => object["DISTINCT"])    
-                                Categories.aggregate('category', 'DISTINCT', { plain: false })
-                                .then(categories2 => {
-                                    finalCategories = categories2.map(object => object["DISTINCT"])
-                                    
-                                    //RENDER PAGE
-                                    res.render('furniture/listFurniture', {
-                                        searchInputEnter: searchInput,
-                                        furnitures: furnitureArray2,
-                                        themes: finalThemes,
-                                        categories: finalCategories,
-                                        queryThemes: themes,
-                                        queryCategories: categories,
-                                        sort: sortRES
-                                    });
-            
-                                })
-                            })
-            
-                        })
-                    }).catch(err => console.log(err));
-                }).catch(err => console.log(err));
+                    })
+    
+                })
             }).catch(err => console.log(err));
-
         } else { //if 1 or less conditions
 
             Furniture.findAll({
@@ -244,12 +234,13 @@ router.get('/search', (req, res) => {
                     order: [sortOrder]
                 }).then((furnitureArray2) => {
                     //collect array of themes and categories as tags
-                    Themes.aggregate('theme', 'DISTINCT', { plain: false })
+                    
+                    Themes.aggregate('theme', 'DISTINCT', { plain: false, order: [["theme", "ASC"]] })
                     .then(themes2 => {
-                        finalThemes = themes2.map(object => object["DISTINCT"])    
-                        Categories.aggregate('category', 'DISTINCT', { plain: false })
+                        finalThemes = themes2.map(object => object["DISTINCT"]);
+                        Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
                         .then(categories2 => {
-                            finalCategories = categories2.map(object => object["DISTINCT"])
+                            finalCategories = categories2.map(object => object["DISTINCT"]);
                             
                             //RENDER PAGE
                             res.render('furniture/listFurniture', {

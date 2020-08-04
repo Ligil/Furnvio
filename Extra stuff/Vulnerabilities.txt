@@ -1,0 +1,3 @@
+Trillium:
+If someone clicks forget password, and somehow someone manages to guess the correct long ass token within 15 minutes of creation, 
+they can at most change the password of a random account they won't even know the email of

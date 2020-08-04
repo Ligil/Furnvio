@@ -1,0 +1,86 @@
+Sequelize Documentation
+https://sequelize.org/v5/
+https://sequelize.org/v5/manual/models-usage.html
+https://sequelize.org/v5/manual/querying.html
+
+Note:
+db.js is for logging in 
+(DO NOT MODIFY THIS as we all have the same username and password as practical)
+Change it only when necessary
+
+DBconfig is for server, not really much to change
+
+DBConnection is where the real stuff happens, change things here
+the setUpDB function is run in app.js BRANDNAMEDB, True forces new table creation, dropping previous and replacing them (line 18 DBConnection)
+Specify in DBConnection.js relationship between tables
+
+
+-------------------------------------------
+Json Web Token (JWT) Documentation
+https://www.npmjs.com/package/jsonwebtoken
+
+ExpiresIn for jwt.sign dosent work if string first argument
+https://github.com/auth0/node-jsonwebtoken/issues/166
+
+-------------------------------------------
+Handlebars documentation, and their {{}}
+https://handlebarsjs.com/guide/#custom-helpers
+
+--------------------------------------------
+Passport
+Lazy find documentation
+the require (import) in app.js as const authenticate = require('./config/passport');
+it calls localStrategy from config/passport.js(?)
+routes/user passport.authenticate 'local' argument for some reason calls passport
+
+Note to self, look up passport documentation in order to implement google login
+
+--------------------------------------------
+Regarding the popup alerts - /about page will be used as example
+PRACTICAL 2 
+
+ctrl + f -> res.locals.success_msg in app.js
+error_msg and errors variables to be used when rendering are in -
+viws/partials/_errors.handlebars and _msg.handlebars
+it is in main.handlebars as {{> _msg}}
+
+*Flash Messenger* - ctrl + f -> app.use(flash()) in app.js
+helpers/messenger.js and views/partials/_flashmsg.handlebars 
+- is a version that uses one use cookies and icons, use this more often as u cant store error and erros while redirecting
+
+Usage:
+for rendering
+- 'success_msg' for green
+- 'error_msg' for red
+- array of objects e.g [{text:'Error message'}, {}] for multiple red
+
+for redirects
+- check helpers/messenger.js for input, routes/main.js about for example 
+
+--------------------------------------------
+To check if user is authenticated, reference practical 7 Security and Delete Video
+- video.js const ensureAuthenticated = require('../helpers/auth'); 
+
+--------------------------------------------
+For handlebars comparison, add to hbs.js
+https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional
+
+
+
+
+--------------------------------------------
+FROM HERE IS POSSIBLY USEFUL THINGS
+
+main.js router.get('/test/:id', (req.res) =>
+is a page for testing req.params, req.query, req.body
+https://stackoverflow.com/questions/30915424/express-what-is-the-difference-between-req-query-and-req-body
+
+remember to test verfify email console.log
+
+MODALS FOR POPUP THINGIES
+https://www.w3schools.com/bootstrap/bootstrap_modal.asp
+
+-----
+To make redirect url pass parameters - using url core module
+https://stackoverflow.com/questions/19035373/how-do-i-redirect-in-expressjs-while-passing-some-context
+

@@ -1,14 +1,26 @@
 // import { Json } from "sequelize/types/lib/utils";
 // this is for navbar
-
-$('#searchInput').on('focusin', function(){
-    document.getElementById('search-div').style.display = 'block'
-    $("#overlay").css("display", "block");
+$('#autoComplete').on('click', function(){
+    if (document.getElementById("searchInput").value.length > 0){
+        document.getElementById('search-div').style.display = 'block'
+        $("#overlay").css("display", "block");
+    }
 });
 
-$('#searchInput').on('focusout', function(){
-    document.getElementById('search-div').style.display = 'none'
-    $("#overlay").css("display", "none");
+// $('#autoComplete').on('', function(){
+//     document.getElementById('search-div').style.display = 'none'
+//     $("#overlay").css("display", "none");
+// });
+
+$(document).mouseup(function(e) 
+{
+    var container = $("autoComplete");
+    // if the target of the click isn't the container nor a descendant of the container
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+        document.getElementById('search-div').style.display = 'none'
+        $("#overlay").css("display", "none");
+    }
 });
 
 
@@ -31,31 +43,83 @@ function getIndicesOf(searchStr, str, caseSensitive) {
 }
 
 $('#searchInput').on('keyup', function(){
-    let searchInput = {searchInput: this.value.split(' ')}
+    let searchInput = {searchInput: document.getElementById("searchInput").value.split(' ')}
+    //remove empty strings when splitting
     searchInput.searchInput = searchInput.searchInput.filter(function(searchValue){
         return (searchValue != '')
-    })
-    a = document.getElementById('search-div')
-    a.style.display = 'block'
+    }) //get search value
 
+    if (document.getElementById("searchInput").value.length > 0){
+        document.getElementById('search-div').style.display = 'block'
+        $("#overlay").css("display", "block");
+    } else {
+        document.getElementById('search-div').style.display = 'none'
+        $("#overlay").css("display", "none");
+    }
+
+    productsDiv = document.getElementById('search-products-items')
+    categoriesDiv = document.getElementById('search-category-items')
+    //categories, products
+    //no category found 
     fetch('/searchValue', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(searchInput),
+        body: JSON.stringify(searchInput)
     }).then((res)=>{
         res.json().then((data) => {
-            
-            a.innerHTML = ''
-            if (data.length != 0){
+            furnitureData = data['furniture']
+            categoryData = data['category']
+            productsDiv.innerHTML = ''
+            categoriesDiv.innerHTML = ''
+            //Section 1: Making Category Tabs
 
-                data.forEach((object)=>{
-                    b = document.createElement("DIV"); //each item
-                    /*make the matching letters bold:*/
-                    
+            if (furnitureData == []){furnitureData = ['']}
+            if (categoryData == []){categoryData = ['']}
+
+            var searchData = searchInput.searchInput
+            if (categoryData.length != 0){
+                categoryData.forEach((category)=>{
+                    /*Make the matching letters bold:*/
+                    var boldedText = category                    
+                    for (i in searchData){
+                        word = searchData[i]
+                        if (boldedText.toLowerCase().startsWith(word.toLowerCase())){
+                            boldedText = "<b class='font-weight-bold'>" + boldedText.substring(0, word.length) + "</b>" + boldedText.substring(word.length)
+                            break
+                        }
+                    }                     
+
+                    eachItem = document.createElement("DIV"); //each item
+                    eachItem.classList.add("align-items-center")
+                    eachItem.classList.add("search-items-each")
+
+                    textContainer = "<div class='search-items-text'>" + boldedText + "</div>"
+                    eachItem.innerHTML = textContainer
+
+                    //Link it
+                    eachItemLink = document.createElement("a");
+                    eachItemLink.setAttribute("href", "/furniture/"+category)
+                    eachItemLink.appendChild(eachItem)
+
+                    //Append it
+                    categoriesDiv.appendChild(eachItemLink);
+                })
+
+            } else {  
+                eachItem = document.createElement("DIV");
+                eachItem.classList.add("search-items-each")
+                eachItem.innerHTML = "<strong>No category found</strong>";
+                categoriesDiv.appendChild(eachItem);
+            }
+
+            //Section 2: Making furniture tabs
+            searchCounter = document.getElementById("search-seeAll");
+            if (furnitureData.length != 0){
+                furnitureData.forEach((object)=>{
+
+                    /*Make the matching letters bold:*/
                     //Part 1: getting data
-                    var searchData = searchInput.searchInput
                     var boldedTest = object.furnitureName
-                    console.log(boldedTest)
 
                     var word, allIndexes = []
                     for (i in searchData){
@@ -86,29 +150,48 @@ $('#searchInput').on('keyup', function(){
                     }
 
                     //Part 3: replacing parts
-                    console.log(allIndexes)
                     var singleArray=[], part3Counter = 0
-                    console.log("NAME", boldedTest)
                     for (i in allIndexes){
                         singleArray = allIndexes[i]
                         boldedTest = boldedTest.substring(0, singleArray[0]+(part3Counter*32)) + "<b class='font-weight-bold'>" + singleArray[1] + "</b>" + boldedTest.substring(singleArray[2]+(part3Counter*32)) 
-                        console.log(boldedTest)
                         part3Counter += 1
                     }
 
                     //28 and 4
-                    b.innerHTML = boldedTest
-                    a.appendChild(b);
+                    //boldedTest is the new bolded text, b is a div in search-div
+
+                    eachItem = document.createElement("DIV"); //each item
+                    eachItem.classList.add("d-flex")
+                    eachItem.classList.add("align-items-center")
+                    eachItem.classList.add("search-items-each")
+
+
+                    //add image and text
+                    image = "<img src='" + object.imageURL + "' alt='' style='max-width: 100%; max-height: 100%'>"
+                    imageContainer = "<div class='col-3'>" + image + "</div>"
+                    textContainer = "<div class='col-9 search-items-text'>" + boldedTest + "</div>"
+                    eachItem.innerHTML = imageContainer + textContainer
+                    eachItemLink = document.createElement("a"); //each item
+                    eachItemLink.setAttribute("href", "/furniture/item/"+object.id)
+                    eachItemLink.appendChild(eachItem)
+                    productsDiv.appendChild(eachItemLink);
+
+                    //counter at bottom
+                    searchCounter.value = "See all (" + data['furnitureCount'] + ") results matching '" + document.getElementById("searchInput").value +"'"
                 })
 
             } else {  
-                b = document.createElement("DIV");
-                b.innerHTML = "<strong>-No items found-</strong>";
-                a.appendChild(b);
+                eachItem = document.createElement("DIV");
+                eachItem.classList.add("search-items-each")
+                eachItem.innerHTML = "<strong>No items found</strong>";
+                productsDiv.appendChild(eachItem);
+
+                searchCounter.value = "No Results"
             }
 
         })
     });
+    //func end
 });
 
 $("#feedback-dropdown, #feedback-dropdown-content").on({
