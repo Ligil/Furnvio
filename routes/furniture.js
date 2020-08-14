@@ -109,7 +109,8 @@ router.get('/search', (req, res) => {
                                         categories: finalCategories,
                                         queryThemes: themes,
                                         queryCategories: categories,
-                                        sort: sortRES
+                                        sort: sortRES,
+                                        resultsFound: furnitureArray2.length
                                     });
 
                                 })
@@ -151,7 +152,8 @@ router.get('/search', (req, res) => {
                                         categories: finalCategories,
                                         queryThemes: themes,
                                         queryCategories: categories,
-                                        sort: sortRES
+                                        sort: sortRES,
+                                        resultsFound: furnitureArray2.length
                                     });
 
                                 })
@@ -161,23 +163,6 @@ router.get('/search', (req, res) => {
             }).catch(err => console.log(err));
 
         } else if (themes.length + categories.length >= 2) {
-            //might not be necessary as I can just count themes/categories.length?
-            // async function themeCount(){
-            //     themeCount = await Furniture.count({
-            //         include:[ themeConditions, categoryConditions ],
-            //         where: { [require("sequelize").Op.or]: conditions },
-            //         group: ["categories.category"]
-            //     })
-            //     return themeCount.length
-            // }   
-            // async function categoryCount(){
-            //     categoryCount = await Furniture.count({
-            //         include:[ themeConditions, categoryConditions ],
-            //         where: { [require("sequelize").Op.or]: conditions },
-            //         group: ["themes.theme"]
-            //     })
-            //     return categoryCount.length
-            // }   
 
             countCheck = themes.length * categories.length
             Furniture.findAll({
@@ -213,7 +198,8 @@ router.get('/search', (req, res) => {
                                         categories: finalCategories,
                                         queryThemes: themes,
                                         queryCategories: categories,
-                                        sort: sortRES
+                                        sort: sortRES,
+                                        resultsFound: furnitureArray2.length
                                     });
 
                                 })
@@ -254,7 +240,8 @@ router.get('/search', (req, res) => {
                                         categories: finalCategories,
                                         queryThemes: themes,
                                         queryCategories: categories,
-                                        sort: sortRES
+                                        sort: sortRES,
+                                        resultsFound: furnitureArray2.length
                                     });
 
                                 })
@@ -321,6 +308,24 @@ router.post('/item/reviewSubmit/:furnitureId', (req, res) => {
     })
 })
 
+router.get('/themes/:name', (req, res) => {
+    var themeName = req.params.name
 
+    Furniture.findAll({   
+        where: {
+            '$Themes.theme$': themeName
+        },
+        include: [{model: Themes, attributes: ['theme']}, { model: Categories, attributes: ['category'] }, {model: Review}],
+    }).then(Furniture => {
+        Themes.findOne({
+            where: { theme: themeName }
+        }).then(theme => {
+            console.log(Furniture)
+            console.log(theme)
+            res.render('furniture/themes', { })
+        })
+    })
+
+})
 
 module.exports = router;

@@ -95,6 +95,13 @@
         <li class="nav-item m-auto dropdown" id="feedback-dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="feedback-dropdown-btn">Feedback</a>
         </li>
+
+        {{!-- Item 4 --}}
+        <li class="nav-item m-auto dropdown" id="themes-dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="themes-dropdown-btn">Themes</a>
+        </li>
+
+
       </ul>
       {{#if user.admin}}
       <ul class="navbar-nav navbar-contents">
@@ -102,7 +109,7 @@
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="admin-function-dropdown-btn">Admin Functions</a>
         </li>
 
-        <li class="nav-item m-auto">
+        {{!-- <li class="nav-item m-auto">
             <a href="/alertTest" class="nav-link">Alert Test</a>
         </li>
 
@@ -110,7 +117,7 @@
           <form action="/pay"  method='post'>
             <button class="btn" style="padding: 0px;" type="submit">Paypal button</button>
           </form>
-        </li>
+        </li> --}}
 
         <li class="nav-item m-auto dropdown">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Video Jots (Click me because im lazy)</a>
@@ -119,6 +126,7 @@
             <a href="/video/showAddVideo" class="dropdown-item">Add Video</a>
           </ul> 
         </li>
+
 			</ul>
       {{/if}} 
 
@@ -132,6 +140,13 @@
         <a href="/feedback">Submit Feedback</a>
         <a href="/feedback/userfeedback">My Feedbacks</a>
         <a href="/feedback/featuredFeedback">Common Feedbacks</a>
+      </div>
+    </div>
+
+    <div id="themes-dropdown-content">
+      <div class="row container py-3">
+        <a href="/furniture/themes/123">Themes</a>
+        {{!-- do some javascript here to display some? --}}
       </div>
     </div>
 

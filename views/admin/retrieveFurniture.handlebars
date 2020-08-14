@@ -44,8 +44,8 @@
 										
 										<div class="d-flex h-100">
 
-											<div class="border col-6 flex-grow-1 d-flex align-items-center" style="flex: 1">
-												<img src="{{imageURL}}" alt="Image unavailable" class="img-fluid">
+											<div class="border col-6 supercenter">
+												<img src="{{imageURL}}" alt="Image unavailable" >
 											</div>
 
 											<div class="border col-6 p-4 d-flex flex-column h-100">
@@ -80,22 +80,22 @@
 													
 													<div>
 														<p class="font-italic col-12">Themes</p>
-														<div class="d-flex border-bottom pb-1 mb-4">
+														<div class="d-flex border-bottom container pb-1 mb-4">
 															{{#each themes}}
-																<div class="col-4">
-																	<p class="font-italic">{{this.dataValues.theme}}</p>
-																</div>
+																<a href="/furniture/themes/{{this.dataValues.theme}}" class="btn btn-sm" id="{{this}}">
+																	{{this.dataValues.theme}}
+																</a>
 															{{/each}}
 														</div>
 													</div>				
 
 													<div>
 														<p class="font-italic col-12">Categories</p>
-														<div class="d-flex border-bottom pb-1 mb-4">
+														<div class="d-flex border-bottom container pb-1 mb-4">
 															{{#each categories}}
-															<div class="col-4">
-																<p class="font-italic">{{this.dataValues.category}}</p>
-															</div>
+																<a href="/furniture/themes/{{this.dataValues.theme}}" class="btn btn-sm" id="{{this}}">
+																	{{this.dataValues.category}}
+																</a>
 															{{/each}}
 														</div>
 													</div>
@@ -135,7 +135,7 @@
 					</div>
 
 				{{else}}
-					<p>No Furniture in datbase</p>
+					<p class="mt-2">No Furniture in database</p>
 				{{/if}}
 			</div>
 		</div>

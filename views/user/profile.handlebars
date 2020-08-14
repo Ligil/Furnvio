@@ -1,90 +1,41 @@
-{{!-- CHANGE THIS PLEASE FOR THE LOVE OF GOD --}}
+<div class="card card-body mb-4">
+    {{!-- https://getbootstrap.com/docs/4.0/components/navs/#javascript-behavior --}}
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                aria-controls="profile" aria-selected="true">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="password-tab" data-toggle="tab" href="#password" role="tab" aria-controls="password"
+                aria-selected="false">Password</a>
+        </li>
+    </ul>
 
-<strong>
-    <section id="one" class="wrapper style4">
-        <div class="inner">
-            <div class="grid-style">
-                <div>
-                    <div class="d-flex">
-                        <h1 class="display-4">Hello, {{ user.name }}    </h1>
-                        {{!-- {% if user.get_totalSpent() >= 1000 %}
-                            <img class="align-middle medalSize" src="{{url_for('static', filename='img/gold.png' ) }}">
-                        {% elif user.get_totalSpent() >= 500 %}
-                            <img class="align-middle medalSize" src="{{url_for('static', filename='img/silver.png' ) }}">
-                        {% elif user.get_totalSpent() >= 200 %}
-                            <img class="align-middle medalSize" src="{{url_for('static', filename='img/bronze.png' ) }}">
-                        {% endif %} --}}
-                    </div>
-                    {{!-- {% if tier %}
-                        <h3>{{ tier }}</h3>
-                    {% endif %} --}}
+    <hr>
 
-                    <br>
-                    <p>User ID: {{ user.id }}</p>
-                    <p>Full Name: {{ user.name }}</p>
-                    <p>Email: {{ user.email }}</p>
-                    <p>Membership Type: {{#if user.admin }} Admin {{else}} Normal User {{/if}}</p>
-                    {{!-- <p>Gender: {{ user.get_gender() }}</p> --}}
-                    <br><br>
-                    <a href="/changeProfile" class="button alt">Change Profile (NOT WORKING)</a>
-                    <a href="/changePassword" class="button alt">Change Password (NOT WORKING)</a>
-                </div>
-                <div>
-                    <br>
-                    {{!-- <p>If you have forgotten about your password please contact an administrator for more assistance.</p>
-                    <p>For safe practice please change your password every month.</p>
-                    {% if user.get_totalSpent() < 1000 %}
-                        <h3>Spend <var style="color:red;">${{ rgoal }}</var> more to upgrade to the next tier!!</h3>
-                    {% elif user.get_totalSpent() >= 1000 %}
-                        <h3>{{ rgoal }}</h3>
-                    {% endif %} --}}
-                    <!-- Table -->
-                    <div>
-                        <div class="box" style="padding-left:25px; padding-right:25px; padding-top:15px; padding-bottom:15px; border: 2px solid #777777; border-radius: 25px;">
-                            <div>
-                                <h3>Membership and Benefits</h3>
-                                <div class="table-wrapper style2" style="color:#000000;">
-                                    <table>
-                                        <thead>
-                                        <tr>
-                                            <th>Medals</th>
-                                            <th>Tiers</th>
-                                            <th>Requirements</th>
-                                            <th>Discount Benefits</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td><img class="align-middle medalSize" src="/img/bronze.png"></td>
-                                            <td>Bronze</td>
-                                            <td>Min spending $200</td>
-                                            <td>2% off all furniture</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="align-middle medalSize" src="/img/silver.png"></td>
-                                            <td>Silver</td>
-                                            <td>Min spending $500</td>
-                                            <td>4.5% off all furniture</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="align-middle medalSize" src="/img/gold.png"></td>
-                                            <td>Gold</td>
-                                            <td>Min spending of $1000</td>
-                                            <td>7.5% off all furniture</td>
-                                        </tr>
-                                        </tbody>
-                                        <tfoot>
-                                        <td>
-                                            <td colspan="3" style="font-size:10px;">*Will apply once the order have be fulfilled/delivered</td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="tab-content" id="myTabContent">
+
+        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="container">
+                <h2>Hello! {{user.name}}</h2>
+                <hr>
+                <p>User ID: {{ user.id }}</p>
+                <p>Full Name: {{ user.name }}</p>
+                <p>Email: {{ user.email }}</p>
+                <p>Membership Type: {{#if user.admin }} Admin {{else}} Normal User {{/if}}</p>
+
             </div>
         </div>
-    </section>
-</strong>
+
+        <div class="tab-pane fade " id="password" role="tabpanel" aria-labelledby="password-tab">
+            <div class="container">
+                <h2>Password</h2>
+                <hr>
+                {{!-- I believe in you, you can do this, novelupdates --}}
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

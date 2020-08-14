@@ -4,7 +4,8 @@
   "description": "Furnvio Furniture Store",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "scss": "node-sass --watch public/scss -o public/css"
   },
   "keywords": [],
   "author": "Trololol",
@@ -33,6 +34,7 @@
     "mysql2": "^2.1.0",
     "node-fetch": "^2.6.0",
     "node-fetch-middleware": "^1.0.1",
+    "node-sass": "^4.14.1",
     "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0",
     "passport-local": "^1.0.0",

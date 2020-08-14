@@ -205,6 +205,17 @@ $("#feedback-dropdown, #feedback-dropdown-content").on({
     }
 })
 
+$("#themes-dropdown, #themes-dropdown-content").on({
+    'mouseenter': function(){
+        $("#themes-dropdown-content").css("display", "block");
+        $("#overlay").css("display", "block");
+    }, 
+    'mouseleave': function(){
+        $("#themes-dropdown-content").css("display", "none")
+        $("#overlay").css("display", "none");
+    }
+})
+
 $("#admin-function-dropdown, #admin-function-dropdown-content").on({
     'mouseenter': function(){
         $("#admin-function-dropdown-content").css("display", "block");

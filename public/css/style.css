@@ -29,6 +29,111 @@ a {
   text-decoration: underline;
 }
 
+.supercenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.supercenter > img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Background line */
+/**
+ * Horizontal Type Line Behind Text
+ * Inspired by this discussion @ CSS-Tricks: https://css-tricks.com/forums/topic/css-trick-for-a-horizontal-type-line-behind-text/#post-151970
+ * Available on jsFiddle: http://jsfiddle.net/ericrasch/jAXXA/
+ * Available on Dabblet: http://dabblet.com/gist/2045198
+ * Available on GitHub Gist: https://gist.github.com/2045198
+ */
+ /* Click here https://codepen.io/ericrasch/pen/Irlpm?__cf_chl_jschl_tk__=d36f2edb3830b90fec2f25f942f4955f29c3e395-1597375737-0-AVJt03uH-kQ_CwD96e-QtbFEgpYtLO40kKhj8ScqaoduB-b887WbSLXfb6i6BgYooOIc693uAkZ_ajn7CQmoPGKtuZ9QYLdZUtZq7RqJVqrYggqjCGZovSGceIBZYAdVJsRMlSNTEy2OTfjgoAs_yaye_eIbtG9PBh1pJtrst0wK5QCRasneu4LKLpHBnPwf3evE_mkPYNj5ftaDl-huBgkByMcz4cAMquQajAGoednozj69PCYjHABMQwwg8GA10cs0XTiOqz0amtnjreQQ0YglWoujjzWN57fFHFXAaqC5DWKkQU6Stx1WuMSM-ZlqwwlMxP7jhVYUHD8weylB1zdMWHSYvhoHC_I6YEXFtU37 */
+h2.background {
+  font: 20px sans-serif;
+  text-align: center;
+  text-transform: uppercase; }
+
+h2.background {
+  position: relative;
+  z-index: 1; }
+  h2.background:before {
+    border-top: 2px solid #dfdfdf;
+    content: "";
+    margin: 0 auto;
+    /* this centers the line to the full width specified */
+    position: absolute;
+    /* positioning must be absolute here, and relative positioning must be applied to the parent */
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 95%;
+    z-index: -1; }
+  h2.background span {
+    /* to hide the lines from behind the text, you have to set the background color the same as the container */
+    background: #fff;
+    padding: 0 15px; }
+
+h2.double:before {
+  /* this is just to undo the :before styling from above */
+  border-top: none; }
+
+h2.double:after {
+  border-bottom: 1px solid blue;
+  -webkit-box-shadow: 0 1px 0 0 red;
+  -moz-box-shadow: 0 1px 0 0 red;
+  box-shadow: 0 1px 0 0 red;
+  content: "";
+  margin: 0 auto;
+  /* this centers the line to the full width specified */
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+  width: 95%;
+  z-index: -1; }
+
+h2.no-background {
+  position: relative;
+  overflow: hidden; }
+  h2.no-background span {
+    display: inline-block;
+    vertical-align: baseline;
+    zoom: 1;
+    *display: inline;
+    *vertical-align: auto;
+    position: relative;
+    padding: 0 20px; }
+    h2.no-background span:before, h2.no-background span:after {
+      content: '';
+      display: block;
+      width: 1000px;
+      position: absolute;
+      top: 0.73em;
+      border-top: 1px solid red; }
+    h2.no-background span:before {
+      right: 100%; }
+    h2.no-background span:after {
+      left: 100%; }
+
+h2.no-span {
+  display: table;
+  white-space: nowrap; }
+  h2.no-span:before, h2.no-span:after {
+    border-top: 1px solid green;
+    content: '';
+    display: table-cell;
+    position: relative;
+    top: 0.5em;
+    width: 45%; }
+  h2.no-span:before {
+    right: 1.5%; }
+  h2.no-span:after {
+    left: 1.5%; }
+
+
+
 /* NAVBAR */
 .navbar {
   box-shadow: none !important;
@@ -269,6 +374,50 @@ a {
   }  
   #admin-function-dropdown-content-furniture2 a{
     width: 100%;
+  }
+  
+  /* Themes */
+  #themes-dropdown {
+    display: inline-block;
+  }
+  
+  #themes-dropdown-btn {
+    color: black;
+    background-color: white;
+    border: 0;
+    transition-duration: 0.5s;
+  }
+  #themes-dropdown-btn:focus{
+    outline: none;
+  }
+  
+  #themes-dropdown:hover > #themes-dropdown-btn {
+    transition-duration: 0.5s;
+    color: #d4af37 !important;
+  }
+  
+  #themes-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 80%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 1;
+    border: 1px solid #CCCCCC; 
+    border-radius: 5px;
+  }
+  
+  #themes-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    margin: 0;
+  }
+  
+  #themes-dropdown-content a:hover {
+    color: #d4af37;
   }
 /* NAVBAR END */
 
