@@ -33,7 +33,7 @@ router.post('/login', (req, res, next) => {
 
 router.get('/profile', (req, res) => {
 	const title = 'FURNVIO - Profile';
-    User.findOne({ where: {email: req.user.email} })
+    User.findOne({ where: {id: req.user.id} })
     .then(user => {
         res.render('user/profile', {title: title, user: user}) // renders views/profile.handlebars
     })

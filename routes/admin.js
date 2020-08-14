@@ -15,6 +15,8 @@ const {ensureAuthenticated, ensureAdmin} = require('../helpers/auth')
 const fs = require('fs');
 const {imageUpload} = require('../helpers/imageUpload');
 const { removeJoinMetaData } = require('../helpers/removeMeta');
+const FurnitureToThemes = require('../models/FurnitureThemes');
+const FurnitureToCategories = require('../models/FurnitureCategories');
 
 //USERS - Retrieve Users
 router.get('/listUsers', ensureAuthenticated, (req, res) => {
@@ -103,7 +105,7 @@ router.get('/addFurniture', ensureAdmin, (req, res) => {
 });
 
 //FURNITURE - add furniture POST (save)
-router.post('/addFurniture', ensureAdmin, (req, res) => {
+router.post('/addFurniture', ensureAdmin, async (req, res) => {
     let furnitureName = req.body.furnitureName;
     let description = req.body.description;
     let cost = req.body.cost;
@@ -116,7 +118,7 @@ router.post('/addFurniture', ensureAdmin, (req, res) => {
     let lastEditedBy = req.user.id
 
     // Multi-value components return array of strings or undefined
-    Furniture.create({
+    let createFurniture = await Furniture.create({
         furnitureName,
         cost,
         description,
@@ -127,36 +129,45 @@ router.post('/addFurniture', ensureAdmin, (req, res) => {
         addedBy,
         lastEditedBy
     }) 
-    .then(furniture => {
+    .then(furniture => { return furniture })
 
-        keys = Object.keys(req.body)
-        // Filter themes
-        themeList = keys.filter( function(key) {return key.startsWith("Theme:")
-        }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
-    
+    let themeFindCreate = await function(){
         for (indexVal in themeList){
             var themeName = themeList[indexVal];
-            Themes.create({
-                theme: themeName,
-                furnitureId: furniture.id
+            Themes.findOrCreate({
+                where: { theme: themeName }
+            }).then(theme => {
+                furniture.addThemes(theme[0])
             })
         }
-        //Filter Categories
-        categoryList = keys.filter( function(key) {return key.startsWith("Category:")
-        }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
+    }
     
+    let categoryFindCreate = await function(){
         for (indexVal in categoryList){
             var categoryName = categoryList[indexVal];
-            Categories.create({
-                category: categoryName,
-                furnitureId: furniture.id
+            Categories.findOrCreate({
+                where: { category: categoryName }
+            }).then(category => {
+                furniture.addCategories(category[0])
             })
         }
+    }
 
-        alertMessage(res, 'success', 'Successfully added furniture '+ furniture.furnitureName +' ID ' + furniture.id+'!', 'fas fa-exclamation-circle', true);
-        res.redirect('/admin/retrieveFurniture');
-    })
-    .catch(err => console.log(err))
+    furniture = createFurniture
+
+    keys = Object.keys(req.body)
+    // Filter themes
+    themeList = keys.filter( function(key) {return key.startsWith("Theme:")
+    }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
+    //Filter Categories
+    categoryList = keys.filter( function(key) {return key.startsWith("Category:")
+    }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
+
+    themeFindCreate()
+    categoryFindCreate()
+
+    alertMessage(res, 'success', 'Successfully added furniture '+ furniture.furnitureName +' ID ' + furniture.id+'!', 'fas fa-exclamation-circle', true);
+    res.redirect('/admin/retrieveFurniture');
 });
 
 //FURNITURE - Upload image for add/edit furniture
@@ -231,8 +242,8 @@ router.put('/saveEditFurniture/:id', ensureAdmin, (req, res) => {
         plain: true
     })
 
-    Themes.destroy({  where: { furnitureId: req.params.id } })    
-    Categories.destroy({ where: { furnitureId: req.params.id } })
+    FurnitureToThemes.destroy({  where: { furnitureId: req.params.id } })    
+    FurnitureToCategories.destroy({ where: { furnitureId: req.params.id } })
 
     keys = Object.keys(req.body)
     // Filter themes
@@ -241,20 +252,23 @@ router.put('/saveEditFurniture/:id', ensureAdmin, (req, res) => {
 
     for (indexVal in themeList){
         var themeName = themeList[indexVal];
-        Themes.create({
-            theme: themeName,
-            furnitureId: req.params.id
+        Themes.findOrCreate({
+            where: { theme: themeName }
+        }).then(theme => {
+            furniture.addThemes(theme[0])
         })
     }
+    
     //Filter Categories
     categoryList = keys.filter( function(key) {return key.startsWith("Category:")
     }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
 
     for (indexVal in categoryList){
         var categoryName = categoryList[indexVal];
-        Categories.create({
-            category: categoryName,
-            furnitureId: req.params.id
+        Categories.findOrCreate({
+            where: { category: categoryName }
+        }).then(category => {
+            furniture.addCategories(category[0])
         })
     }
 

@@ -14,9 +14,10 @@ function localStrategy(passport){ //somehow takes all the data from /user/login 
             if(user.verified == 0){
                 return done(null, false, {message: 'User not verified'})
             }
-            if(user.googleId != null){
-                return done(null, false, {message: 'Log in using Google'})
-            }
+            //allowed both logins so
+            // if(user.googleId != null){
+            //     return done(null, false, {message: 'Log in using Google'})
+            // }
 
             // Match password
             bcrypt.compare(password, user.password, (err, isMatch) => {
@@ -56,15 +57,28 @@ function googleStrategy(passport){
     function(accessToken, refreshToken, profile, done) {
         console.log("Person clicked, doing stuff now")
         //console.log(profile) //can use profile.name.familyName, profile.name.givenName, displayName, photos?
-        User.findOrCreate({ 
+        User.findOne({ 
             where: {
                 name: profile.displayName,
                 email: profile.emails[0].value,
                 verified: 1,
                 googleId: profile.id
             }
-        }).then((err, user) => {
-            return done(user, err); //idk why this one is diff compared to local
+        }).then((user, err) => {
+            if (user == null){
+                User.create({
+                    name: profile.displayName,
+                    email: profile.emails[0].value,
+                    verified: 1,
+                    googleId: profile.id,
+                    admin: 0
+                }).then((user, err) => {
+                    return done(err, user); //idk why this one is diff compared to local
+                })
+            } else {
+                return done(err, user); //idk why this one is diff compared to local
+            }
+            
         })
     }
     ));

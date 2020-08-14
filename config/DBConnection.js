@@ -1,12 +1,15 @@
 const mySQLDB = require('./DBConfig');
 const user = require('../models/User');
 const video = require('../models/Video');
-const furniture = require('../models/Furniture');
 const cart = require('../models/Cart');
 const feedback = require('../models/Feedback')
-const themes = require('../models/Themes');
-const categories = require('../models/Categories');
 const reviews = require('../models/Review')
+
+const furniture = require('../models/Furniture');
+const themes = require('../models/Themes');
+const furnitureToThemes = require('../models/FurnitureThemes')
+const categories = require('../models/Categories');
+const furnitureToCategories = require('../models/FurnitureCategories')
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {
     mySQLDB.authenticate()
@@ -30,11 +33,21 @@ const setUpDB = (drop) => {
         feedback.belongsTo(user);
 
         //For furniture + themes + categories
-        furniture.hasMany(themes);
-        furniture.hasMany(categories);
-        themes.belongsTo(furniture);
-        categories.belongsTo(furniture);
+        furniture.belongsToMany(themes, { through: furnitureToThemes });
+        themes.belongsToMany(furniture, { through: furnitureToThemes });
+        furniture.hasMany(furnitureToThemes);
+        furnitureToThemes.belongsTo(furniture);
+        themes.hasMany(furnitureToThemes);
+        furnitureToThemes.belongsTo(themes);
+
+        furniture.belongsToMany(categories, { through: furnitureToCategories });
+        categories.belongsToMany(furniture, { through: furnitureToCategories });
+        furniture.hasMany(furnitureToCategories);
+        furnitureToCategories.belongsTo(furniture);
+        categories.hasMany(furnitureToCategories);
+        furnitureToCategories.belongsTo(categories);
     
+
         // For reviews
         furniture.hasMany(reviews)
         reviews.belongsTo(furniture)
