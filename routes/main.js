@@ -171,137 +171,7 @@ router.get('/cart', ensureAuthenticated, (req, res) => {
 });
 //VAJON PART END
 
-//JUN LENG PART
-router.get('/userfeedback', ensureAuthenticated, (req, res) => {
-	Feedback.findAll({
-		include: [{ model: User, as: 'user' }],
-		where: {
-			userId: req.user.id
-		},
-		order: [
-			['id', 'ASC']
-		],
-		raw: true
-	})
-		.then((feedbacks) => {
-			const title = 'BRANDNAME - User Feedback';
-			res.render('question/userquestions', {
-				feedbacks,
-				title: title
-			});
-		})
-		.catch(err => console.log(err));
-});
-router.get('/feedback', (req, res) => {
-	res.render('question/feedback')
-});
-router.get('/rfeedback', ensureAuthenticated, (req, res) => {
-	Feedback.findAll({
-		include: [{ model: User, as: 'user' }],
-		order: [
-			['id', 'ASC']
-		],
-		raw: true
-	})
-		.then((feedbacks) => {
-			const title = 'BRANDNAME - Retrieve Feedback';
-			res.render('question/rfeedback', {
-				feedbacks,
-				title: title
-			});
-		})
-		.catch(err => console.log(err));
-});
-router.post('/feedback', ensureAuthenticated, (req, res) => {
-	let feedbacktype = req.body.feedbacktype;
-	let feedback = req.body.feedback;
-	let userId = req.user.id;
-	// Multi-value components return array of strings or undefined
-	Feedback.create({
-		feedbacktype: feedbacktype,
-		feedback: feedback,
-		answer: null,
-		userId: userId,
-		featured: 0
-	})
-		.then(feedback => {
-			alertMessage(res, 'success', 'Your feedback has been sent!', 'fas fa-exclamation-circle', true);
-			res.redirect('/feedback');
-		})
-		.catch(err => console.log(err))
-});
-router.get('/answerFeedback/:id', ensureAuthenticated, (req, res) => {
-	Feedback.findByPk(req.params.id)
-		.then((feedback) => {
-			id = req.params.id;
-			res.render('question/answer', {
-				feedback,
-				id
-			});
-		}).catch(err => console.log(err)); // To catch no video ID
-});
-router.put('/saveEditedFeedback/:id', ensureAuthenticated, (req, res) => {
-	let id = req.params.id;
-	let { answer, featured } = req.body;
-	console.log(id)
-	Feedback.update({
-		answer,
-		featured
-	}, {
-		where: {
-			id: id
-		}
-	}).then(() => {
-		alertMessage(res, 'success', 'Question Answered!', 'fas fa-exclamation-circle', true);
-		res.redirect('../rfeedback');
-	}).catch(err => console.log(err));
 
-});
-router.get('/deleteFeedback/:id', ensureAuthenticated, (req, res) => {
-	let userId = req.user.id
-	Feedback.findOne({
-		where: {
-			id: req.params.id,
-		}
-	}).then((feedbacks) => {
-		if (feedbacks == null) {
-			//req.logout();
-			alertMessage(res, 'danger', 'Unauthorized access to feedbacks', 'fas fa-exclamation-circle', true);
-			res.redirect('/rfeedback');
-			return
-		}
-		else {
-			Feedback.destroy({
-				where: {
-					id: feedbacks.id
-				}
-			}).then((feedbacks) => { //video2 returns int(1)
-				alertMessage(res, 'success', 'Successfuly Deleted', 'fas fa-exclamation-circle', true);
-				res.redirect('/rfeedback');
-			})
-		}
-	});
-});
-router.get('/featuredFeedback', ensureAuthenticated, (req, res) => {
-	Feedback.findAll({
-		order: [
-			['feedbacktype', 'ASC']
-		],
-
-		where: {
-			featured: 1
-		},
-		raw: true
-	})
-		.then((feedbacks) => {
-			console.log(feedbacks)
-			res.render('question/featuredfeedback', {
-				feedbacks: feedbacks
-			});
-		})
-		.catch(err => console.log(err));
-})
-//JUN LENG PART END
 
 //FOR SEARCHING ITEMS IN NAVBAR 
 router.post('/searchValue', (req, res) => {
@@ -380,38 +250,16 @@ router.get('/test/:id', (req, res) => {
 	});
 })
 router.get('/test2', (req, res) => {
-	var url_parts = url.parse(req.url, true);
-	var query = url_parts.query; //all url queries
-	//OBJECTIVE: query will contain theme:monochrome and category:wood keys
-	//Use these keys to create conditions to search Furniture for suitable furniture
-	console.log(query)
-	var themes = query['themes[]']
-	var categories = query['categories[]']
-
-	if (!(Array.isArray(themes))) { themes = [themes] }
-	if (!(Array.isArray(categories))) { categories = [categories] }
-
-	// if (themes.length != 0){ themes = {model: Themes, attributes: ['theme'], where: { [require("sequelize").Op.or]: themes }} } 
-	// else { themes = {model: Themes, attributes: ['theme']} }
-	// if (categories.length != 0){ categories = {model: Categories, attributes: ['category'], where: { [require("sequelize").Op.or]: categories } }  }
-	// else { categories = {model: Categories, attributes: ['category']} }
-
-	console.log(themes, categories)
-	//Get ids that fit requirements
-	Furniture.findAll({
-		include: [
-			{ model: Themes, where: { theme: { [require("sequelize").Op.in]: themes } } },
-			{ model: Categories, where: { category: { [require("sequelize").Op.in]: categories } } }
-		],
-		group: ["furniture.id"],
-		having: sequelize.where(
-			sequelize.fn('count', sequelize.col('furniture.id')), { [require("sequelize").Op.gte]: 1 }
-		)
-	}).then(furniture => {
-		console.log(furniture)
-	})
-
-	res.render('test2', { id: req.params.id, layout: 'test' })
+	Furniture.findOne({
+        where: {id: 1},
+        include:[ {model: Themes, attributes: ['theme']}, {model: Categories, attributes: ['category']} ],
+    }).then(item => {
+        if (item){
+            res.render('furniture/furnitureItem', {furniture: item})
+        } else {
+            res.redirect('/')
+        }
+    })
 
 });
 router.post('/test2', (req, res) => {

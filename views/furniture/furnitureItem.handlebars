@@ -19,12 +19,42 @@
     <div class = "col-5 h-100">
         <div class="p-4 mx-2" style = "background-color: #F8F8F8;">
             <h4>{{furniture.furnitureName}}</h4>
+             {{#ifCond reviewtotal '==' 1}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {{/ifCond}}
+            {{#ifCond reviewtotal '==' 2}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star "></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {{/ifCond}}
+            {{#ifCond reviewtotal '==' 3}}
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star"></span>
             <span class="fa fa-star"></span>
-            <span style="font-weight:100">(3 out of 5)</span>
+            {{/ifCond}}
+            {{#ifCond reviewtotal '==' 4}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            {{/ifCond}}
+            {{#ifCond reviewtotal '==' 5}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            {{/ifCond}}
+            <span style="font-weight:100">({{reviewtotal}} out of 5)</span>
             <hr>
 
             <div class="d-flex">
@@ -44,32 +74,92 @@
 
 <div class="border p-3 mx-3">
     <h3>Reviews</h3>
+    {{#ifCond reviewtotal '==' 1}}
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    {{/ifCond}}
+    {{#ifCond reviewtotal '==' 2}}
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star "></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    {{/ifCond}}
+    {{#ifCond reviewtotal '==' 3}}
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star"></span>
     <span class="fa fa-star"></span>
-    <span style="font-weight:100">(3 out of 5)</span>
+    {{/ifCond}}
+    {{#ifCond reviewtotal '==' 4}}
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star"></span>
+    {{/ifCond}}
+    {{#ifCond reviewtotal '==' 5}}
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    {{/ifCond}}
+    <span style="font-weight:100">({{reviewtotal}} out of 5)</span>
     <hr>
     {{#if review}}
-        <p>{{reviewLength}} review(s)</p>
+        <p class = 'cd-1'>{{reviewLength}} review(s)</p>
         {{#each review}}
             <div class="card card-body">
                 <div class="d-flex">
-                    <span>Trillium Tay{{!-- Username --}}</span> 
-
+                    <span>{{this.user.dataValues.name}}</span> 
+                    {{#ifCond rating '==' 1}}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    {{/ifCond}}
+                    {{#ifCond rating '==' 2}}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star "></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    {{/ifCond}}
+                    {{#ifCond rating '==' 3}}
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star"></span>
                     <span class="fa fa-star"></span>
+                    {{/ifCond}}
+                    {{#ifCond rating '==' 4}}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    {{/ifCond}}
+                    {{#ifCond rating '==' 5}}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    {{/ifCond}}
                 </div>
+                <span>{{time}}</span>
                 <hr>
                 {{this.reviewText}}
             </div>
         {{/each}}
     {{else}}
-        <p>No reviews yet</p>
+        <p>Be the first to review!</p>
     {{/if}}
 
     <hr>        
@@ -80,15 +170,15 @@
         <hr>
         <span>Review for {{furniture.furnitureName}}:</span>
         <div class="rating">
-            <input type="radio" name="star" id="star5" value="5">
+            <input type="radio" {{#ifCond rating "==" 5}}selected{{/ifCond}} name="star" id="star5" value="5">
             <label for="star5"></label>
-            <input type="radio" name="star" id="star4" value="4">
+            <input type="radio" {{#ifCond rating "==" 4}}selected{{/ifCond}} name="star" id="star4" value="4">
             <label for="star4"></label>
-            <input type="radio" name="star" id="star3" value="3">
+            <input type="radio" {{#ifCond rating "==" 3}}selected{{/ifCond}} name="star" id="star3" value="3">
             <label for="star3"></label>
-            <input type="radio" name="star" id="star2" value="2">
+            <input type="radio" {{#ifCond rating "==" 2}}selected{{/ifCond}} name="star" id="star2" value="2">
             <label for="star2"></label>
-            <input checked type="radio" name="star" id="star1" value="1">
+            <input checked {{#ifCond rating "==" 1}}selected{{/ifCond}}  type="radio" name="star" id="star1" value="1">
             <label for="star1"></label>
         </div>
         <textarea class="form-control" name="reviewText" rows="3" required></textarea>

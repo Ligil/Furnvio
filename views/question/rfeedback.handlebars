@@ -22,7 +22,7 @@
     <tbody>
         {{#each feedbacks}}
         <tr>
-            <td>{{ 'user.email' }}</td>
+            <td><a href = "mailto:{{user.email}}">{{ 'user.email' }}</a></td>
             <td>{{ feedbacktype }}</td>
             <td>{{ feedback }}</td>
             <td>{{ answer }}</td>
