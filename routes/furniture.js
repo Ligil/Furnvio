@@ -308,6 +308,32 @@ router.post('/item/reviewSubmit/:furnitureId', (req, res) => {
     })
 })
 
+//REVIEWS - Upload image for add/edit review
+router.post('/reviewUpload', ensureAdmin, (req, res) => {
+    if (!fs.existsSync('./public/reviewUploads/')){
+        fs.mkdirSync('./public/reviewUploads/');
+    }
+    reviewImageUpload(req, res, (err) => {
+        if (err) {
+            res.json({file: '/img/no-image.jpg', err: err});
+        } else {
+            if (req.file === undefined) {
+                res.json({file: '/img/no-image.jpg', err: err});
+            } else {
+                res.json({file: `/reviewUploads/${req.file.filename}`});
+            }
+        }
+    });
+})
+
+router.get('/themes', (req, res) => {
+    Themes.findAll({ 
+    }).then(themes => {
+        res.render('furniture/themes', { themes })
+    })
+
+})
+
 router.get('/themes/:name', (req, res) => {
     var themeName = req.params.name
 

@@ -332,7 +332,6 @@ $('[data-toggle=confirmation]').confirmation({
 
 $('#posterUpload').on('change', function(){
     let image = $("#posterUpload")[0].files[0];
-    console.log(image)
     let formdata = new FormData();
     formdata.append('posterUpload', image);
     $.ajax({
@@ -357,11 +356,79 @@ $('#posterUpload').on('change', function(){
 
 $('#imageUpload').on('change', function(){
     let image = $("#imageUpload")[0].files[0];
-    console.log(image)
     let formdata = new FormData();
     formdata.append('imageUpload', image);
     $.ajax({
         url: '/admin/furnitureUpload',
+        type: 'POST',
+        data: formdata,
+        contentType: false,
+        processData: false,
+        'success':(data) => {
+            $('#image').attr('src', data.file);
+            $('#imageURL').attr('value', data.file);// sets imageURL hidden field
+            if(data.err){
+                $('#imageErr').show();
+                $('#imageErr').text(data.err.message);
+            } else{
+                $('#imageErr').hide();
+            }
+        }
+    });
+});
+
+$('#reviewUpload').on('change', function(){
+    let image = $("#reviewUpload")[0].files[0];
+    let formdata = new FormData();
+    formdata.append('reviewUpload', image);
+    $.ajax({
+        url: '/admin/reviewUpload',
+        type: 'POST',
+        data: formdata,
+        contentType: false,
+        processData: false,
+        'success':(data) => {
+            $('#image').attr('src', data.file);
+            $('#imageURL').attr('value', data.file);// sets imageURL hidden field
+            if(data.err){
+                $('#imageErr').show();
+                $('#imageErr').text(data.err.message);
+            } else{
+                $('#imageErr').hide();
+            }
+        }
+    });
+});
+
+$('#themeUpload').on('change', function(){
+    let image = $("#themeUpload")[0].files[0];
+    let formdata = new FormData();
+    formdata.append('themeUpload', image);
+    $.ajax({
+        url: '/admin/themeUpload',
+        type: 'POST',
+        data: formdata,
+        contentType: false,
+        processData: false,
+        'success':(data) => {
+            $('#image').attr('src', data.file);
+            $('#imageURL').attr('value', data.file);// sets imageURL hidden field
+            if(data.err){
+                $('#imageErr').show();
+                $('#imageErr').text(data.err.message);
+            } else{
+                $('#imageErr').hide();
+            }
+        }
+    });
+});
+
+$('#categoryUpload').on('change', function(){
+    let image = $("#categoryUpload")[0].files[0];
+    let formdata = new FormData();
+    formdata.append('categoryUpload', image);
+    $.ajax({
+        url: '/admin/categoryUpload',
         type: 'POST',
         data: formdata,
         contentType: false,

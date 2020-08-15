@@ -3,20 +3,22 @@ const router = express.Router();
 
 //Models
 const User = require('../models/User');
-const Furniture = require('../models/Furniture'); //Models
-const Video = require('../models/Video'); //Models
+const Video = require('../models/Video'); 
 const Feedback = require('../models/Feedback');
+
+const Furniture = require('../models/Furniture');
 const Themes = require('../models/Themes');
 const Categories = require('../models/Categories');
+const FurnitureToThemes = require('../models/FurnitureThemes');
+const FurnitureToCategories = require('../models/FurnitureCategories');
 //Extras
 const alertMessage = require('../helpers/messenger');
 const {ensureAuthenticated, ensureAdmin} = require('../helpers/auth')
 
 const fs = require('fs');
-const {imageUpload} = require('../helpers/imageUpload');
+const {imageUpload, themeImageUpload, categoryImageUpload} = require('../helpers/imageUpload');
+
 const { removeJoinMetaData } = require('../helpers/removeMeta');
-const FurnitureToThemes = require('../models/FurnitureThemes');
-const FurnitureToCategories = require('../models/FurnitureCategories');
 
 //USERS - Retrieve Users
 router.get('/listUsers', ensureAuthenticated, (req, res) => {
@@ -301,6 +303,44 @@ router.get('/deleteFurniture/:id', ensureAdmin, (req, res) => {
         }
 	});
 });
+
+//THEMES - Upload image for add/edit theme
+router.post('/themeUpload', ensureAdmin, (req, res) => {
+    if (!fs.existsSync('./public/themeUploads/')){
+        fs.mkdirSync('./public/themeUploads/');
+    }
+    themeImageUpload(req, res, (err) => {
+        if (err) {
+            res.json({file: '/img/no-image.jpg', err: err});
+        } else {
+            if (req.file === undefined) {
+                res.json({file: '/img/no-image.jpg', err: err});
+            } else {
+                res.json({file: `/themeUploads/${req.file.filename}`});
+            }
+        }
+    });
+})
+
+//CATEGORIES - Upload image for add/edit category
+router.post('/categoryUpload', ensureAdmin, (req, res) => {
+    if (!fs.existsSync('./public/categoryUploads/')){
+        fs.mkdirSync('./public/categoryUploads/');
+    }
+    categoryImageUpload(req, res, (err) => {
+        if (err) {
+            res.json({file: '/img/no-image.jpg', err: err});
+        } else {
+            if (req.file === undefined) {
+                res.json({file: '/img/no-image.jpg', err: err});
+            } else {
+                res.json({file: `/categoryUploads/${req.file.filename}`});
+            }
+        }
+    });
+})
+
+
 
 //FEEDBACK - JUN LENG
 

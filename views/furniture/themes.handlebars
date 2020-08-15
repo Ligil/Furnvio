@@ -1,1 +1,11 @@
-<p>Testing, this is the themes page</p>
+<div id="furniture-summary">
+    Here are our different themes of furniture.
+</div>
+
+<div class="container d-flex" style="flex-flow: row wrap">
+    {{#each themes }}
+    <div class="col-3 border border-rounded">
+        {{this.theme}}
+    </div>
+    {{/each}}
+</div>
