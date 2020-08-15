@@ -27,14 +27,37 @@
             </div>
         </div>
 
+
         <div class="tab-pane fade " id="password" role="tabpanel" aria-labelledby="password-tab">
             <div class="container">
-                <h2>Password</h2>
-                <hr>
-                {{!-- I believe in you, you can do this, novelupdates --}}
+                {{#ifCond user.googleId '==' null}}
+                <form action="/user/changePassword" method="POST">
+                    <p class="border-bottom font-weight-bold mb-2">Existing Password</p>
+                    <p class="detailText">For security reasons, you must verify your existing password before you can set a new one.</p>
+                    <div class="col-sm-12 col-md-8 col-lg-6 col-xl-5 d-flex justify-content-between p-0 mb-2" style="flex-flow: row wrap">
+                        <label >Your Existing Password</label>
+                        <input id="existingPassword" class="border border-rounded" style="" name="existingPassword" required>
+                    </div>
+                    <p class="border-bottom font-weight-bold mb-2">New Password</p>
+                    <p class="detailText">Enter your new password below.</p>
+                    <div class="col-sm-12 col-md-8 col-lg-6 col-xl-5  d-flex justify-content-between p-0 mb-2" style="flex-flow: row wrap">
+                        <label >New Password</label>
+                        <input id="password1" class="border border-rounded" style="" name="newPassword1" required>
+                    </div>
+                    <div class="col-sm-12 col-md-8 col-lg-6 col-xl-5  d-flex justify-content-between p-0" style="flex-flow: row wrap">
+                        <label >Confirm Password</label>
+                        <input id="password2" class="border border-rounded" style="" name="newPassword1" required>
+                    </div>
+                    <hr>
+                    <div class="d-flex">
+                        <button class="btn btn-yellow text-white ml-auto" id="searchButton" type="submit">Save Password</button>
+                    </div>
+                </form>
+                {{else}}
+                <p>You have a google account, nothing to change here!</p>
+                {{/ifCond}}
             </div>
         </div>
-
     </div>
 
 
