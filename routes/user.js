@@ -42,31 +42,38 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
 
 router.post('/changePassword', ensureAuthenticated, (req, res) => {
     let {existingPassword, newPassword1, newPassword2} = req.body;
-    if(newPassword1 !== newPassword2) {
+    if(newPassword1 !== newPassword2) { //check new password match
         alertMessage(res, 'danger', 'New Password does not match!', 'fas faexclamation-circle', true);
-        res.redirect('/user/changePassword');
-    }else if (existingPassword.length < 4 || newPassword1.length < 4 || newPassword2.length < 4) {
+        res.redirect('/user/profile');
+    }else if (newPassword1.length < 4 || newPassword2.length < 4) { //check password length
         alertMessage(res, 'danger', 'Password length must be more than 4 characters!', 'fas faexclamation-circle', true);
-        res.redirect('/user/changePassword');
+        res.redirect('/user/profile');
     }else{
-        User.findOne({ where: {id: req.user.id} })
+        User.findOne({ where: {id: req.user.id} }) //find existing user
         .then(user => {
-            if (user == null){
+            if (user == null){ //if user does not exist
                 console.log('ERRORUSER111 - User no longer exists')
                 alertMessage(res, 'danger', 'User ID no longer exists in database, please send resend email or contact staff for help', 'fas faexclamation-circle', true);
                 res.redirect('/');
-            }else{
-                //if user exists
-                bcrypt.genSalt(10, function(err, salt) {
-                    bcrypt.hash(newPassword1, salt, function(err, hashedPassword) {
-                        User.update({password: hashedPassword, passwordResetToken:''}, { //right token for the right account
-                            where: {id: user.id}
-                        })
-                        alertMessage(res, 'success', 'Password reset! Please try to login', 'fas fa-sign-in-alt', true);
-                        res.redirect('/user/profile')
-                    });
-                });
-            }
+            } else { //if user exists
+                bcrypt.compare(existingPassword, user.password, (err, isMatch) => { //check password match
+                    if(isMatch) { //if match
+                        //Change Password
+                        bcrypt.genSalt(10, function(err, salt) {
+                            bcrypt.hash(newPassword1, salt, function(err, hashedPassword) {
+                                User.update({password: hashedPassword, passwordResetToken:''}, { //right token for the right account
+                                    where: {id: user.id}
+                                })
+                                alertMessage(res, 'success', 'Password Changed!', 'fas fa-sign-in-alt', true);
+                                res.redirect('/user/profile')
+                            });
+                        });
+                    } else { //if not match
+                        alertMessage(res, 'danger', 'Existing password does not match!', 'fas faexclamation-circle', true);
+                        res.redirect('/user/profile');
+                    }
+                })
+            } 
         })
     }
 })
@@ -148,12 +155,12 @@ router.post('/register', (req, res) => {
 
 
 function sendVerificationEmail(userId, email, token){
-    sgMail.setApiKey('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');
+    sgMail.setApiKey('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');
     console.log('Sending email')
     var htmlText = "Thank you registering with FURNVIO.<br><br> Please click <a href='http://localhost:5000/user/verify/" + userId + "/" + token +"'> <strong>here</strong></a> to verify your account."
     const message = {
         to: email,
-        from: "191885T@mymail.nyp.edu.sg",
+        from: "VajonLim@gmail.com",
         subject: "Verify FURNVIO Account",
         text: "FURNVIO Email Verification",
         html: htmlText
@@ -256,12 +263,12 @@ router.post('/forgotPassword', (req, res) => {
 
 //MUSTDO
 function sendForgotPasswordEmail(email, token){
-    sgMail.setApiKey('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');
+    sgMail.setApiKey('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');
     console.log('Sending email')
     var htmlText = "To reset your FURNVIO account password click on the following link. <br>Please note that reset link will expire in 48 hours. <br>If you didn't issue a password reset you can safely ignore this email. <br><a href='http://localhost:5000/user/passwordReset/" + token +"'> <strong>reset</strong></a>"
     const message = {
         to: email,
-        from: "191885T@mymail.nyp.edu.sg",
+        from: "VajonLim@gmail.com",
         subject: "Requested Password Reset - FURNVIO Account",
         text: "FURNVIO Forget Password",
         html: htmlText
