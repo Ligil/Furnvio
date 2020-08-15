@@ -10,6 +10,7 @@ const alertMessage = require('../helpers/messenger');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
+const { ensureAuthenticated, ensureAdmin } = require('../helpers/auth')
 // SendGrid
 const sgMail = require('@sendgrid/mail');
 // JWT JSON Web Token
@@ -31,13 +32,44 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-router.get('/profile', (req, res) => {
+router.get('/profile', ensureAuthenticated, (req, res) => {
 	const title = 'FURNVIO - Profile';
     User.findOne({ where: {id: req.user.id} })
     .then(user => {
         res.render('user/profile', {title: title, user: user}) // renders views/profile.handlebars
     })
 }); 
+
+router.post('/changePassword', ensureAuthenticated, (req, res) => {
+    let {existingPassword, newPassword1, newPassword2} = req.body;
+    if(newPassword1 !== newPassword2) {
+        alertMessage(res, 'danger', 'New Password does not match!', 'fas faexclamation-circle', true);
+        res.redirect('/user/changePassword');
+    }else if (existingPassword.length < 4 || newPassword1.length < 4 || newPassword2.length < 4) {
+        alertMessage(res, 'danger', 'Password length must be more than 4 characters!', 'fas faexclamation-circle', true);
+        res.redirect('/user/changePassword');
+    }else{
+        User.findOne({ where: {id: req.user.id} })
+        .then(user => {
+            if (user == null){
+                console.log('ERRORUSER111 - User no longer exists')
+                alertMessage(res, 'danger', 'User ID no longer exists in database, please send resend email or contact staff for help', 'fas faexclamation-circle', true);
+                res.redirect('/');
+            }else{
+                //if user exists
+                bcrypt.genSalt(10, function(err, salt) {
+                    bcrypt.hash(newPassword1, salt, function(err, hashedPassword) {
+                        User.update({password: hashedPassword, passwordResetToken:''}, { //right token for the right account
+                            where: {id: user.id}
+                        })
+                        alertMessage(res, 'success', 'Password reset! Please try to login', 'fas fa-sign-in-alt', true);
+                        res.redirect('/user/profile')
+                    });
+                });
+            }
+        })
+    }
+})
 
 router.get('/register', (req, res) => {
 	const title = 'FURNVIO - Register';
