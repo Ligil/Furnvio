@@ -250,16 +250,19 @@ router.get('/test/:id', (req, res) => {
 	});
 })
 router.get('/test2', (req, res) => {
-	Furniture.findOne({
-        where: {id: 1},
-        include:[ {model: Themes, attributes: ['theme']}, {model: Categories, attributes: ['category']} ],
-    }).then(item => {
-        if (item){
-            res.render('furniture/furnitureItem', {furniture: item})
-        } else {
-            res.redirect('/')
-        }
-    })
+	const sgMail = require('@sendgrid/mail');
+	sgMail.setApiKey('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');
+	const msg = {
+		to: '191885T@mymail.nyp.edu.sg',
+		from: 'vajonlim@gmail.com',
+		subject: 'Sending with Twilio SendGrid is Fun',
+		text: 'and easy to do anywhere, even with Node.js',
+		html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+	};
+	sgMail.send(msg)
+	.then(mail => {
+		console.log(mail)
+	}).catch(err => console.log(err))
 
 });
 router.post('/test2', (req, res) => {
