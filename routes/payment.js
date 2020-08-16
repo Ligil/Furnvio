@@ -18,7 +18,7 @@ const tempOrder = require('../models/tempOrder');
 const { max } = require('moment');
 const sequelize = require('../config/DBConfig');
 const Order = require('../models/Order');
-
+const User = require('../models/User');
 
 paypal.configure({
     'mode': 'sandbox', //sandbox or live
@@ -96,6 +96,7 @@ router.post('/paypal', (req,res) => {
 
 router.post('/stripe', (req, res) => {
     const addressId = req.body.addressId;
+    const email = User.findOne({where:{userId:req.user.id}, attributes: ['email']});
     Cart.findAll({
         include: [{ model: Furniture, as: 'furniture' }],
         where: {
@@ -149,6 +150,7 @@ router.post('/stripe', (req, res) => {
                     userId: req.user.id,
                 }
             }),
+            sendPurchaseEmail(email, totalPrice),
             res.redirect('success/stripe')});
     });
 });
@@ -158,6 +160,7 @@ router.get('/success/:id', (req,res) => {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
     const id = req.params.id;
+    const email = User.findOne({where:{userId:req.user.id}, attributes: ['email']});
 
     Cart.findAll({
 		include: [{ model: Furniture, as: 'furniture' }],
@@ -220,6 +223,7 @@ router.get('/success/:id', (req,res) => {
                                 userId: req.user.id,
                             }
                         })
+                        sendPurchaseEmail(email, totalPrice)
                         alertMessage(res, 'info', 'Payment has been processed. Thank you for purchasing', 'fas fa-exclamation-circle', true);
                         res.redirect('/');
                     }
@@ -232,10 +236,12 @@ router.get('/success/:id', (req,res) => {
     });
 });
 
-function sendPurchaseEmail(userId, email, token){
+function sendPurchaseEmail(email, price){
     sgMail.setApiKey('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');
     console.log('Sending email')
-    var htmlText = "Thank you for purchasing on FURNVIO.<br><br> Please click <a href='http://localhost:5000/user/verify/" + userId + "/" + token +"'> <strong>here</strong></a> to verify your account."
+    var htmlText = "<h1>FURNVIO</h1><br><br> You have been charged S$" + price +"<br><br>\
+                    Thank you for purchasing on FURNVIO.<br><br> \
+                    Login to your account to check your order."
     const message = {
         to: email,
         from: "furnvio@gmail.com",
