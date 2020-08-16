@@ -571,3 +571,33 @@ input[type=number]::-webkit-outer-spin-button {
 #topbutton:hover {
   background-color: #555; /* Add a dark-grey background on hover */
 }
+
+.address {
+  /*the container must be positioned relative:*/
+  padding:0px;
+  position: relative;
+  display: inline-block;
+}
+
+.choices {
+  position: relative;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 100;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.choices div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.choices div:hover {
+  background-color: #e9e9e9;
+}

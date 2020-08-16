@@ -1,0 +1,71 @@
+<div class="container mb-4">
+	<div class="card card-body">
+		<h3>Add Address</h3>
+		<form action="" method="post" id="addVideo" autocomplete="off">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="form-group mb-4">
+						<label class="font-italic" for="Address">Address</label>
+                        <input type="text"  id="Address" name="Address" class="form-control form-control-lg" value="{{address.address}}">
+                        <div id="choices" class="choices" style="display: block" id="choices"></div>	
+                    </div>
+
+                    <div class="row form-group mb-4">
+                        <div class="col-sm-2">
+                            <label class="font-italic" for="PostalC">Postal code</label>
+                            <input class="form-control" id="PostalC" name="PostalC" rows="7" value="{{address.postal}}" required>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="font-italic" for="UnitNo">Unit Number</label>
+                            <input class="form-control" id="UnitNo" name="UnitNo" rows="7" value="{{address.unitNo}}" required>
+                        </div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-2 mt-3 ">
+			                <button id="" type="submit" class="btn btn-yellow text-white">Submit</button>
+                        </div>
+                    </div>
+                </div>  
+			</div>
+
+
+
+		</form>
+	</div>
+</div>
+
+<script>
+    document.getElementById('Address').addEventListener('input', (e)=> {
+        if (e.target.value.length < 3) {
+            document.getElementById('choices').innerHTML =''
+        }
+        if (e.target.value.length >= 3){
+            const input = e.target.value;
+            fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?parameters&key=AIzaSyBdIZ9m4f5LLMtQZWbuFX1j4yYN_SnLFiw&input='
+            + input)
+            .then((res) => {
+                return res.json();
+            }).then((data) => {
+                var predictions = data.predictions;
+                document.getElementById('choices').innerHTML =''
+                for (i = 0; i < predictions.length; i++){
+                    temp = document.createElement('div')
+                    temp.id = predictions[i].place_id
+                    temp.innerText = predictions[i].description                
+                    temp.onclick = function(){
+                        e.target.value = this.innerText
+                        document.getElementById('choices').innerHTML =''
+                        fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=' + this.id + '&key=AIzaSyBdIZ9m4f5LLMtQZWbuFX1j4yYN_SnLFiw')
+                        .then((res) => {
+                            return res.json()
+                        }).then((data) => {
+                            var AD = data.result.address_components
+                            var PC = AD[AD.length-1]
+                            document.getElementById('PostalC').value= PC['long_name']
+                        })
+                    }
+                    document.getElementById('choices').append(temp)
+                }
+            }).catch(err => console.log(err))   
+        }
+    })
+</script>
