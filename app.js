@@ -14,6 +14,8 @@ const FlashMessenger = require('flash-messenger');
 const passport = require('passport');
 const paypal = require('paypal-rest-sdk');
 const createBrowserHistory = require('history').createBrowserHistory;
+const stripe = require('stripe')('sk_test_51GzxYAGs0S0NVDtKV4WOkcliVJND17yu9LfEtpm3isRqKU2huh5U8ooVqCOZK57S6GuQpXurOIqYREZI8tSerVOS00ZONhhcNe');
+
 
 /*
 * Loads routes file main.js in routes directory. The main.js determines which function
@@ -28,7 +30,7 @@ const payRoute = require('./routes/payment');
 const feedbackRoute = require('./routes/feedbacks')
 
 // Copy and paste this statement only!!
-const {formatDate, radioCheck, replaceCommas, ifCond, numberFormat, ifIn} = require('./helpers/hbs');
+const {formatDate, radioCheck, replaceCommas, ifCond, numberFormat, numberFormat2, ifIn} = require('./helpers/hbs');
 
 /*
 * Creates an Express server - Express is a web application framework for creating web applications
@@ -68,6 +70,7 @@ app.engine('handlebars', exphbs({
 		replaceCommas: replaceCommas,
 		ifCond: ifCond,
 		numberFormat: numberFormat,
+		numberFormat2: numberFormat2,
 		ifIn: ifIn
 	},
 	defaultLayout: 'main' // Specify default template views/layout/main.handlebar 
@@ -136,7 +139,7 @@ app.use('/user', userRoute);
 app.use('/admin', adminRoute);
 app.use('/furniture', furnitureRoute);
 app.use('/video', videoRoute);
-app.use('/pay', payRoute);
+app.use('/payment', payRoute);
 app.use('/feedback', feedbackRoute);
 // This route maps the root URL to any path defined in main.js
 

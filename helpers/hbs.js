@@ -76,5 +76,9 @@ module.exports = {
     
         // Returns the formatted number
         return (ds ? num.replace('.', ds) : num).replace(new RegExp(re, 'g'), '$&' + ts);
+    },
+    
+    numberFormat2: function(value){ 
+        return (value * 100);
     }
 }

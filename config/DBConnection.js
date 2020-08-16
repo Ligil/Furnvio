@@ -10,6 +10,10 @@ const themes = require('../models/Themes');
 const furnitureToThemes = require('../models/FurnitureThemes')
 const categories = require('../models/Categories');
 const furnitureToCategories = require('../models/FurnitureCategories')
+const Order = require('../models/Order');
+const Orderdetails = require('../models/tempOrder');
+const Address = require('../models/Address');
+const { order } = require('paypal-rest-sdk');
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {
     mySQLDB.authenticate()
@@ -53,6 +57,10 @@ const setUpDB = (drop) => {
         reviews.belongsTo(furniture)
         user.hasMany(reviews)
         reviews.belongsTo(user)
+
+        user.hasMany(Order);
+        user.hasMany(Address);
+        Address.hasMany(Order);
 
         mySQLDB.sync({ // Creates table if none exists
             force: drop
