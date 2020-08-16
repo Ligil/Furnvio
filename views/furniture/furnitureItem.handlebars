@@ -1,60 +1,68 @@
-
 {{!-- Name {{furniture.furnitureName}} --}}
 
 {{!-- img <img src="{{furniture.imageURL}}" alt="Image unavailable" class="img-fluid"> --}}
 
 <div id="furniture-summary">
     {{#each furniture.categories}}
-        <a href="{{this.dataValues.category}}">{{this.dataValues.category}}</a>
-    {{/each}}/                                                   
+    <a href="{{this.dataValues.category}}">{{this.dataValues.category}}</a>
+    {{/each}}/
 </div>
 
 <div class="d-flex mb-4">
-    <div class = "col-7 h-100">
-        <div class="border supercenter">    
+    <div class="col-7 h-100">
+        <div class="border supercenter">
             <img src="{{furniture.imageURL}}" alt="Image unavailable" class="img-fluid p-4">
         </div>
     </div>
 
-    <div class = "col-5 h-100">
-        <div class="p-4 mx-2" style = "background-color: #F8F8F8;">
+    <div class="col-5 h-100">
+        <div class="p-4 mx-2" style="background-color: #F8F8F8;">
             <h4>{{furniture.furnitureName}}</h4>
-             {{#ifCond reviewtotal '==' 1}}
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            {{/ifCond}}
-            {{#ifCond reviewtotal '==' 2}}
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star "></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            {{/ifCond}}
-            {{#ifCond reviewtotal '==' 3}}
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            {{/ifCond}}
-            {{#ifCond reviewtotal '==' 4}}
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            {{/ifCond}}
-            {{#ifCond reviewtotal '==' 5}}
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            {{/ifCond}}
-            <span style="font-weight:100">({{reviewtotal}} out of 5)</span>
+            <div class = "mx-2">
+                {{#ifCond reviewtotal '==' 0}}
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                {{/ifCond}}
+                {{#ifCond reviewtotal '==' 1}}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                {{/ifCond}}
+                {{#ifCond reviewtotal '==' 2}}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star "></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                {{/ifCond}}
+                {{#ifCond reviewtotal '==' 3}}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                {{/ifCond}}
+                {{#ifCond reviewtotal '==' 4}}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                {{/ifCond}}
+                {{#ifCond reviewtotal '==' 5}}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                {{/ifCond}}
+            </div>
+            <span style="font-weight:100">({{actualtotal}} out of 5)</span>
             <hr>
 
             <div class="d-flex">
@@ -65,15 +73,23 @@
             <hr>
 
             <h4 class="mb-2">About product</h4>
-            <p class = "p-2 border">{{furniture.description}}</p>
-            <a href="/addToCart/{{id}}" class="btn furnitureCartButton" style="padding-top: 10px; padding-bottom: 10px;"><i class="fas fa-plus"></i> Add To Cart</a>
+            <p class="p-2 border">{{furniture.description}}</p>
+            <a href="/addToCart/{{id}}" class="btn furnitureCartButton"
+                style="padding-top: 10px; padding-bottom: 10px;"><i class="fas fa-plus"></i> Add To Cart</a>
         </div>
     </div>
 </div>
 
 
-<div class="border p-3 mx-3">
+<div class="border p-3 mx-3;">
     <h3>Reviews</h3>
+    {{#ifCond reviewtotal '==' 0}}
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    {{/ifCond}}
     {{#ifCond reviewtotal '==' 1}}
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star"></span>
@@ -109,60 +125,73 @@
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star checked"></span>
     {{/ifCond}}
-    <span style="font-weight:100">({{reviewtotal}} out of 5)</span>
+    <span style="font-weight:100">({{actualtotal}} out of 5)</span>
     <hr>
     {{#if review}}
-        <p class = 'cd-1'>{{reviewLength}} review(s)</p>
-        {{#each review}}
-            <div class="card card-body">
-                <div class="d-flex">
-                    <span>{{this.user.dataValues.name}}</span> 
-                    {{#ifCond rating '==' 1}}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    {{/ifCond}}
-                    {{#ifCond rating '==' 2}}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star "></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    {{/ifCond}}
-                    {{#ifCond rating '==' 3}}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    {{/ifCond}}
-                    {{#ifCond rating '==' 4}}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    {{/ifCond}}
-                    {{#ifCond rating '==' 5}}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    {{/ifCond}}
-                </div>
-                <span>{{time}}</span>
-                <hr>
-                {{this.reviewText}}
-            </div>
-        {{/each}}
+    <p class='cd-1'>{{reviewLength}} review(s)</p>
+    {{#each review}}
+    <div class="card card-body mb-2">
+        <div class="d-flex">
+            <span>{{this.user.dataValues.name}}</span>
+             {{#ifCond rating '==' 0}}
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {{/ifCond}}
+            {{#ifCond rating '==' 1}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {{/ifCond}}
+            {{#ifCond rating '==' 2}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star "></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {{/ifCond}}
+            {{#ifCond rating '==' 3}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {{/ifCond}}
+            {{#ifCond rating '==' 4}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            {{/ifCond}}
+            {{#ifCond rating '==' 5}}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            {{/ifCond}}
+        </div>
+        <span>{{time}}</span>
+        <hr>
+        {{#if imageURL}}
+        <div class = 'col-6'>
+            <img src="{{this.imageURL}}" alt="Image unavailable" class="img-fluid p-4">
+            <hr>
+        </div>
+        {{/if}}
+        {{this.reviewText}}
+    </div>
+    {{/each}}
     {{else}}
-        <p>Be the first to review!</p>
+    <p>Be the first to review!</p>
     {{/if}}
 
-    <hr>        
+    <hr>
     <hr>
     {{!-- If made review --}}
     <form class="card card-body" method="post" action="/furniture/item/reviewSubmit/{{furniture.id}}">
@@ -178,19 +207,28 @@
             <label for="star3"></label>
             <input type="radio" {{#ifCond rating "==" 2}}selected{{/ifCond}} name="star" id="star2" value="2">
             <label for="star2"></label>
-            <input checked {{#ifCond rating "==" 1}}selected{{/ifCond}}  type="radio" name="star" id="star1" value="1">
+            <input checked {{#ifCond rating "==" 1}}selected{{/ifCond}} type="radio" name="star" id="star1" value="1">
             <label for="star1"></label>
         </div>
         <textarea class="form-control" name="reviewText" rows="3" required></textarea>
-        
+        <div class="col-lg-5">
+            <br>
+            <img id="image" src="/img/no-image.jpg" alt="" class="border img-thumbnail img-fluid" style="width:100%">
+            <div class="container">
+                <br>
+                <input type="file" id="reviewImageUpload" name="reviewImageUpload"
+                    accept="image/png, image/jpeg, image/jpg, image/gif, image/webp">
 
-        <input class="btn btn-primary" type="submit" value="Submit">
+                {{!—- Hidden field to submit URL of image to the server --}}
+                <input id="imageURL" type="hidden" name="imageURL">
+                <div class="font-weight-bold text-danger small" id="imageErr" style="display:none"></div>
+            </div>
+
+        </div>
+        <br>
+        <input class="btn furnitureCartButton col-2" type="submit" value="Submit">
+
     </form>
     {{!-- Else --}}
     {{!-- purchase item to make a review --}}
 </div>
-
-
-
-
-

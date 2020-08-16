@@ -55,6 +55,50 @@
                     <hr class="my-2">
                     <div class="container">
                         <p class="font-weight-bold">{{furnitureName}}</p>
+                        <div class = "md-2">
+                        {{#ifCond rating '==' 0}}
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        {{/ifCond}}
+                        {{#ifCond rating '==' 1}}
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        {{/ifCond}}
+                        {{#ifCond rating '==' 2}}
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star "></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        {{/ifCond}}
+                        {{#ifCond rating '==' 3}}
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        {{/ifCond}}
+                        {{#ifCond rating '==' 4}}
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        {{/ifCond}}
+                        {{#ifCond rating '==' 5}}
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        {{/ifCond}}
+                    </div>
                         <a href="/addToCart/{{id}}" class="btn furnitureCartButton" style="padding-top: 5px; padding-bottom: 5px;"><i class="fas fa-plus"></i> Add To Cart</a>
                     </div>
                 </div>
