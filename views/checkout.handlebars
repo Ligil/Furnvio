@@ -7,16 +7,19 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-12 col-lg-4">
-            {{#if cart}}
-            <div class="container">Total Price: S$<span id="Price">{{numberFormat total}}</span></div>
+        <div class="col-sm-12 col-lg-3">
+            {{#if temp}}
+                <div class="container">Total Price: S$<span id="Price">{{numberFormat temp.totalprice}}</span></div>
+                {{else}}
+                    <div class="container">No item in cart, please add some.</div>
             {{/if}}
+            <a href="/cart" class="btn btn-yellow">Back to Cart</a>
         </div>
-        <div class="col-sm-12 col-lg-8">
+        <div class="col-sm-12 col-lg-9">
             <table class="table table-light table-hover">
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col" width='60%'>Address <a href="/user/address" class="btn pull-right btn-sm py-1">Manage Address</a></th>
+                        <th scope="col" width='60%'>Address <a href="/user/profile" class="btn pull-right btn-sm py-1">Manage Address</a></th>
                         <th scope="col" width='15%'>Unit No.</th>
                         <th scope="col" width='20%'>Postal Code</th>
                     </tr>
@@ -64,9 +67,12 @@
                         <input type="text" name="disCode" id="disCode" class="form-control">
                     </div>
                     <div class="col-sm-4">
-                        <button class="btn btn-success btn-sm" id="">check code</button>
+                        <button class="btn btn-success btn-sm" id="disCodeB">check code</button>
                     </div>
                 </div>
+                <footer id="disCodeN" style="display: none; color:red;">No Code!</footer>
+                <footer id="disCodeW" style="display: none; color:red;">Invalid Code!</footer>
+                <footer id="disCodeA" style="display: none; color:springgreen;">Code has been processed!</footer>
             </div>
             <div class="col-sm-12 container row mt-3" id="payment" style="display: none;">
                 Payment:
@@ -97,6 +103,6 @@
 
 <script>
     $('#addAddress').on('click', function(){
-        window.location.href='/user/AddAddress'
+        window.location.href='/user/AddAddress1'
     })
 </script>

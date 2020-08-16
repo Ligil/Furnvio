@@ -394,7 +394,32 @@ router.post('/AddAddress', ensureAuthenticated, (req, res) => {
         userId
     }) 
     .then(addresses => {
+        c
         res.redirect('/user/profile');
+    })
+    .catch(err => console.log(err))    
+})
+
+router.get('/AddAddress1', ensureAuthenticated, (req, res) => {
+    res.render('user/AddAddress1')
+})
+
+router.post('/AddAddress1', ensureAuthenticated, (req, res) => {
+    let address = req.body.Address;
+    let postal = req.body.PostalC;
+    let unitNo = req.body.UnitNo;
+
+    let userId = req.user.id;
+    // Multi-value components return array of strings or undefined
+    Address.create({
+        address,
+        unitNo,
+        postal,
+        userId
+    }) 
+    .then(addresses => {
+        alertMessage(res, 'success', 'Successfully added Addresses', 'fas fa-exclamation-circle', true);
+        res.redirect('/payment/checkout');
     })
     .catch(err => console.log(err))    
 })
@@ -433,6 +458,7 @@ router.post('/address/edit/:id', ensureAuthenticated, (req, res) => {
             id: req.params.id
         }
         }).then(() => {
+            alertMessage(res, 'success', 'Successfully updated Addresses', 'fas fa-exclamation-circle', true);
             res.redirect('/user/profile');
         }).catch(err => console.log(err));
 })

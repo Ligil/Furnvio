@@ -388,12 +388,12 @@ $('#imageUpload').on('change', function(){
     });
 });
 
-$('#reviewUpload').on('change', function(){
-    let image = $("#reviewUpload")[0].files[0];
+$('#reviewImageUpload').on('change', function(){
+    let image = $("#reviewImageUpload")[0].files[0];
     let formdata = new FormData();
-    formdata.append('reviewUpload', image);
+    formdata.append('reviewImageUpload', image);
     $.ajax({
-        url: '/admin/reviewUpload',
+        url: '/furniture/reviewUpload',
         type: 'POST',
         data: formdata,
         contentType: false,
@@ -456,3 +456,32 @@ $('#categoryImageUpload').on('change', function(){
         }
     });
 });
+
+
+
+$('#disCodeB').on('click', function(){
+    let disCode = {disCode: document.getElementById("disCode").value}
+    console.log(disCode)
+    fetch('http://localhost:5000/payment/checkDis', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(disCode)
+    }).then((res)=>{
+        res.json().then((data) => {
+            if(data['response'] == 2){
+                document.getElementById('disCodeN').style.display = 'none'
+                document.getElementById('disCodeW').style.display = ''
+            } else {
+                if(data['response'] == 0){
+                    document.getElementById('disCodeW').style.display = 'none'
+                    document.getElementById('disCodeN').style.display = ''
+                } else {
+                    document.getElementById('disCodeN').style.display = 'none'
+                    document.getElementById('disCodeW').style.display = 'none'
+                    location.reload()
+                }
+            }
+        })
+    })
+})
+

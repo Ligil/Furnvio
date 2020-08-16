@@ -99,7 +99,6 @@ router.get('/adminfeaturedFeedback', ensureAuthenticated, (req, res) => {
 router.put('/saveAnsweredFeedback/:id', ensureAuthenticated, (req, res) => {
 	let id = req.params.id;
 	let {answer, featured} = req.body;
-	console.log(id)
 	Feedback.update({
 		answer, 
 		featured

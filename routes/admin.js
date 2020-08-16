@@ -19,6 +19,7 @@ const fs = require('fs');
 const {imageUpload, themeImageUpload, categoryImageUpload} = require('../helpers/imageUpload');
 
 const { removeJoinMetaData } = require('../helpers/removeMeta');
+const discountCode = require('../models/discountCode');
 
 //USERS - Retrieve Users
 router.get('/listUsers', ensureAuthenticated, (req, res) => {
@@ -111,6 +112,8 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
     let width = req.body.width;
     let height = req.body.height;
     let imageURL = req.body.imageURL;
+    let rating = 0;
+    let actualrating = 0;
 
     let addedBy = req.user.id;
     let lastEditedBy = req.user.id
@@ -125,7 +128,9 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
         heightmm: height,
         imageURL,
         addedBy,
-        lastEditedBy
+        lastEditedBy,
+        rating,
+        actualrating
     }) 
     .then(furniture => { return furniture })
 
@@ -509,5 +514,102 @@ router.get('/passwordAgeAdminreset', (req, res) => {
 	const title = 'BRANDNAME - Admin - ??';
 	res.render('admin/showUsers', {title: title}) 
 }); 
+
+
+router.get('/discount', ensureAdmin, (req, res) => {
+    discountCode.findAll({})
+    .then((discounts) => {
+        console.log(discounts)
+        res.render('admin/discountC', {
+            discounts: discounts
+        });
+    })
+    .catch(err => console.log(err));
+})
+
+router.get('/AddDiscount', ensureAdmin, (req, res) => {
+    res.render('admin/AddDiscountC')
+})
+
+router.post('/AddDiscount', ensureAdmin, (req, res) => {
+    let discountcode = req.body.DiscountC;
+    let perDis = req.body.perDis || 0;
+    let subDis = req.body.subDis || 0;
+    discountCode.findOne({where:discountcode})
+    .then((code) => {
+        if(code){
+            res.redirect('/admin/AddDiscount')
+        } else {
+            discountCode.create({
+                discountcode,
+                subDis,
+                perDis,
+            }) 
+            .then(discounts => {
+                alertMessage(res, 'success', 'Successfully added Discount Code', 'fas fa-exclamation-circle', true);
+                res.redirect('/admin/discount');
+            })
+        }
+    })
+    .catch(err => console.log(err))    
+})
+
+
+router.get('/discount/edit/:id', ensureAdmin, (req, res) => {
+    discountCode.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then((code) => {
+        res.render('admin/EditDiscountC', {
+            code
+        });
+    }).catch(err => console.log(err)); 
+});
+
+router.post('/discount/edit/:id', ensureAdmin, (req, res) => {
+    let discountcode = req.body.DiscountC;
+    let perDis = req.body.perDis;
+    let subDis = req.body.subDis;discountCode.findOne({where:discountcode})
+    let id = req.params.id
+    .then((code) => {
+        if(code){
+            res.redirect('/admin/discount/edit/'+id)
+        } else {   
+            discountCode.update({
+                discountcode,
+                subDis,
+                perDis,
+            }, {
+                where: {
+                    id
+                }
+            }).then(() => {
+                alertMessage(res, 'success', 'Successful update', 'fas fa-exclamation-circle', true);
+                res.redirect('/admin/discount');
+            })
+        }
+    })
+    .catch(err => console.log(err));
+})
+
+router.get('/discount/delete/:id', ensureAdmin, (req, res) => {
+	discountCode.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then((code) => {
+        discountCode.destroy({
+            where: {
+                id: code.id
+            }
+        }).then((address2) =>{ 
+            alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
+            res.redirect('/admin/discount');
+        })
+
+	});
+});
+
 
 module.exports = router;

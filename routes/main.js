@@ -14,6 +14,7 @@ const Furniture = require('../models/Furniture');
 const Cart = require('../models/Cart');
 const Themes = require('../models/Themes');
 const Categories = require('../models/Categories');
+const tempOrder = require('../models/tempOrder');
 
 //SOME ROUTES
 router.get('/', (req, res) => {
@@ -162,6 +163,13 @@ router.get('/cart', ensureAuthenticated, (req, res) => {
 			}
 			console.log(cart)
 
+			const totalprice = totalTotalPrice
+            tempOrder.create({
+                userId: req.user.id,
+                totalprice
+            })
+			tempOrder.update({totalprice}, {where: {userId: req.user.id}})
+			
 			res.render('cart', {
 				cart: cart,
 				title: title,
