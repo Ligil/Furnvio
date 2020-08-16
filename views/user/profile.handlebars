@@ -9,6 +9,10 @@
             <a class="nav-link" id="password-tab" data-toggle="tab" href="#password" role="tab" aria-controls="password"
                 aria-selected="false">Password</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address"
+                aria-selected="false">Address</a>
+        </li>
     </ul>
 
     <hr>
@@ -56,6 +60,65 @@
                 {{else}}
                 <p>You have a google account, nothing to change here!</p>
                 {{/ifCond}}
+            </div>
+        </div>
+
+        <div class="tab-pane fade show" id="address" role="tabpanel" aria-labelledby="address-tab">
+            <div class="container">
+                {{#if addresses}}
+                <div class="card card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-9">
+                            <h3 class="mt-2">Address</h3>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-3">
+                            <a href="/user/AddAddress" class="btn btn-yellow pull-right mb-3">Add Address</a>
+                        </div>
+                    </div>
+                    {{#each addresses}}
+                        <div class="card border-primary mb-2 w-100 mx-auto">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0 pl-3">{{address}}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-9">
+                                        <div class="col-sm-12 col-md-6 col-lg-">
+                                            <p class="font-italic">Postal Code: {{postal}}</p>
+                                        </div>  
+                                        <div class="col-sm-12 col-md-6 col-lg-5">
+                                            <p class="font-italic">Unit Number: {{unitNo}}</p>
+                                        </div>  
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-3">
+                                        <a href="address/edit/{{id}}" class="card-link">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            Edit
+                                        </a>
+                                        <a href="address/delete/{{id}}" class="card-link" data-toggle="confirmation" data-title="Confirm delete?">
+                                            <i class="far fa-trash-alt"></i>
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+
+                {{else}}
+                <div class="card card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-9">
+                            <h3 class="mt-2">No Address, please add.</h3>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-3">
+                            <a href="/user/AddAddress" class="btn btn-yellow pull-right mb-3">Add Address</a>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
             </div>
         </div>
     </div>

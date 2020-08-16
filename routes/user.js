@@ -3,6 +3,7 @@ const router = express.Router();
 
 //Models
 const User = require('../models/User');
+const Address = require('../models/Address');
 
 //extras
 const alertMessage = require('../helpers/messenger');
@@ -36,7 +37,12 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
 	const title = 'FURNVIO - Profile';
     User.findOne({ where: {id: req.user.id} })
     .then(user => {
-        res.render('user/profile', {title: title, user: user}) // renders views/profile.handlebars
+        Address.findAll({ 
+            where: { userId: req.user.id },
+            raw: true
+        }).then((addresses) => {
+            res.render('user/profile', {title: title, user: user, addresses: addresses}) // renders views/profile.handlebars
+        })
     })
 }); 
 
@@ -366,6 +372,93 @@ router.post('/passwordReset/:token', (req, res, next) => {
             };
         })
     }
+});
+
+
+
+router.get('/AddAddress', ensureAuthenticated, (req, res) => {
+    res.render('user/AddAddress')
+})
+
+router.post('/AddAddress', ensureAuthenticated, (req, res) => {
+    let address = req.body.Address;
+    let postal = req.body.PostalC;
+    let unitNo = req.body.UnitNo;
+
+    let userId = req.user.id;
+    // Multi-value components return array of strings or undefined
+    Address.create({
+        address,
+        unitNo,
+        postal,
+        userId
+    }) 
+    .then(addresses => {
+        res.redirect('/user/profile');
+    })
+    .catch(err => console.log(err))    
+})
+
+router.get('/address/edit/:id', ensureAuthenticated, (req, res) => {
+    Address.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then((address) => {
+        if (req.user.id != address.userId){
+            alertMessage(res, 'danger', 'Access Denied', 'fas fa-exclamation-circle', true);
+            res.redirect('/logout');
+            return
+        };
+        res.render('user/EditAddress', {
+            address
+        });
+    }).catch(err => console.log(err)); 
+});
+
+router.post('/address/edit/:id', ensureAuthenticated, (req, res) => {
+    let address = req.body.Address;
+    let postal = req.body.PostalC;
+    let unitNo = req.body.UnitNo;
+
+    let userId = req.user.id;
+    // Multi-value components return array of strings or undefined
+    Address.update({
+        address,
+        unitNo,
+        postal,
+        userId
+    }, {
+        where: {
+            id: req.params.id
+        }
+        }).then(() => {
+            res.redirect('/user/profile');
+        }).catch(err => console.log(err));
+})
+
+router.get('/address/delete/:id', ensureAuthenticated, (req, res) => {
+	Address.findOne({
+        where: {
+            id: req.params.id,
+            userId: req.user.id
+        }
+    }).then((address) => {
+        if (address == null){
+            alertMessage(res, 'danger', 'Unauthorized access to Address', 'fas fa-exclamation-circle', true);
+            res.redirect('/logout');
+            return
+        };
+        address.destroy({
+            where: {
+                id: address.id
+            }
+        }).then((address2) =>{ 
+            alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
+            res.redirect('/user/profile');
+        })
+
+	});
 });
 
 module.exports = router;

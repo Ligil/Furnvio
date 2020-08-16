@@ -1,0 +1,102 @@
+<style>
+    table tbody tr{
+        cursor: pointer;
+        transition: all .25s ease-in-out;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-lg-4">
+            {{#if cart}}
+            <div class="container">Total Price: S$<span id="Price">{{numberFormat total}}</span></div>
+            {{/if}}
+        </div>
+        <div class="col-sm-12 col-lg-8">
+            <table class="table table-light table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" width='60%'>Address <a href="/user/address" class="btn pull-right btn-sm py-1">Manage Address</a></th>
+                        <th scope="col" width='15%'>Unit No.</th>
+                        <th scope="col" width='20%'>Postal Code</th>
+                    </tr>
+                </thead>
+                {{#if addresses}}
+                    <h4>Please select an address</h4>
+                    <tbody class="tbody-light" id="tableB">
+                        {{#each addresses}}
+                        <tr>
+                            <td>{{address}}</td>
+                            <td>{{unitNo}}</td>
+                            <td>{{postal}}</td>
+                            <td style="display: none;">{{id}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                    <script>
+                        var tableB = document.getElementById('tableB');
+                        for(var i = 0; i < tableB.rows.length; i++){
+                            tableB.rows[i].onclick = function(){
+                                for(var x = 0; x < tableB.rows.length; x++){
+                                    tableB.rows[x].style.background = '#ffffff'
+                                }
+                                this.style.background = '#ffffe6'
+                                document.getElementById('addressId').value = this.cells[3].innerText
+                                document.getElementById('addressId2').value = this.cells[3].innerText
+                                document.getElementById('payment').style.display = ''
+                            }   
+                        }
+                    </script>
+                    {{else}}
+                    <tbody class="tbody-light">                       
+                        <tr>
+                            <td colspan='3' id="addAddress">
+                                You have no address. Click here to add one.
+                            </td>
+                        </tr>
+                    </tbody>
+                {{/if}}
+            </table>
+            <div class="col-sm-12">
+                <label for="disCode">Discount code:</label>
+                <div class="row">
+                    <div class="col-sm-8 mt-1">
+                        <input type="text" name="disCode" id="disCode" class="form-control">
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-success btn-sm" id="">check code</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 container row mt-3" id="payment" style="display: none;">
+                Payment:
+                <form action="/payment/stripe"  method='post'>
+                    <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_51GzxYAGs0S0NVDtK90UByD01vWqMd3i3VVsL7EkrpT9zYQm1AkfhDnk5S8920T6tRKExG9cl4h0xoNT9zUFYP9c800IZAk8dQQ"
+                        data-amount="{{numberFormat2 total}}"
+                        data-name="Payment"
+                        data-description="Furnvio"
+                        data-image=""
+                        data-locale="auto">
+                    </script>
+                    <script>
+                        document.getElementsByClassName('stripe-button-el')[0].style.display = 'none';
+                    </script>
+                    <input type="number" name="addressId" id="addressId" style="display: none;">
+                    <button type="submit" class="btn btn-success btn-sm" id="checkout-button">Any card</button>
+                </form>
+                <form action="/payment/paypal"  method='post'>
+                    <input type="number" name="addressId" id="addressId2" style="display: none;">
+                    <input class="btn btn-success btn-sm pull-right" type="submit"  name="Paypal" value="Paypal">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#addAddress').on('click', function(){
+        window.location.href='/user/AddAddress'
+    })
+</script>
