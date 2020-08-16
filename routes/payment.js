@@ -152,6 +152,7 @@ router.post('/stripe', (req, res) => {
                     })
                 });
         });
+                                orderStatus: "Pending"
 });
 
 
@@ -234,6 +235,7 @@ router.get('/success/:id', (req, res) => {
                 }
             })
         });
+                                orderStatus: "pending"
 });
 
 function sendPurchaseEmail(email, price) {
