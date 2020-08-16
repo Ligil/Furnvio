@@ -216,6 +216,17 @@ $("#themes-dropdown, #themes-dropdown-content").on({
     }
 })
 
+$("#categories-dropdown, #categories-dropdown-content").on({
+    'mouseenter': function(){
+        $("#categories-dropdown-content").css("display", "block");
+        $("#overlay").css("display", "block");
+    }, 
+    'mouseleave': function(){
+        $("#categories-dropdown-content").css("display", "none")
+        $("#overlay").css("display", "none");
+    }
+})
+
 $("#admin-function-dropdown, #admin-function-dropdown-content").on({
     'mouseenter': function(){
         $("#admin-function-dropdown-content").css("display", "block");
@@ -400,10 +411,10 @@ $('#reviewUpload').on('change', function(){
     });
 });
 
-$('#themeUpload').on('change', function(){
-    let image = $("#themeUpload")[0].files[0];
+$('#themeImageUpload').on('change', function(){
+    let image = $("#themeImageUpload")[0].files[0];
     let formdata = new FormData();
-    formdata.append('themeUpload', image);
+    formdata.append('themeImageUpload', image);
     $.ajax({
         url: '/admin/themeUpload',
         type: 'POST',
@@ -423,10 +434,10 @@ $('#themeUpload').on('change', function(){
     });
 });
 
-$('#categoryUpload').on('change', function(){
-    let image = $("#categoryUpload")[0].files[0];
+$('#categoryImageUpload').on('change', function(){
+    let image = $("#categoryImageUpload")[0].files[0];
     let formdata = new FormData();
-    formdata.append('categoryUpload', image);
+    formdata.append('categoryImageUpload', image);
     $.ajax({
         url: '/admin/categoryUpload',
         type: 'POST',

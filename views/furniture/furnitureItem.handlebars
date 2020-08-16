@@ -4,10 +4,19 @@
 {{!-- img <img src="{{furniture.imageURL}}" alt="Image unavailable" class="img-fluid"> --}}
 
 <div id="furniture-summary">
-    {{#each furniture.categories}}
-        <a href="{{this.dataValues.category}}">{{this.dataValues.category}}</a>
-    {{/each}}/                                                   
+    <span>
+        Themes: 
+        {{#each furniture.themes}}
+            <a href="/furniture/themes/{{this.dataValues.theme}}">{{this.dataValues.theme}}</a>;
+        {{/each}}
+        <br>
+        Categories:
+        {{#each furniture.categories}}
+            <a href="/furrniture/categories/{{this.dataValues.category}}">{{this.dataValues.category}}</a>;
+        {{/each}}    
+    </span>                                               
 </div>
+
 
 <div class="d-flex mb-4">
     <div class = "col-7 h-100">
@@ -66,7 +75,7 @@
 
             <h4 class="mb-2">About product</h4>
             <p class = "p-2 border">{{furniture.description}}</p>
-            <a href="/addToCart/{{id}}" class="btn furnitureCartButton" style="padding-top: 10px; padding-bottom: 10px;"><i class="fas fa-plus"></i> Add To Cart</a>
+            <a href="/addToCart/{{furniture.id}}" class="btn furnitureCartButton" style="padding-top: 10px; padding-bottom: 10px;"><i class="fas fa-plus"></i> Add To Cart</a>
         </div>
     </div>
 </div>

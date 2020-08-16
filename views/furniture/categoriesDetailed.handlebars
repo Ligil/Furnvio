@@ -1,0 +1,116 @@
+<div id="furniture-summary">
+    <span>
+        <a href="/">Home</a> / <a href="/furniture/categories">Categories</a> / <a href="/furniture/categories/{{category.category}}">{{category.category}}</a> : 
+    </span>
+    <span>Furniture with category: {{category.category}}</span>
+</div>
+
+<div class="card m-1">
+    <div class="col-12 d-flex flex-wrap">
+        <div class="col-md-4 col-sm-12 supercenter border">
+            <img class="card-img-top border-bottom" src="{{category.categoryImageURL}}" alt="Card image cap">
+        </div>
+        <div class="col-md-8 col-sm-12 p-3 d-flex" style="flex-flow: column">
+            <h5 class="border-bottom pb-2">category: {{category.category}}</h5>
+            <p class="p-3 border border-rounded" style="flex: 1">{{category.categoryDescription}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="container d-flex flex-wrap" style="flex-flow: row wrap">
+    {{#if furnitures}}
+    <div class="d-flex flex-wrap">
+        {{#each furnitures}}
+            <div class="p-2 col-sm-12 col-md-6 col-lg-4">
+                <div class="card" style="height:100%">
+                    <div class="position-relative furnitureSearchImage supercenter">
+                        <btn class="furnitureDetailsButton" data-toggle="modal" data-target="#modal{{id}}">Quick View</btn>
+                        <a href="/furniture/item/{{id}}" >
+                            <img id="image" src="{{imageURL}}" alt="" class="img-fluid mt-1" style="width:100%; max-height: 600px;">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <p class="font-weight-bold">{{furnitureName}}</p>
+
+                        {{!-- Modal Section --}}
+                        <div class="modal fade" id="modal{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        
+                                        <div class="d-flex h-100">
+
+                                            <div class="border col-6 supercenter">
+                                                <img src="{{imageURL}}" alt="Image unavailable">
+                                            </div>
+
+                                            <div class="border col-6 p-4 d-flex flex-column h-100">
+                                                <h5 class="font-weight-bold border-bottom pb-2 mb-4">{{furnitureName}}</h5>
+
+                                                <div class="overflow-auto">
+                                                    <div class="d-flex border-bottom pb-1 mb-4">
+                                                        <div class="col-5">
+                                                            <p class="font-italic">ID: <span class="text-info">{{id}}</span></p>
+                                                        </div class="col-5">
+                                                        <div>
+                                                            <p class="font-italic">Cost: <span class="text-info">${{cost}}</span></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="container border-bottom pb-1 mb-4">
+                                                        <p class="font-italic">Dimensions: (L x W x H): </p>
+                                                        <p class="text-info">{{lengthmm}}mm x {{widthmm}}mm x {{heightmm}}mm</p>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div>
+                                                        <p class="font-italic my-1 col-12">Themes</p>
+                                                        <div class="d-flex container border-bottom pb-1 mb-4">
+                                                            {{#each themes}}
+                                                                <a href="/furniture/themes/{{this.dataValues.theme}}" class="btn btn-sm" id="{{this}}">
+                                                                    {{this.dataValues.theme}}
+                                                                </a>
+                                                            {{/each}}
+                                                        </div>
+                                                    </div>				
+
+                                                    <div>
+                                                        <p class="font-italic col-12">Categories</p>
+                                                        <div class="d-flex container border-bottom pb-1 mb-4">
+                                                            {{#each categories}}
+                                                                <a href="/furniture/categories/{{this.dataValues.category}}" class="btn btn-sm" id="{{this}}">
+                                                                    {{this.dataValues.category}}
+                                                                </a>
+                                                            {{/each}}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-4">
+                                                        <p class="font-italic col-12">Description</p>
+                                                        <div class="border container rounded p-2">
+                                                            {{description}}
+                                                        </div>
+                                                    </div>
+
+                                                    {{!-- Add to Cart button --}}
+                                                    <a href="/addToCart/{{id}}" class="btn furnitureCartButton" style="padding-top: 5px; padding-bottom: 5px;"><i class="fas fa-plus"></i> Add To Cart</a>
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+    {{else}}
+    <h2 class="background"><span>No Furniture Found</span></h2>
+    {{/if}}
+</div>

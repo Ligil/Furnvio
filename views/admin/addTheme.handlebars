@@ -1,0 +1,34 @@
+<form action="" method="post" id="addTheme" autocomplete="off">
+    <input type="hidden" name="_method" value="PUT">
+
+        <div class="d-flex">
+            <div class="col-6">
+                <div class="form-group mb-4">
+                    <label class="font-italic" for="themeName">Theme Name</label>
+                    <input class="form-control" id="themeName" name="themeName" onblur='titleCase(this)'>
+                </div>        
+
+                <div class="form-group mb-4">
+                    <label class="font-italic" for="description">Theme Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="7"></textarea>
+                </div>
+
+                <button id="butAddFurniture" type="submit" class="btn amber darken-4 text-white">Submit</button>
+            </div>
+            <div class="col-6">
+                <!-- Image -->
+                <img id="image" src="/img/no-image.jpg" alt="" class="border img-thumbnail img-fluid" style="width:100%">
+                <div class="container">
+                    <br>
+                    {{!-- Actual input button --}}
+                    <input type="file" id="themeImageUpload" name="themeImageUpload" accept="image/png, image/jpeg, image/jpg, image/gif, image/webp">
+
+                    {{!—- Hidden field to submit URL of image to the server --}}
+                    <input id="imageURL" type="hidden" name="imageURL">
+                    <div class="font-weight-bold text-danger small" id="imageErr" style="display:none"></div>
+                </div>
+            </div>
+        </div>
+
+
+</form>

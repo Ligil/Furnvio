@@ -166,7 +166,7 @@ function sendVerificationEmail(userId, email, token){
     var htmlText = "Thank you registering with FURNVIO.<br><br> Please click <a href='http://localhost:5000/user/verify/" + userId + "/" + token +"'> <strong>here</strong></a> to verify your account."
     const message = {
         to: email,
-        from: "VajonLim@gmail.com",
+        from: "furnvio@gmail.com",
         subject: "Verify FURNVIO Account",
         text: "FURNVIO Email Verification",
         html: htmlText
@@ -274,7 +274,7 @@ function sendForgotPasswordEmail(email, token){
     var htmlText = "To reset your FURNVIO account password click on the following link. <br>Please note that reset link will expire in 48 hours. <br>If you didn't issue a password reset you can safely ignore this email. <br><a href='http://localhost:5000/user/passwordReset/" + token +"'> <strong>reset</strong></a>"
     const message = {
         to: email,
-        from: "VajonLim@gmail.com",
+        from: "furnvio@gmail.com",
         subject: "Requested Password Reset - FURNVIO Account",
         text: "FURNVIO Forget Password",
         html: htmlText

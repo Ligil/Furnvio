@@ -76,7 +76,7 @@ const themeImageUpload = multer({
     fileFilter: (req, file, callback) => {
         checkFileType(file, callback);
     }
-}).single('themeImageUpload'); // Must be the name as the HTML file upload input
+}).single('themeImageUpload'); // Must be the name as the HTML file upload input / key???
 
 //Category Image Upload
 const categoryImageStorage = multer.diskStorage({

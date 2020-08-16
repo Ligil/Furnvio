@@ -100,6 +100,7 @@ router.get('/addToCart/:furnitureId', (req, res) => {
 		res.redirect('/cart');
 	}).catch(err => console.log(err));
 });
+
 router.get('/deleteFromCart/:id', (req, res) => {
 	Cart.findOne({
 		where: {

@@ -342,13 +342,53 @@ router.get('/themes/:name', (req, res) => {
             '$Themes.theme$': themeName
         },
         include: [{model: Themes, attributes: ['theme']}, { model: Categories, attributes: ['category'] }, {model: Review}],
-    }).then(Furniture => {
+    }).then(furnitures => {
         Themes.findOne({
             where: { theme: themeName }
         }).then(theme => {
-            console.log(Furniture)
-            console.log(theme)
-            res.render('furniture/themes', { })
+            if (theme == null){
+                alertMessage(res, 'info', 'Theme does not exist! Click one below.', 'fas fa-exclamation-circle', true);
+                res.redirect('/furniture/themes')
+            } else {
+                res.render('furniture/themesDetailed', {
+                    furnitures,
+                    theme
+                })
+            }
+        })
+    })
+
+})
+
+router.get('/categories', (req, res) => {
+    Categories.findAll({ 
+    }).then(categories => {
+        res.render('furniture/categories', { categories })
+    })
+
+})
+
+router.get('/categories/:name', (req, res) => {
+    var categoryName = req.params.name
+
+    Furniture.findAll({   
+        where: {
+            '$Categories.category$': categoryName
+        },
+        include: [{model: Themes, attributes: ['theme']}, { model: Categories, attributes: ['category'] }, {model: Review}],
+    }).then(furnitures => {
+        Categories.findOne({
+            where: { category: categoryName }
+        }).then(category => {
+            if (category == null){
+                alertMessage(res, 'info', 'Category does not exist! Click one below', 'fas fa-exclamation-circle', true);
+                res.redirect('/furniture/categories')
+            } else {
+                res.render('furniture/categoriesDetailed', { 
+                    furnitures,
+                    category
+                })
+            }
         })
     })
 

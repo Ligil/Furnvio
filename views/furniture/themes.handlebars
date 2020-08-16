@@ -1,11 +1,27 @@
 <div id="furniture-summary">
-    Here are our different themes of furniture.
+    <span>
+        <a href="/">Home</a> / 
+        <a href="/furniture/themes">Themes</a> : 
+    </span>
+    <span>Here are our different themes of furniture.</span>
 </div>
+<div class="container d-flex flex-wrap" style="flex-flow: row wrap">
+    {{#each themes}}
+        <div class="p-2 col-sm-12 col-md-6 col-lg-3">
+            <div class="card themeSearchImage supercenter position-relative" style="height:100%">
+                <div class="position-relative">
+                    <a class="themeOverlay" href="/furniture/themes/{{this.theme}}">Click to view</a>
+                    <img class="card-img-top border-bottom" src="{{this.themeImageURL}}" alt="Card image cap">
+                </div>
 
-<div class="container d-flex" style="flex-flow: row wrap">
-    {{#each themes }}
-    <div class="col-3 border border-rounded">
-        {{this.theme}}
-    </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{this.theme}}</h5>
+                    <p class="card-text">{{this.themeDescription}}</p>
+                </div>
+
+            </div>
+        </div>
+    {{else}}
+        <p>No Themes in datbase</p>
     {{/each}}
 </div>
