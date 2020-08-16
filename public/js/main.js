@@ -58,6 +58,7 @@ $('#searchInput').on('keyup', function(){
     }
 
     productsDiv = document.getElementById('search-products-items')
+    themesDiv = document.getElementById('search-theme-items')
     categoriesDiv = document.getElementById('search-category-items')
     //categories, products
     //no category found 
@@ -69,8 +70,11 @@ $('#searchInput').on('keyup', function(){
         res.json().then((data) => {
             furnitureData = data['furniture']
             categoryData = data['category']
+            themeData = data['theme']
             productsDiv.innerHTML = ''
             categoriesDiv.innerHTML = ''
+            themesDiv.innerHTML = ''
+            
             //Section 1: Making Category Tabs
 
             if (furnitureData == []){furnitureData = ['']}
@@ -98,7 +102,7 @@ $('#searchInput').on('keyup', function(){
 
                     //Link it
                     eachItemLink = document.createElement("a");
-                    eachItemLink.setAttribute("href", "/furniture/"+category)
+                    eachItemLink.setAttribute("href", "/furniture/categories/"+category)
                     eachItemLink.appendChild(eachItem)
 
                     //Append it
@@ -110,6 +114,46 @@ $('#searchInput').on('keyup', function(){
                 eachItem.classList.add("search-items-each")
                 eachItem.innerHTML = "<strong>No category found</strong>";
                 categoriesDiv.appendChild(eachItem);
+            }
+
+            //Section 1.5: Making theme tabs
+            if (furnitureData == []){furnitureData = ['']}
+            if (themeData == []){themeData = ['']}
+
+            var searchData = searchInput.searchInput
+            if (themeData.length != 0){
+                themeData.forEach((theme)=>{
+                    /*Make the matching letters bold:*/
+                    var boldedText = theme                    
+                    for (i in searchData){
+                        word = searchData[i]
+                        if (boldedText.toLowerCase().startsWith(word.toLowerCase())){
+                            boldedText = "<b class='font-weight-bold'>" + boldedText.substring(0, word.length) + "</b>" + boldedText.substring(word.length)
+                            break
+                        }
+                    }                     
+
+                    eachItem = document.createElement("DIV"); //each item
+                    eachItem.classList.add("align-items-center")
+                    eachItem.classList.add("search-items-each")
+
+                    textContainer = "<div class='search-items-text'>" + boldedText + "</div>"
+                    eachItem.innerHTML = textContainer
+
+                    //Link it
+                    eachItemLink = document.createElement("a");
+                    eachItemLink.setAttribute("href", "/furniture/themes/"+theme)
+                    eachItemLink.appendChild(eachItem)
+
+                    //Append it
+                    themesDiv.appendChild(eachItemLink);
+                })
+
+            } else {  
+                eachItem = document.createElement("DIV");
+                eachItem.classList.add("search-items-each")
+                eachItem.innerHTML = "<strong>No theme found</strong>";
+                themesDiv.appendChild(eachItem);
             }
 
             //Section 2: Making furniture tabs

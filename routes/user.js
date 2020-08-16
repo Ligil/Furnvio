@@ -364,7 +364,7 @@ router.post('/passwordReset/:token', (req, res, next) => {
                                     where: {id: user.id}
                                 })
                                 alertMessage(res, 'success', 'Password reset! Please try to login', 'fas fa-sign-in-alt', true);
-                                res.redirect('/')
+                                res.redirect('/user/login')
                             });
                         });
                     }

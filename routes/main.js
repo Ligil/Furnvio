@@ -221,17 +221,38 @@ router.post('/searchValue', (req, res) => {
 					[require("sequelize").Op.or]: conditions2
 				},
 				raw: true,
-				group: ['category'],
 				attributes: ['category']
 			}).then(categoryResult => {
 
-				Furniture.count({ where: { [require("sequelize").Op.or]: conditions }
-				}).then(furnitureCountResult => {
-					categoryResultMapped = categoryResult.map(category => category['category'])
-					categoryAndFurniture = {furniture: furnitureResult, furnitureCount: furnitureCountResult, category: categoryResultMapped}
-					res.json(categoryAndFurniture)
-				}).catch(err => console.log(err))
+				let conditions3 = []
+				for (var x in searchVals) {
+					conditions3.push({
+						theme: {
+							[require("sequelize").Op.startsWith]: searchVals[x]
+						}
+					});
+				}
 
+				Themes.findAll({
+					limit: 3,
+					where: {
+						[require("sequelize").Op.or]: conditions3
+					},
+					raw: true,
+					attributes: ['theme']
+				}).then(themeResult => {
+
+
+					Furniture.count({ where: { [require("sequelize").Op.or]: conditions }
+					}).then(furnitureCountResult => {
+
+						categoryResultMapped = categoryResult.map(category => category['category'])
+						themeResultMapped = themeResult.map(theme => theme['theme'])
+						themeCategoryAndFurniture = {furniture: furnitureResult, furnitureCount: furnitureCountResult, category: categoryResultMapped, theme: themeResultMapped}
+						res.json(themeCategoryAndFurniture)
+
+					}).catch(err => console.log(err))
+				}).catch(err => console.log(err))
 			}).catch(err => console.log(err))
 		}).catch(err => console.log(err))
 

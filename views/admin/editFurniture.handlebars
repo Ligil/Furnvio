@@ -40,8 +40,8 @@
 						<label class="font-italic">Themes</label>
 						<div id="themeDivs" class="btn-group-toggle border p-2 pb-3" data-toggle="buttons">
 							{{#each themes}}
-								<label class="btn btn-amber {{#ifIn this @root.furniture.themes}}active{{/ifIn}}">
-									<input type="checkbox" name="Theme:{{this}}" {{#ifIn this @root.furniture.themes}}checked{{/ifIn}}> {{this}}
+								<label class="btn btn-amber {{#ifIn this.theme @root.furniture.themes}}active{{/ifIn}}">
+									<input type="checkbox" name="Theme:{{this.id}}" {{#ifIn this.theme @root.furniture.themes}}checked{{/ifIn}}> {{this.theme}}
 								</label>
 							{{/each}}
 						</div>  
@@ -62,8 +62,8 @@
 						<label class="font-italic">Categories</label>
 						<div id="categoryDivs" class="btn-group-toggle border p-2 pb-3" data-toggle="buttons">
 							{{#each categories}}
-								<label class="btn btn-amber {{#ifIn this @root.furniture.categories}}active{{/ifIn}}">
-									<input type="checkbox" name="Category:{{this}}" {{#ifIn this @root.furniture.categories}}checked{{/ifIn}}> {{this}}
+								<label class="btn btn-amber {{#ifIn this.category @root.furniture.categories}}active{{/ifIn}}">
+									<input type="checkbox" name="Category:{{this.id}}" {{#ifIn this.category @root.furniture.categories}}checked{{/ifIn}}> {{this.category}}
 								</label>
 							{{/each}}
 						</div>

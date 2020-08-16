@@ -201,17 +201,15 @@ router.get('/editFurniture/:id', ensureAdmin, (req, res) => {
         furniture.categories = removeJoinMetaData(furniture.categories)
         furniture.themes = removeJoinMetaData(furniture.themes)
         //Themes and categories section
-        Themes.aggregate('theme', 'DISTINCT', { plain: false, order: [["theme", "ASC"]] })
+        Themes.findAll({ attributes: ['id', 'theme'], order: [["theme", "ASC"]] })
         .then(themes => {
-            finalThemes = themes.map(object => object["DISTINCT"]);
-            Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
+            Categories.findAll({ attributes: ['id', 'category'], order: [["category", "ASC"]] })
             .then(categories => {
-                finalCategories = categories.map(object => object["DISTINCT"]);
 
                 res.render('admin/editFurniture', {
                     furniture: furniture,
-                    themes: finalThemes,
-                    categories: finalCategories
+                    themes: themes,
+                    categories: categories
                 });
 
             });
@@ -248,34 +246,39 @@ router.put('/saveEditFurniture/:id', ensureAdmin, (req, res) => {
     FurnitureToThemes.destroy({  where: { furnitureId: req.params.id } })    
     FurnitureToCategories.destroy({ where: { furnitureId: req.params.id } })
 
-    keys = Object.keys(req.body)
-    // Filter themes
-    themeList = keys.filter( function(key) {return key.startsWith("Theme:")
-    }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
-
-    for (indexVal in themeList){
-        var themeName = themeList[indexVal];
-        Themes.findOrCreate({
-            where: { theme: themeName }
-        }).then(theme => {
-            furniture.addThemes(theme[0])
-        })
-    }
+    Furniture.findOne({
+        where: {id: req.params.id}
+    }).then(furniture => {    
+        keys = Object.keys(req.body)
+        // Filter themes
+        themeList = keys.filter( function(key) {return key.startsWith("Theme:")
+        }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
     
-    //Filter Categories
-    categoryList = keys.filter( function(key) {return key.startsWith("Category:")
-    }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
+        for (indexVal in themeList){
+            var themeId = themeList[indexVal];
+            Themes.findOne({
+                where: { id: themeId }
+            }).then(theme => {
+                furniture.addThemes(theme)
+            })
+        }
+        
+        //Filter Categories
+        categoryList = keys.filter( function(key) {return key.startsWith("Category:")
+        }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
+    
+        for (indexVal in categoryList){
+            var categoryId = categoryList[indexVal];
+            Categories.findOne({
+                where: { id: categoryId }
+            }).then(category => {
+                furniture.addCategories(category)
+            })
+        }
+    
+        res.redirect('/admin/retrieveFurniture');
+    })
 
-    for (indexVal in categoryList){
-        var categoryName = categoryList[indexVal];
-        Categories.findOrCreate({
-            where: { category: categoryName }
-        }).then(category => {
-            furniture.addCategories(category[0])
-        })
-    }
-
-    res.redirect('/admin/retrieveFurniture');
 }); 
 
 //FURNITURE - Delete Furniture 
@@ -291,8 +294,8 @@ router.get('/deleteFurniture/:id', ensureAdmin, (req, res) => {
             res.redirect('/admin/retrieveFurniture');
             return
         } else {
-            Themes.destroy({ where: {furnitureId: furniture.id}})
-            Categories.destroy({ where: {furnitureId: furniture.id}})
+            FurnitureToThemes.destroy({ where: {furnitureId: furniture.id} })
+            FurnitureToCategories.destroy({ where: {furnitureId: furniture.id} })
             Furniture.destroy({
                 where: {
                     id: furniture.id
@@ -396,12 +399,12 @@ router.get('/deleteTheme/:id', ensureAdmin, (req, res) => {
 });
 
 //CATEGORY - Add Category
-router.get('/addTheme', ensureAdmin, (req, res) => {
-    res.render('admin/addTheme', {});
+router.get('/addCategory', ensureAdmin, (req, res) => {
+    res.render('admin/addCategory', {});
 });
 
 //CATEGORY- Add Category (save)
-router.post('/addTheme', ensureAdmin, (req, res) => {
+router.post('/addCategory', ensureAdmin, (req, res) => {
     let categoryName = req.body.categoryName;
     let categoryDescription = req.body.description;
     let imageURL = req.body.imageURL;

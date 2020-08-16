@@ -1,23 +1,25 @@
 <div id="furniture-summary">
     <span>
-        <a href="/">Home</a> / <a href="/furniture/categories">Categories</a> / <a href="/furniture/categories/{{category.category}}">{{category.category}}</a> : 
+        <a href="/">Home</a> / 
+        <a href="/furniture/categories">Categories</a> / 
+        <a href="/furniture/categories/{{category.category}}">{{category.category}}</a> : 
     </span>
-    <span>Furniture with category: {{category.category}}</span>
+    <span>Furniture with Category: {{category.category}}</span>
 </div>
 
 <div class="card m-1">
     <div class="col-12 d-flex flex-wrap">
-        <div class="col-md-4 col-sm-12 supercenter border">
-            <img class="card-img-top border-bottom" src="{{category.categoryImageURL}}" alt="Card image cap">
+        <div class="col-md-4 col-sm-12 supercenter">
+            <img class="card-img-top border" src="{{category.categoryImageURL}}" alt="Card image cap">
         </div>
         <div class="col-md-8 col-sm-12 p-3 d-flex" style="flex-flow: column">
-            <h5 class="border-bottom pb-2">category: {{category.category}}</h5>
+            <h5 class="border-bottom pb-2">Category: {{category.category}}</h5>
             <p class="p-3 border border-rounded" style="flex: 1">{{category.categoryDescription}}</p>
         </div>
     </div>
 </div>
 
-<div class="container d-flex flex-wrap" style="flex-flow: row wrap">
+<div class="d-flex flex-wrap" style="flex-flow: row wrap">
     {{#if furnitures}}
     <div class="d-flex flex-wrap">
         {{#each furnitures}}

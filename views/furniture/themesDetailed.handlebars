@@ -4,13 +4,13 @@
         <a href="/furniture/themes">Themes</a> / 
         <a href="/furniture/themes/{{theme.theme}}">{{theme.theme}}</a> : 
     </span>
-    <span>Furniture with theme: {{theme.theme}}</span>
+    <span>Furniture with Theme: {{theme.theme}}</span>
 </div>
 
 <div class="card m-1">
     <div class="col-12 d-flex flex-wrap">
-        <div class="col-md-4 col-sm-12 supercenter border">
-            <img class="card-img-top border-bottom" src="{{theme.themeImageURL}}" alt="Card image cap">
+        <div class="col-md-4 col-sm-12 supercenter">
+            <img class="card-img-top border" src="{{theme.themeImageURL}}" alt="Card image cap">
         </div>
         <div class="col-md-8 col-sm-12 p-3 d-flex" style="flex-flow: column">
             <h5 class="border-bottom pb-2">Theme: {{theme.theme}}</h5>
@@ -18,8 +18,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="d-flex flex-wrap" style="flex-flow: row wrap">
     {{#if furnitures}}
