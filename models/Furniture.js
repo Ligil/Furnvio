@@ -30,6 +30,12 @@ const Furniture = db.define('furniture', {
     },
     lastEditedBy: {
         type: Sequelize.INTEGER
+    },
+    rating: {
+        type: Sequelize.INTEGER
+    },
+    actualrating: {
+        type: Sequelize.FLOAT
     }
 });
 module.exports = Furniture;

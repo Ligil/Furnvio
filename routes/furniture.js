@@ -15,6 +15,8 @@ const sequelize = require('../config/DBConfig');
 const Review = require('../models/Review');
 const flashMessage = require('../helpers/messenger');
 const moment = require("moment");
+const fs = require('fs');
+const {reviewImageUpload} = require('../helpers/imageUpload');
 
 router.get('/search', (req, res) => {
     //check if searchInput not null to access page      
@@ -270,15 +272,20 @@ router.get('/item/:id', (req, res) => {
                 where: { furnitureId: item.id }
             }).then(review=> {
                 let reviewtotal = 0;
-                review.forEach(obj => {
-                    reviewtotal += obj.dataValues.rating;
-                    obj.dataValues.time = moment(obj.dataValues.time).format('Do MMMM YYYY h:mm A');
-                });
-                reviewtotal = Math.floor(reviewtotal/review.length)
+                let actualtotal = 0;
+                if (reviewtotal.length != 0) {
+                    review.forEach(obj => {
+                        reviewtotal += obj.dataValues.rating;
+                        obj.dataValues.time = moment(obj.dataValues.time).format('Do MMMM YYYY h:mm A');
+                    });
+                    actualtotal = Math.round(reviewtotal/review.length * 10)/10
+                    reviewtotal = Math.floor(reviewtotal/review.length)
+                }
                 res.render('furniture/furnitureItem', {
                     furniture: item,
                     review: review,
                     reviewtotal: reviewtotal,
+                    actualtotal: actualtotal,
                     reviewLength: review.length,
                 })
         });
@@ -292,19 +299,34 @@ router.get('/item/:id', (req, res) => {
 
 router.post('/item/reviewSubmit/:furnitureId', (req, res) => {
     let date_ob = new Date();
-    let { star, reviewText } = req.body;
+    let { star, reviewText, imageURL } = req.body;
     let furnitureId = req.params.furnitureId;
     let userId = req.user.id;
-    let imageUrl = null //ignore this for now
     Review.create({
         reviewText,
         rating: star,
-        imageUrl,
+        imageURL,
         time: date_ob,
         furnitureId,
         userId,
     }).then(() => {
-        res.redirect('/furniture/item/' + req.params.furnitureId)
+        Review.findAll({
+            include: {model: Users, attributes: ['name']},
+            where: { furnitureId: req.params.furnitureId }
+        }).then(review=> {
+            let reviewtotal = 0;
+            review.forEach(obj => {
+                reviewtotal += obj.dataValues.rating;
+            });
+            reviewtotal = Math.round(reviewtotal/review.length * 10) / 10;
+            Furniture.update({
+                rating: reviewtotal
+            }, {
+                where:{ id:req.params.furnitureId },
+                plain: true
+            })
+            res.redirect('/furniture/item/' + req.params.furnitureId)
+        })
     })
 })
 
@@ -342,13 +364,53 @@ router.get('/themes/:name', (req, res) => {
             '$Themes.theme$': themeName
         },
         include: [{model: Themes, attributes: ['theme']}, { model: Categories, attributes: ['category'] }, {model: Review}],
-    }).then(Furniture => {
+    }).then(furnitures => {
         Themes.findOne({
             where: { theme: themeName }
         }).then(theme => {
-            console.log(Furniture)
-            console.log(theme)
-            res.render('furniture/themes', { })
+            if (theme == null){
+                alertMessage(res, 'info', 'Theme does not exist! Click one below.', 'fas fa-exclamation-circle', true);
+                res.redirect('/furniture/themes')
+            } else {
+                res.render('furniture/themesDetailed', {
+                    furnitures,
+                    theme
+                })
+            }
+        })
+    })
+
+})
+
+router.get('/categories', (req, res) => {
+    Categories.findAll({ 
+    }).then(categories => {
+        res.render('furniture/categories', { categories })
+    })
+
+})
+
+router.get('/categories/:name', (req, res) => {
+    var categoryName = req.params.name
+
+    Furniture.findAll({   
+        where: {
+            '$Categories.category$': categoryName
+        },
+        include: [{model: Themes, attributes: ['theme']}, { model: Categories, attributes: ['category'] }, {model: Review}],
+    }).then(furnitures => {
+        Categories.findOne({
+            where: { category: categoryName }
+        }).then(category => {
+            if (category == null){
+                alertMessage(res, 'info', 'Category does not exist! Click one below', 'fas fa-exclamation-circle', true);
+                res.redirect('/furniture/categories')
+            } else {
+                res.render('furniture/categoriesDetailed', { 
+                    furnitures,
+                    category
+                })
+            }
         })
     })
 

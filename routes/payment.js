@@ -19,6 +19,8 @@ const { max } = require('moment');
 const sequelize = require('../config/DBConfig');
 const Order = require('../models/Order');
 const User = require('../models/User');
+const discountCode = require('../models/discountCode');
+const { NULL } = require('node-sass');
 
 paypal.configure({
     'mode': 'sandbox', //sandbox or live
@@ -40,7 +42,6 @@ router.post('/paypal', (req, res) => {
         raw: true
     })
         .then((cart) => {
-            const title = 'BRANDNAME - Cart';
             var totalTotalPrice = 0.00
             for (i in cart) {
                 cartObject = cart[i];
@@ -108,7 +109,6 @@ router.post('/stripe', (req, res) => {
         raw: true
     })
         .then((cart) => {
-            const title = 'BRANDNAME - Cart';
             var totalTotalPrice = 0.00
             for (i in cart) {
                 cartObject = cart[i];
@@ -130,34 +130,29 @@ router.post('/stripe', (req, res) => {
                     customer: customer.id
                 }))
                 .then((charge) => {
-                    const userId = req.user.id;
-                    const totalPrice = totalTotalPrice;
-                    const paymentId = charge['id']
-                    User.findOne({ where: { id: req.user.id }, attributes: ['email'] })
+                    tempOrder.findOne({where: {userId:req.user.id}})
+                    .then((temp) => {
+                        User.findOne({ where: { id: req.user.id }})
                         .then((email) => {
+                            const userId = req.user.id;
+                            const totalPrice = temp.totalprice
+                            const paymentId = charge['id']
                             Order.create({
                                 userId,
                                 addressId,
                                 paymentId,
                                 totalPrice,
-                                order: cart,
-                                orderStatus: "Pending"
+                                order: cart
                             }),
-                                tempOrder.destroy({
-                                    where: {
-                                        userId: req.user.id,
-                                    }
-                                }),
-                                Cart.destroy({
-                                    where: {
-                                        userId: req.user.id,
-                                    }
-                                }),
+                                tempOrder.destroy({where: {userId: req.user.id}}),
+                                Cart.destroy({where: {userId: req.user.id}}),
                                 sendPurchaseEmail(email, totalPrice),
                                 res.redirect('success/stripe')
-                        });
-                })
+                        })
+                    })
+                });
         });
+                                orderStatus: "Pending"
 });
 
 
@@ -177,7 +172,6 @@ router.get('/success/:id', (req, res) => {
         raw: true
     })
         .then((cart) => {
-            const title = 'BRANDNAME - Cart';
             var totalTotalPrice = 0.00
             for (i in cart) {
                 cartObject = cart[i];
@@ -205,32 +199,34 @@ router.get('/success/:id', (req, res) => {
                             console.log(error.response);
                             throw error;
                         } else {
-                            const userId = req.user.id
-                            const totalPrice = totalTotalPrice
-                            const paymentId = payment['id']
-                            const addressId = temp.addressId
-
-                            Order.create({
-                                userId,
-                                addressId,
-                                paymentId,
-                                totalPrice,
-                                order: cart,
-                                orderStatus: "pending"
+                            User.findOne({ where: { id: req.user.id }})
+                            .then((email) => {
+                                const userId = req.user.id
+                                const totalPrice = temp.totalprice
+                                const paymentId = payment['id']
+                                const addressId = temp.addressId
+    
+                                Order.create({
+                                    userId,
+                                    addressId,
+                                    paymentId,
+                                    totalPrice,
+                                    order: cart
+                                })
+                                tempOrder.destroy({
+                                    where: {
+                                        userId: req.user.id,
+                                    }
+                                })
+                                Cart.destroy({
+                                    where: {
+                                        userId: req.user.id,
+                                    }
+                                })
+                                sendPurchaseEmail(email, totalPrice)
+                                alertMessage(res, 'info', 'Payment has been processed. Thank you for purchasing', 'fas fa-exclamation-circle', true);
+                                res.redirect('/');
                             })
-                            tempOrder.destroy({
-                                where: {
-                                    userId: req.user.id,
-                                }
-                            })
-                            Cart.destroy({
-                                where: {
-                                    userId: req.user.id,
-                                }
-                            })
-                            sendPurchaseEmail(email, totalPrice)
-                            alertMessage(res, 'info', 'Payment has been processed. Thank you for purchasing', 'fas fa-exclamation-circle', true);
-                            res.redirect('/');
                         }
                     });
                 } else {
@@ -239,6 +235,7 @@ router.get('/success/:id', (req, res) => {
                 }
             })
         });
+                                orderStatus: "pending"
 });
 
 function sendPurchaseEmail(email, price) {
@@ -272,6 +269,23 @@ router.get('/checkout', ensureAuthenticated, (req, res) => {
         raw: true
     })
         .then((addresses) => {
+            tempOrder.findOne({wher :{userId: req.user.id}})
+            .then((temp) => {
+                res.render('checkout', {
+                    addresses: addresses,
+                    temp: temp,
+                });
+            })
+        })
+        .catch(err => console.log(err));
+})
+
+router.post('/checkDis', (req, res) => {
+    console.log(req.body.disCode)
+    if(req.body.disCode == ''){
+        res.json({response: 0})
+    } else {
+        let disCode = req.body.disCode
             Cart.findAll({
                 include: [{ model: Furniture, as: 'furniture' }],
                 where: {
@@ -283,7 +297,6 @@ router.get('/checkout', ensureAuthenticated, (req, res) => {
                 raw: true
             })
                 .then((cart) => {
-                    const title = 'FURNVIO - Cart';
                     var totalTotalPrice = 0.00
                     for (i in cart) {
                         cartObject = cart[i];
@@ -291,22 +304,33 @@ router.get('/checkout', ensureAuthenticated, (req, res) => {
                         cart[i]['totalPrice'] = totalPrice;
                         totalTotalPrice += totalPrice;
                     }
-                    const totalprice = totalTotalPrice
-                    tempOrder.create({
-                        userId: req.user.id,
-                        totalprice
+                    tempOrder.findOne({where: {userId:req.user.id}})
+                    .then((temp) => {
+                        discountCode.findOne({where:{discountCode:disCode}})
+                        .then((discount) => {
+                            if(discount == null){
+                                res.json({response:2})
+                            } else {
+                                if(discount['perDis'] != null || discount['perDis'] != 0){
+                                    let price = temp.totalprice
+                                    price = price * discount['perDis']
+                                    tempOrder.update({totalprice: price}, {where: {userId: req.user.id}})
+                                    alertMessage(res, 'success', 'Successfully used discount code', 'fas fa-exclamation-circle', true);
+                                    res.json({response:1})
+                                }
+                                if(discount['subDis'] != null || discount['subDis'] != 0){
+                                    let price = temp.totalprice
+                                    price = price - discount['subDis']
+                                    tempOrder.update({totalprice: price}, {where: {userId: req.user.id}})
+                                    alertMessage(res, 'success', 'Successfully used discount code', 'fas fa-exclamation-circle', true);
+                                    res.json({response:1})
+                                }
+                            }
+                        })
                     })
-                    res.render('checkout', {
-                        addresses: addresses,
-                        cart: cart,
-                        title: title,
-                        total: totalTotalPrice
-                    });
                 })
-        })
-        .catch(err => console.log(err));
+    }
 })
-
 
 
 module.exports = router;

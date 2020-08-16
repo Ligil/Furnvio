@@ -1,0 +1,54 @@
+<div class="container">
+    {{#if discounts}}
+    <div class="card card-body">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-8">
+                <h3 class="mt-2">Discount codes</h3>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-4">
+                <a href="AddDiscount" class="btn btn-yellow pull-right mb-3">Add Discount Code</a>
+            </div>
+        </div>
+        {{#each discounts}}
+            <div class="card border-primary mb-2 w-100 mx-auto">
+                <div class="card-header">
+                    <h5 class="card-title mb-0 pl-3">{{discountCode}}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-9">
+                            <div class="col-sm-12 col-md-6 col-lg-">
+                                <p class="font-italic">flat amount: {{subDis}}</p>
+                            </div>  
+                            <div class="col-sm-12 col-md-6 col-lg-5">
+                                <p class="font-italic">percentage amount: {{perDis}}</p>
+                            </div>  
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <a href="discount/edit/{{id}}" class="card-link">
+                                <i class="fas fa-pencil-alt"></i>
+                                Edit
+                            </a>
+                            <a href="discount/delete/{{id}}" class="card-link" data-toggle="confirmation" data-title="Confirm delete?">
+                                <i class="far fa-trash-alt"></i>
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+    {{else}}
+    <div class="card card-body">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-9">
+                <h3 class="mt-2">No Discounts</h3>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-3">
+                <a href="AddDiscounts" class="btn btn-yellow pull-right mb-3">Add Discount Code</a>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</div>

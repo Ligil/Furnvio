@@ -45,7 +45,7 @@
 								</label>
 							{{/each}}
 						</div>  
-						<div class="my-2">
+						{{!-- <div class="my-2">
 							<button class="btn btn-sm btn-yellow" type="button" data-toggle="collapse" data-target="#themeCreate" aria-expanded="false" aria-controls="themeCreate">
 								Create Theme
 							</button>
@@ -55,7 +55,7 @@
 									<button id="themeCreateAdd" class="btn btn-sm col-3 m-1" type="button" onclick="addTheme()">Add</button>
 								</div>
 							</div>
-						</div>
+						</div> --}}
 					</div>
 					{{!-- Categories --}}
 					<div>
@@ -67,7 +67,7 @@
 								</label>
 							{{/each}}
 						</div>
-						<div class="my-2">
+						{{!-- <div class="my-2">
 							<button class="btn btn-sm btn-yellow" type="button" data-toggle="collapse" data-target="#categoryCreate" aria-expanded="false" aria-controls="categoryCreate">
 								Create Category
 							</button>
@@ -77,7 +77,7 @@
 									<button id="categoryCreateAdd" class="btn btn-sm col-3 m-1" type="button" onclick="addCategory()">Add</button>
 								</div>
 							</div>
-						</div>
+						</div> --}}
 					</div>
 
 				</div>
@@ -122,7 +122,7 @@
 	});
 
 
-	function addTheme(){
+	{{!-- function addTheme(){
 		var themeName = document.getElementById("themeCreateInput").value;
 		console.log(themeName)
 		$("#themeDivs > label").map(function() {
@@ -156,5 +156,5 @@
 			categoryDiv.innerHTML = "<input type='checkbox' name='Category:"+categoryName+"'>"+categoryName;
 			document.getElementById("categoryDivs").appendChild(categoryDiv);
 		}
-	}
+	} --}}
 </script>

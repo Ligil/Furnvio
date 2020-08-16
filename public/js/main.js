@@ -216,6 +216,17 @@ $("#themes-dropdown, #themes-dropdown-content").on({
     }
 })
 
+$("#categories-dropdown, #categories-dropdown-content").on({
+    'mouseenter': function(){
+        $("#categories-dropdown-content").css("display", "block");
+        $("#overlay").css("display", "block");
+    }, 
+    'mouseleave': function(){
+        $("#categories-dropdown-content").css("display", "none")
+        $("#overlay").css("display", "none");
+    }
+})
+
 $("#admin-function-dropdown, #admin-function-dropdown-content").on({
     'mouseenter': function(){
         $("#admin-function-dropdown-content").css("display", "block");
@@ -377,12 +388,12 @@ $('#imageUpload').on('change', function(){
     });
 });
 
-$('#reviewUpload').on('change', function(){
-    let image = $("#reviewUpload")[0].files[0];
+$('#reviewImageUpload').on('change', function(){
+    let image = $("#reviewImageUpload")[0].files[0];
     let formdata = new FormData();
-    formdata.append('reviewUpload', image);
+    formdata.append('reviewImageUpload', image);
     $.ajax({
-        url: '/admin/reviewUpload',
+        url: '/furniture/reviewUpload',
         type: 'POST',
         data: formdata,
         contentType: false,
@@ -400,10 +411,10 @@ $('#reviewUpload').on('change', function(){
     });
 });
 
-$('#themeUpload').on('change', function(){
-    let image = $("#themeUpload")[0].files[0];
+$('#themeImageUpload').on('change', function(){
+    let image = $("#themeImageUpload")[0].files[0];
     let formdata = new FormData();
-    formdata.append('themeUpload', image);
+    formdata.append('themeImageUpload', image);
     $.ajax({
         url: '/admin/themeUpload',
         type: 'POST',
@@ -423,10 +434,10 @@ $('#themeUpload').on('change', function(){
     });
 });
 
-$('#categoryUpload').on('change', function(){
-    let image = $("#categoryUpload")[0].files[0];
+$('#categoryImageUpload').on('change', function(){
+    let image = $("#categoryImageUpload")[0].files[0];
     let formdata = new FormData();
-    formdata.append('categoryUpload', image);
+    formdata.append('categoryImageUpload', image);
     $.ajax({
         url: '/admin/categoryUpload',
         type: 'POST',
@@ -445,3 +456,32 @@ $('#categoryUpload').on('change', function(){
         }
     });
 });
+
+
+
+$('#disCodeB').on('click', function(){
+    let disCode = {disCode: document.getElementById("disCode").value}
+    console.log(disCode)
+    fetch('http://localhost:5000/payment/checkDis', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(disCode)
+    }).then((res)=>{
+        res.json().then((data) => {
+            if(data['response'] == 2){
+                document.getElementById('disCodeN').style.display = 'none'
+                document.getElementById('disCodeW').style.display = ''
+            } else {
+                if(data['response'] == 0){
+                    document.getElementById('disCodeW').style.display = 'none'
+                    document.getElementById('disCodeN').style.display = ''
+                } else {
+                    document.getElementById('disCodeN').style.display = 'none'
+                    document.getElementById('disCodeW').style.display = 'none'
+                    location.reload()
+                }
+            }
+        })
+    })
+})
+

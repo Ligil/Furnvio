@@ -166,7 +166,7 @@ function sendVerificationEmail(userId, email, token){
     var htmlText = "Thank you registering with FURNVIO.<br><br> Please click <a href='http://localhost:5000/user/verify/" + userId + "/" + token +"'> <strong>here</strong></a> to verify your account."
     const message = {
         to: email,
-        from: "VajonLim@gmail.com",
+        from: "furnvio@gmail.com",
         subject: "Verify FURNVIO Account",
         text: "FURNVIO Email Verification",
         html: htmlText
@@ -274,7 +274,7 @@ function sendForgotPasswordEmail(email, token){
     var htmlText = "To reset your FURNVIO account password click on the following link. <br>Please note that reset link will expire in 48 hours. <br>If you didn't issue a password reset you can safely ignore this email. <br><a href='http://localhost:5000/user/passwordReset/" + token +"'> <strong>reset</strong></a>"
     const message = {
         to: email,
-        from: "VajonLim@gmail.com",
+        from: "furnvio@gmail.com",
         subject: "Requested Password Reset - FURNVIO Account",
         text: "FURNVIO Forget Password",
         html: htmlText
@@ -394,7 +394,32 @@ router.post('/AddAddress', ensureAuthenticated, (req, res) => {
         userId
     }) 
     .then(addresses => {
+        c
         res.redirect('/user/profile');
+    })
+    .catch(err => console.log(err))    
+})
+
+router.get('/AddAddress1', ensureAuthenticated, (req, res) => {
+    res.render('user/AddAddress1')
+})
+
+router.post('/AddAddress1', ensureAuthenticated, (req, res) => {
+    let address = req.body.Address;
+    let postal = req.body.PostalC;
+    let unitNo = req.body.UnitNo;
+
+    let userId = req.user.id;
+    // Multi-value components return array of strings or undefined
+    Address.create({
+        address,
+        unitNo,
+        postal,
+        userId
+    }) 
+    .then(addresses => {
+        alertMessage(res, 'success', 'Successfully added Addresses', 'fas fa-exclamation-circle', true);
+        res.redirect('/payment/checkout');
     })
     .catch(err => console.log(err))    
 })
@@ -433,6 +458,7 @@ router.post('/address/edit/:id', ensureAuthenticated, (req, res) => {
             id: req.params.id
         }
         }).then(() => {
+            alertMessage(res, 'success', 'Successfully updated Addresses', 'fas fa-exclamation-circle', true);
             res.redirect('/user/profile');
         }).catch(err => console.log(err));
 })

@@ -50,6 +50,7 @@
     </form>
     
     {{!-- Profile --}}
+    <a href="/cart" class="nav-link supercenter"><i id="fa-shopping-cart" class="fas fa-shopping-cart"></i></a>
 
     {{#if user}}
 
@@ -58,7 +59,6 @@
       <button class="dropbtn dropdown-toggle" id="profile-dropdown-btn">Account</button>
       <div id="profile-dropdown-content">
         <a href="/user/profile" class="nav-link">Profile</a>
-        <a href="/cart" class="nav-link">Cart</a>
 				<a href="/logout" class="nav-link">Logout</a>
       </div>
 
@@ -99,6 +99,11 @@
         {{!-- Item 4 --}}
         <li class="nav-item m-auto dropdown" id="themes-dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="themes-dropdown-btn">Themes</a>
+        </li>
+
+        {{!-- Item 5 --}}
+        <li class="nav-item m-auto dropdown" id="categories-dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="categories-dropdown-btn">Categories</a>
         </li>
 
 
@@ -150,10 +155,18 @@
       </div>
     </div>
 
+    <div id="categories-dropdown-content">
+      <div class="row container py-3">
+        <a href="/furniture/categories">Categories</a>
+        {{!-- do some javascript here to display some? --}}
+      </div>
+    </div>
+
     <div id="admin-function-dropdown-content">
       <div class="row container">
         <div>
           <a href="/admin/listUsers">User List</a>
+          <a href="/admin/discount">Discounts</a>
           <a href="#" id="admin-function-dropdown-content-furniture1">Furniture > </a>
           <a href="/feedback/rfeedback" >Retrieve Questions</a>   
           <a href = "/feedback/adminfeaturedFeedback">Featured Feedback</a>

@@ -19,6 +19,7 @@ const fs = require('fs');
 const {imageUpload, themeImageUpload, categoryImageUpload} = require('../helpers/imageUpload');
 
 const { removeJoinMetaData } = require('../helpers/removeMeta');
+const discountCode = require('../models/discountCode');
 
 //USERS - Retrieve Users
 router.get('/listUsers', ensureAuthenticated, (req, res) => {
@@ -67,21 +68,17 @@ router.get('/retrieveFurniture', ensureAdmin, (req, res) => {
     Furniture.findAll({
         include: [{model: Themes, attributes: ['theme']},
                   {model: Categories, attributes: ['category'], as: 'categories'}],
-        order: [
-            ['id', 'ASC'] 
-        ]
+        order: [['id', 'ASC']]
     }).then((furnitures) => {
-        Themes.aggregate('theme', 'DISTINCT', { plain: false, order: [["theme", "ASC"]] })
-        .then(themes => {
-            finalThemes = themes.map(object => object["DISTINCT"]);
-            Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
-            .then(categories => {
-                finalCategories = categories.map(object => object["DISTINCT"]);
+        Themes.findAll({ 
+        }).then(themes => {
+            Categories.findAll({
+            }).then(categories => {
                 
                 res.render('admin/retrieveFurniture', {
                     furnitures: furnitures,
-                    themes: finalThemes,
-                    categories: finalCategories
+                    themes,
+                    categories
                 });
 
             }).catch(err => console.log(err))
@@ -115,6 +112,8 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
     let width = req.body.width;
     let height = req.body.height;
     let imageURL = req.body.imageURL;
+    let rating = 0;
+    let actualrating = 0;
 
     let addedBy = req.user.id;
     let lastEditedBy = req.user.id
@@ -129,7 +128,9 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
         heightmm: height,
         imageURL,
         addedBy,
-        lastEditedBy
+        lastEditedBy,
+        rating,
+        actualrating
     }) 
     .then(furniture => { return furniture })
 
@@ -304,12 +305,62 @@ router.get('/deleteFurniture/:id', ensureAdmin, (req, res) => {
 	});
 });
 
+
+//THEME - Add Theme
+router.get('/addTheme', ensureAdmin, (req, res) => {
+    res.render('admin/addTheme', {});
+});
+
+//THEME - Add Theme (save)
+router.post('/addTheme', ensureAdmin, (req, res) => {
+    let themeName = req.body.themeName;
+    let themeDescription = req.body.description;
+    let imageURL = req.body.imageURL;
+
+    Themes.create({
+        theme: themeName,
+        themeDescription,
+        themeImageURL: imageURL
+    }).then(theme => {
+        res.redirect('/admin/retrieveFurniture');
+    })
+});
+
+//THEME - Edit Theme
+router.get('/editTheme/:id', ensureAdmin, (req, res) => {
+    Themes.findOne({
+        where: { id: req.params.id },
+    }).then((theme) => {
+        res.render('admin/editTheme', {
+            theme
+        });
+    }).catch(err => console.log(err)); 
+});
+
+//THEME - Edit Theme PUT (save)
+router.put('/saveEditTheme/:id', ensureAdmin, (req, res) => {
+    let themeName = req.body.themeName;
+    let themeDescription = req.body.description;
+    let imageURL = req.body.imageURL;
+
+    Themes.update({
+            theme: themeName,
+            themeDescription,
+            themeImageURL: imageURL
+        }, {
+        where: { id: req.params.id }
+    })
+
+    res.redirect('/admin/retrieveFurniture');
+}); 
+
 //THEMES - Upload image for add/edit theme
 router.post('/themeUpload', ensureAdmin, (req, res) => {
     if (!fs.existsSync('./public/themeUploads/')){
         fs.mkdirSync('./public/themeUploads/');
     }
     themeImageUpload(req, res, (err) => {
+        console.log(err)
         if (err) {
             res.json({file: '/img/no-image.jpg', err: err});
         } else {
@@ -321,6 +372,76 @@ router.post('/themeUpload', ensureAdmin, (req, res) => {
         }
     });
 })
+
+//THEME - Delete Theme
+router.get('/deleteTheme/:id', ensureAdmin, (req, res) => {
+	Themes.findOne({
+        where: {
+            id: req.params.id,
+        }
+    }).then((theme) => {
+        if (theme == null){
+            alertMessage(res, 'danger', 'Theme does not exist in database', 'fas fa-exclamation-circle', true);
+            res.redirect('/admin/retrieveFurniture');
+            return
+        } else {
+            FurnitureToThemes.destroy({ where: {themeId: theme.id}})
+            Themes.destroy({ where: {id: theme.id}})
+            .then(theme => {
+                alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
+                res.redirect('/admin/retrieveFurniture');
+            })
+        }
+	});
+});
+
+//CATEGORY - Add Category
+router.get('/addTheme', ensureAdmin, (req, res) => {
+    res.render('admin/addTheme', {});
+});
+
+//CATEGORY- Add Category (save)
+router.post('/addTheme', ensureAdmin, (req, res) => {
+    let categoryName = req.body.categoryName;
+    let categoryDescription = req.body.description;
+    let imageURL = req.body.imageURL;
+
+    Categories.create({
+        category: categoryName,
+        categoryDescription,
+        categoryImageURL: imageURL
+    }).then(category => {
+        res.redirect('/admin/retrieveFurniture');
+    })
+});
+
+//Category - Edit Category
+router.get('/editCategory/:id', ensureAdmin, (req, res) => {
+    Categories.findOne({
+        where: { id: req.params.id },
+    }).then((category) => {
+        res.render('admin/editCategory', {
+            category
+        });
+    }).catch(err => console.log(err)); 
+});
+
+//CATEGORY - Edit Category PUT (save)
+router.put('/saveEditCategory/:id', ensureAdmin, (req, res) => {
+    let categoryName = req.body.categoryName;
+    let categoryDescription = req.body.description;
+    let imageURL = req.body.imageURL;
+
+    Categories.update({
+            category: categoryName,
+            categoryDescription,
+            categoryImageURL: imageURL
+        }, {
+        where: { id: req.params.id }
+    })
+
+    res.redirect('/admin/retrieveFurniture');
+}); 
 
 //CATEGORIES - Upload image for add/edit category
 router.post('/categoryUpload', ensureAdmin, (req, res) => {
@@ -340,6 +461,28 @@ router.post('/categoryUpload', ensureAdmin, (req, res) => {
     });
 })
 
+
+//Category - Delete Category
+router.get('/deleteCategory/:id', ensureAdmin, (req, res) => {
+	Categories.findOne({
+        where: {
+            id: req.params.id,
+        }
+    }).then((category) => {
+        if (category== null){
+            alertMessage(res, 'danger', 'Category does not exist in database', 'fas fa-exclamation-circle', true);
+            res.redirect('/admin/retrieveFurniture');
+            return
+        } else {
+            FurnitureToCategories.destroy({ where: {categoryId: category.id}})
+            Categories.destroy({ where: {id: category.id}})
+            .then(category => {
+                alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
+                res.redirect('/admin/retrieveFurniture');
+            })
+        }
+	});
+});
 
 
 //FEEDBACK - JUN LENG
@@ -371,5 +514,102 @@ router.get('/passwordAgeAdminreset', (req, res) => {
 	const title = 'BRANDNAME - Admin - ??';
 	res.render('admin/showUsers', {title: title}) 
 }); 
+
+
+router.get('/discount', ensureAdmin, (req, res) => {
+    discountCode.findAll({})
+    .then((discounts) => {
+        console.log(discounts)
+        res.render('admin/discountC', {
+            discounts: discounts
+        });
+    })
+    .catch(err => console.log(err));
+})
+
+router.get('/AddDiscount', ensureAdmin, (req, res) => {
+    res.render('admin/AddDiscountC')
+})
+
+router.post('/AddDiscount', ensureAdmin, (req, res) => {
+    let discountcode = req.body.DiscountC;
+    let perDis = req.body.perDis || 0;
+    let subDis = req.body.subDis || 0;
+    discountCode.findOne({where:discountcode})
+    .then((code) => {
+        if(code){
+            res.redirect('/admin/AddDiscount')
+        } else {
+            discountCode.create({
+                discountcode,
+                subDis,
+                perDis,
+            }) 
+            .then(discounts => {
+                alertMessage(res, 'success', 'Successfully added Discount Code', 'fas fa-exclamation-circle', true);
+                res.redirect('/admin/discount');
+            })
+        }
+    })
+    .catch(err => console.log(err))    
+})
+
+
+router.get('/discount/edit/:id', ensureAdmin, (req, res) => {
+    discountCode.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then((code) => {
+        res.render('admin/EditDiscountC', {
+            code
+        });
+    }).catch(err => console.log(err)); 
+});
+
+router.post('/discount/edit/:id', ensureAdmin, (req, res) => {
+    let discountcode = req.body.DiscountC;
+    let perDis = req.body.perDis;
+    let subDis = req.body.subDis;discountCode.findOne({where:discountcode})
+    let id = req.params.id
+    .then((code) => {
+        if(code){
+            res.redirect('/admin/discount/edit/'+id)
+        } else {   
+            discountCode.update({
+                discountcode,
+                subDis,
+                perDis,
+            }, {
+                where: {
+                    id
+                }
+            }).then(() => {
+                alertMessage(res, 'success', 'Successful update', 'fas fa-exclamation-circle', true);
+                res.redirect('/admin/discount');
+            })
+        }
+    })
+    .catch(err => console.log(err));
+})
+
+router.get('/discount/delete/:id', ensureAdmin, (req, res) => {
+	discountCode.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then((code) => {
+        discountCode.destroy({
+            where: {
+                id: code.id
+            }
+        }).then((address2) =>{ 
+            alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
+            res.redirect('/admin/discount');
+        })
+
+	});
+});
+
 
 module.exports = router;
