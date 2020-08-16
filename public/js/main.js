@@ -445,3 +445,32 @@ $('#categoryUpload').on('change', function(){
         }
     });
 });
+
+
+
+$('#disCodeB').on('click', function(){
+    let disCode = {disCode: document.getElementById("disCode").value}
+    console.log(disCode)
+    fetch('http://localhost:5000/payment/checkDis', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(disCode)
+    }).then((res)=>{
+        res.json().then((data) => {
+            if(data['response'] == 2){
+                document.getElementById('disCodeN').style.display = 'none'
+                document.getElementById('disCodeW').style.display = ''
+            } else {
+                if(data['response'] == 0){
+                    document.getElementById('disCodeW').style.display = 'none'
+                    document.getElementById('disCodeN').style.display = ''
+                } else {
+                    document.getElementById('disCodeN').style.display = 'none'
+                    document.getElementById('disCodeW').style.display = 'none'
+                    location.reload()
+                }
+            }
+        })
+    })
+})
+
