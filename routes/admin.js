@@ -115,6 +115,8 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
     let width = req.body.width;
     let height = req.body.height;
     let imageURL = req.body.imageURL;
+    let rating = 0;
+    let actualrating = 0;
 
     let addedBy = req.user.id;
     let lastEditedBy = req.user.id
@@ -129,7 +131,9 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
         heightmm: height,
         imageURL,
         addedBy,
-        lastEditedBy
+        lastEditedBy,
+        rating,
+        actualrating
     }) 
     .then(furniture => { return furniture })
 

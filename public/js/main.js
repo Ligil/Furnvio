@@ -377,12 +377,12 @@ $('#imageUpload').on('change', function(){
     });
 });
 
-$('#reviewUpload').on('change', function(){
-    let image = $("#reviewUpload")[0].files[0];
+$('#reviewImageUpload').on('change', function(){
+    let image = $("#reviewImageUpload")[0].files[0];
     let formdata = new FormData();
-    formdata.append('reviewUpload', image);
+    formdata.append('reviewImageUpload', image);
     $.ajax({
-        url: '/admin/reviewUpload',
+        url: '/furniture/reviewUpload',
         type: 'POST',
         data: formdata,
         contentType: false,
