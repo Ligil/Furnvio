@@ -350,6 +350,7 @@ router.post('/reviewUpload', ensureAdmin, (req, res) => {
 
 router.get('/themes', (req, res) => {
     Themes.findAll({ 
+        order: [["theme", "ASC"]]
     }).then(themes => {
         res.render('furniture/themes', { themes })
     })
@@ -384,6 +385,7 @@ router.get('/themes/:name', (req, res) => {
 
 router.get('/categories', (req, res) => {
     Categories.findAll({ 
+        order: [["category", "ASC"]]
     }).then(categories => {
         res.render('furniture/categories', { categories })
     })
