@@ -352,23 +352,24 @@ router.post('/passwordReset/:token', (req, res, next) => {
             } else {
                 //verify user
                 userId = authData.userId
-                User.findOne({ where: {id: userId} })
-                .then(user => {
-                    if (user == null){
-                        console.log('ERRORUSER111 - User no longer exists')
-                        alertMessage(res, 'danger', 'User ID no longer exists in database, please send resend email or contact staff for help', 'fas faexclamation-circle', true);
-                        res.redirect('/');
-                    }else{
-                        //if user exists
-                        //salthash password
-                        bcrypt.genSalt(10, function(err, salt) {
-                            bcrypt.hash(password, salt, function(err, hashedPassword) {
-                                User.update({password: hashedPassword, passwordResetToken:''}, { //right token for the right account
-                                    where: {id: user.id}
-                                })
-                                alertMessage(res, 'success', 'Password reset! Please try to login', 'fas fa-sign-in-alt', true);
-                                res.redirect('/user/login')
-                            });
+                User.findOne({ where: { id: userId } })
+                    .then(user => {
+                        if (user == null) {
+                            console.log('ERRORUSER111 - User no longer exists')
+                            alertMessage(res, 'danger', 'User ID no longer exists in database, please send resend email or contact staff for help', 'fas faexclamation-circle', true);
+                            res.redirect('/');
+                        } else {
+                            //if user exists
+                            //salthash password
+                            bcrypt.genSalt(10, function (err, salt) {
+                                bcrypt.hash(password, salt, function (err, hashedPassword) {
+                                    User.update({ password: hashedPassword, passwordResetToken: '' }, { //right token for the right account
+                                        where: { id: user.id }
+                                    })
+                                    alertMessage(res, 'success', 'Password reset! Please try to login', 'fas fa-sign-in-alt', true);
+                                    res.redirect('/user/login')
+                                });
+                            })
                         }
                     })
             };
