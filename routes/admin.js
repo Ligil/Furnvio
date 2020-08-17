@@ -13,6 +13,7 @@ const Themes = require('../models/Themes');
 const Categories = require('../models/Categories');
 const FurnitureToThemes = require('../models/FurnitureThemes');
 const FurnitureToCategories = require('../models/FurnitureCategories');
+const discountCode = require('../models/discountCode');
 //Extras
 const alertMessage = require('../helpers/messenger');
 const { ensureAuthenticated, ensureAdmin } = require('../helpers/auth')
@@ -21,7 +22,6 @@ const fs = require('fs');
 const { imageUpload, themeImageUpload, categoryImageUpload } = require('../helpers/imageUpload');
 
 const { removeJoinMetaData } = require('../helpers/removeMeta');
-const discountCode = require('../models/discountCode');
 
 //USERS - Retrieve Users
 router.get('/listUsers', ensureAuthenticated, (req, res) => {
@@ -534,14 +534,14 @@ router.post('/AddDiscount', ensureAdmin, (req, res) => {
     let discountcode = req.body.DiscountC;
     let perDis = req.body.perDis || 0;
     let subDis = req.body.subDis || 0;
-    discountCode.findOne({where:{discountcode}})
+    discountCode.findOne({where:{discountCode:discountcode}})
     .then((code) => {
         if(code){
             alertMessage(res, 'danger', 'Discount Code already exist', 'fas fa-exclamation-circle', true);
             res.redirect('/admin/AddDiscount')
         } else {
             discountCode.create({
-                discountcode,
+                discountCode:discountcode,
                 subDis,
                 perDis,
             }) 
@@ -573,14 +573,14 @@ router.post('/discount/edit/:id', ensureAdmin, (req, res) => {
     let subDis = req.body.subDis;
     
     let id = req.params.id
-    discountCode.findOne({where:{discountcode}})
+    discountCode.findOne({where:{discountCode:discountcode}})
     .then((code) => {
         if(code && code.id != id){
             alertMessage(res, 'danger', 'Discount Code already exist', 'fas fa-exclamation-circle', true);
             res.redirect('/admin/discount/edit/'+id)
         } else {   
             discountCode.update({
-                discountcode,
+                discountCode:discountcode,
                 subDis,
                 perDis,
             }, {
