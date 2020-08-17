@@ -4,9 +4,10 @@
   </div>
 
   {{!-- Top Half --}}
-  <div class="d-flex container my-3">
+  <div class="d-flex flex-wrap container my-3">
+
     {{!-- Logo thing --}}
-    <a class="mr-3 col-2" style="padding: 0px;" href="/">
+    <a class="col-sm-12 col-md-2 supercenter" style="padding: 0px;" href="/">
       {{!-- <h1 class="my-auto" style="font-size:40px; color:#d4af37;" >
         FURNVIO
       </h1> --}}
@@ -15,14 +16,15 @@
 
     {{!-- Search --}}
     {{!-- https://teamtreehouse.com/community/changing-javascript-for-different-screen-sizes --}}
-    <form class="m-auto d-flex col-7" autocomplete="off" action="/furniture/search"method="GET" >
+    <form id="searchbarForm" class="m-auto d-flex col-sm-12 col-md-8" autocomplete="off" action="/furniture/search"method="GET" >
 
       <div class="autocomplete col-10" id="autoComplete">
         <input required class="form-control" id="searchInput" type="text" name="searchInput" placeholder="Search here" style="border: 1px solid #e6a3a9ff;" value="{{#if searchInputEnter}}{{searchInputEnter}}{{/if}}">
         <div class="search-div" id="search-div" style="display: none">
 
-          <div class="d-flex">
-            <div class="col-6 px-0 border-right">
+          <div class="d-flex" style="flex-flow: row wrap">
+            
+            <div class="col-sm-12 col-md-6 px-0">
               <div class="search-header" id="search-theme-header"> {{!-- Header 'Themes' --}}
                 <strong>Themes</strong>
               </div>
@@ -32,7 +34,7 @@
               </div>
             </div>
 
-            <div class="col-6 px-0">
+            <div class="col-sm-12 col-md-6 px-0">
               <div class="search-header" id="search-category-header"> {{!-- Header 'Categories' --}}
                 <strong>Categories</strong>
               </div>
@@ -53,49 +55,47 @@
 
           {{!-- Footer --}}
           <div class="search-footer" id="search-footer">
-            <input id="search-seeAll" class="search-seeAll" type="submit" value="See all () results matching 'a'">
+            <a id="search-seeAll" class="search-seeAll" href="javascript:$('#searchbarForm').submit();">See all () results matching 'a'</a>
           </div>
 
         </div>
       </div>
 
-      <button class="btn text-white btn-rounded btn-sm my-0 col-2" id="searchButton" type="submit"><i class="fas fa-search" style="color:#d4af37"></i></button>
+      <button class="btn text-white btn-rounded btn-sm my-0 col-2 supercenter" id="searchButton" type="submit"><i class="fas fa-search" style="color:#d4af37"></i></button>
 
     </form>
     
     {{!-- Profile --}}
-    <a href="/cart" class="nav-link supercenter"><i id="fa-shopping-cart" class="fas fa-shopping-cart"></i></a>
+    <div id="profile1" class="d-flex row-wrap col-sm-12 col-md-2 p-0">
+      <a href="/cart" class="nav-link col-sm-4 col-md-4 supercenter"><i id="fa-shopping-cart" class="fas fa-shopping-cart"></i></a>
+      {{#if user}}
+      <div class="m-auto col-sm-8 col-md-8" id="profile-dropdown">
 
-    {{#if user}}
+        <button class="dropbtn dropdown-toggle" id="profile-dropdown-btn">Account</button>
+        <div id="profile-dropdown-content">
+          <a href="/user/profile" class="nav-link">Profile</a>
+          <a href="/logout" class="nav-link">Logout</a>
+        </div>
 
-    <div class="m-auto col-2" id="profile-dropdown">
-
-      <button class="dropbtn dropdown-toggle" id="profile-dropdown-btn">Account</button>
-      <div id="profile-dropdown-content">
-        <a href="/user/profile" class="nav-link">Profile</a>
-        <a href="/user/myorders" class="nav-link">My Orders</a>
-				<a href="/logout" class="nav-link">Logout</a>
       </div>
-
-    </div>
-      
-    {{else}}
-    <div class="m-auto col-2" id="profile-dropdown">
-      <button class="dropbtn dropdown-toggle" id="profile-dropdown-btn">Account</button>
-      <div id="profile-dropdown-content">
-        <a href="/user/login" class="nav-link">Login</a>
-        <a href="/user/register" class="nav-link">Register</a>
+      {{else}}
+      <div class="m-auto col-sm-8 col-md-8" id="profile-dropdown">
+        <button class="dropbtn dropdown-toggle" id="profile-dropdown-btn">Account</button>
+        <div id="profile-dropdown-content">
+          <a href="/user/login" class="nav-link">Login</a>
+          <a href="/user/register" class="nav-link">Register</a>
+        </div>
       </div>
+      {{/if}}
     </div>
-    {{/if}}
 
   </div>
 
+  {{!-- WINDOWS NAVBAR --}}
   {{!-- Bottom Half --}}
-  <nav class="navbar navbar-expand-lg navbar-light border" style="padding:0px;">
+  <nav id="windowsNav" class="navbar navbar-expand-lg navbar-light border" style="padding:0px;">
     <div class="container">
       <ul class="navbar-nav navbar-contents">
-        
         {{!-- Item 1 --}}
         {{!-- <li class="nav-item">
             <a class="nav-link" href="/furniture/listFurniture">Furniture</a>
@@ -111,45 +111,41 @@
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="feedback-dropdown-btn">Feedback</a>
         </li>
 
-        {{!-- Item 4 --}}
-        <li class="nav-item m-auto dropdown" id="themes-dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="themes-dropdown-btn">Themes</a>
-        </li>
-
-        {{!-- Item 5 --}}
-        <li class="nav-item m-auto dropdown" id="categories-dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="categories-dropdown-btn">Categories</a>
-        </li>
-
-
-      </ul>
-      {{#if user.admin}}
-      <ul class="navbar-nav navbar-contents">
-        <li class="nav-item m-auto dropdown" id="admin-function-dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="admin-function-dropdown-btn">Admin Functions</a>
-        </li>
-
-        {{!-- <li class="nav-item m-auto">
-            <a href="/alertTest" class="nav-link">Alert Test</a>
+        <li class="nav-item m-auto">
+          <a class="nav-link" href="/furniture/themes">Themes</a>
         </li>
 
         <li class="nav-item m-auto">
-          <form action="/pay"  method='post'>
-            <button class="btn" style="padding: 0px;" type="submit">Paypal button</button>
-          </form>
-        </li> --}}
+          <a class="nav-link" href="/furniture/categories">Categories</a>
+        </li>
+        
+        {{!-- Item 6 --}}
+        {{#if user.admin}}
+        <li class="nav-item m-auto dropdown" id="admin-function-dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="admin-function-dropdown-btn">Admin Functions</a>
+        </li>
+        {{/if}} 
+        
+      </ul>
 
-        {{!-- <li class="nav-item m-auto dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Video Jots (Click me because im lazy)</a>
-          <ul class="dropdown-menu">
-            <a href="/video/listVideos" class="dropdown-item">Videos</a>
-            <a href="/video/showAddVideo" class="dropdown-item">Add Video</a>
-          </ul> 
-        </li> --}}
+      {{!-- <li class="nav-item m-auto">
+          <a href="/alertTest" class="nav-link">Alert Test</a>
+      </li>
 
-			</ul>
-      {{/if}} 
+      <li class="nav-item m-auto">
+        <form action="/pay"  method='post'>
+          <button class="btn" style="padding: 0px;" type="submit">Paypal button</button>
+        </form>
+      </li> --}}
 
+      {{!-- <li class="nav-item m-auto dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Video Jots (Click me because im lazy)</a>
+        <ul class="dropdown-menu">
+          <a href="/video/listVideos" class="dropdown-item">Videos</a>
+          <a href="/video/showAddVideo" class="dropdown-item">Add Video</a>
+        </ul> 
+      </li> --}}
+    
     </div>
   </nav>
   {{!-- Bottom, bottom nav --}}
@@ -195,6 +191,73 @@
        
     </div>
   </div>
+  {{!-- WINDOWS NAVBAR --}}
+
+  {{!-- PHONE NAVBAR --}}
+  <nav id="phoneNav" class="navbar navbar-expand-lg navbar-light border-top border-bottom container-fluid" style="display: none">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <hr>
+      <ul class="nav navbar-nav mr-auto mt-2 mt-lg-0 container-fluid">
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Cart</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Profile</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Feedback
+          </a>
+          <div id="navbarDropdown1" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/feedback">Submit Feedback</a>
+            <a class="dropdown-item" href="/feedback/userfeedback">My Feedbacks</a>
+            <a class="dropdown-item" href="/feedback/featuredFeedback">Common Feedbacks</a>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/furniture/themes">Themes</a>
+        </li>
+
+
+        <li class="nav-item">
+          <a class="nav-link" href="/furniture/categories">Categories</a>
+        </li>
+
+
+        {{#if user.admin}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Admin Functions
+          </a>
+          <div id="navbarDropdown2" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/admin/listUsers">User List</a>
+            <br>
+            <a class="dropdown-item" href="/admin/discount">Discounts</a>
+            <br>
+            <a class="dropdown-item" href="/admin/addFurniture">Add Furniture</a>
+            <br>
+            <a class="dropdown-item" href="/admin/retrieveFurniture">Retrieve Furniture</a>
+            <a class="dropdown-item" href="/feedback/rfeedback" >Retrieve Questions</a>   
+            <a class="dropdown-item" href = "/feedback/adminfeaturedFeedback">Featured Feedback</a>
+          </div>
+        </li>
+        {{/if}} 
+
+      </ul>
+    </div>
+  </nav>
+  {{!-- PHONE NAVBAR --}}
 
 </div>
 
