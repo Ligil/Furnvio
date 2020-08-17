@@ -24,9 +24,9 @@
         </div>
     </div>
 
-    <div class="col-sm-12 col-md-5 my-1 h-100">
-        <div class="p-4 mx-2" style="background-color: #F8F8F8;">
-            <h4>{{furniture.furnitureName}}</h4>
+    <div class="col-sm-12 col-md-5 p-4"style="background-color: #F8F8F8; height: 100%;">
+        <h4>{{furniture.furnitureName}}</h4>
+        <div class="d-flex">
             <div class = "mx-2">
                 {{#ifCond reviewtotal '==' 0}}
                 <span class="fa fa-star"></span>
@@ -72,20 +72,24 @@
                 {{/ifCond}}
             </div>
             <span style="font-weight:100">({{actualtotal}} out of 5)</span>
-            <hr>
-
-            <div class="d-flex">
-                <h3>${{furniture.cost}}</h3>
-                {{!-- Add quantity somewhere here? --}}
-            </div>
-
-            <hr>
-
-            <h4 class="md-2">About product</h4>
-            <p class = "p-2 border">{{furniture.description}}</p>
-            <a href="/addToCart/{{furniture.id}}" class="btn furnitureCartButton" style="padding-top: 10px; padding-bottom: 10px;"><i class="fas fa-plus"></i> Add To Cart</a>
         </div>
+
+        <hr>
+
+        <div class="d-flex">
+            <h3>${{furniture.cost}}</h3>
+            {{!-- Add quantity somewhere here? --}}
+        </div>
+
+        <hr>
+
+        <h4 class="md-2">About product</h4>
+        <p class = "p-2 border">{{furniture.description}}</p>
+        <hr>
+        <p>Length: {{furniture.lengthmm}}cm, Width: {{furniture.widthmm}}cm, Height: {{furniture.heightmm}}cm</p>
+        <a href="/addToCart/{{furniture.id}}" class="btn furnitureCartButton" style="padding-top: 10px; padding-bottom: 10px;"><i class="fas fa-plus"></i> Add To Cart</a>
     </div>
+
 </div>
 
 

@@ -516,13 +516,6 @@ router.get('/ensureAdmin', ensureAdmin, (req, res) => {
     res.redirect('/')
 })
 
-//do eventually
-router.get('/passwordAgeAdminreset', (req, res) => {
-    const title = 'BRANDNAME - Admin - ??';
-    res.render('admin/showUsers', { title: title })
-});
-
-
 router.get('/discount', ensureAdmin, (req, res) => {
     discountCode.findAll({})
     .then((discounts) => {
@@ -619,18 +612,18 @@ router.get('/discount/delete/:id', ensureAdmin, (req, res) => {
         })
 
     });
-});
+});  
 
 router.get('/retrieveorders', ensureAdmin, (req, res) => {
     Order.findAll()
-        .then((orders) => {
-            const title = 'Furnvio - My Orders';
-            res.render('admin/RetrieveOrders', {
-                orders,
-                title: title
-            });
-        })
-        .catch(err => console.log(err));
+    .then((orders) => {
+        const title = 'Furnvio - My Orders';
+        res.render('admin/RetrieveOrders', {
+            orders,
+            title: title
+        });
+    })
+    .catch(err => console.log(err));
 });
 
 router.get('/retrieveorders/:id', ensureAdmin, (req, res) => {
@@ -672,7 +665,7 @@ router.post('/updateorders', (req, res) => {
     alertMessage(res, 'success', 'Successfully updated order status', 'fas faexclamation-circle', true);
 	res.status(200).json({
         message: "Hello"
-        
 	})
 });
+
 module.exports = router;

@@ -178,7 +178,6 @@ router.get('/cart', ensureAuthenticated, (req, res) => {
 				cart[i]['totalPrice'] = totalPrice;
 				totalTotalPrice += totalPrice;
 			}
-			console.log(cart)
 
 			const totalprice = totalTotalPrice
             tempOrder.create({
