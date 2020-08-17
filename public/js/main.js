@@ -75,6 +75,7 @@ $('#searchInput').on('keyup', function(){
             categoriesDiv.innerHTML = ''
             themesDiv.innerHTML = ''
             
+            console.log(themeData, categoryData)
             //Section 1: Making Category Tabs
 
             if (furnitureData == []){furnitureData = ['']}
@@ -208,12 +209,13 @@ $('#searchInput').on('keyup', function(){
                     eachItem.classList.add("d-flex")
                     eachItem.classList.add("align-items-center")
                     eachItem.classList.add("search-items-each")
+                    eachItem.classList.add("flex-wrap")
 
 
                     //add image and text
                     image = "<img src='" + object.imageURL + "' alt='' style='max-width: 100%; max-height: 100%'>"
-                    imageContainer = "<div class='col-3'>" + image + "</div>"
-                    textContainer = "<div class='col-9 search-items-text'>" + boldedTest + "</div>"
+                    imageContainer = "<div class='col-sm-12 col-md-3 searchImageToDelete'>" + image + "</div>"
+                    textContainer = "<div class='col-sm-12 col-md-9 search-items-text'>" + boldedTest + "</div>"
                     eachItem.innerHTML = imageContainer + textContainer
                     eachItemLink = document.createElement("a"); //each item
                     eachItemLink.setAttribute("href", "/furniture/item/"+object.id)
@@ -230,7 +232,7 @@ $('#searchInput').on('keyup', function(){
                 eachItem.innerHTML = "<strong>No items found</strong>";
                 productsDiv.appendChild(eachItem);
 
-                searchCounter.value = "No Results"
+                searchCounter.textContent = "No Results"
             }
 
         })

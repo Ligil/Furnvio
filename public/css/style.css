@@ -15,6 +15,10 @@ a {
   text-decoration: inherit;
 }
 
+.navbar .dropdown-menu {
+  position: relative !important;
+}
+
 #fa-shopping-cart{
   color: black
 }

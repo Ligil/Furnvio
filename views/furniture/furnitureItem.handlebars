@@ -17,14 +17,14 @@
 </div>
 
 
-<div class="d-flex mb-4">
-    <div class="col-7 h-100">
+<div class="d-flex flex-wrap mb-4">
+    <div class="col-sm-12 col-md-7 h-100">
         <div class="border supercenter">
             <img src="{{furniture.imageURL}}" alt="Image unavailable" class="img-fluid p-4">
         </div>
     </div>
 
-    <div class="col-5 h-100">
+    <div class="col-sm-12 col-md-5 my-1 h-100">
         <div class="p-4 mx-2" style="background-color: #F8F8F8;">
             <h4>{{furniture.furnitureName}}</h4>
             <div class = "mx-2">
@@ -81,7 +81,7 @@
 
             <hr>
 
-            <h4 class="mb-2">About product</h4>
+            <h4 class="md-2">About product</h4>
             <p class = "p-2 border">{{furniture.description}}</p>
             <a href="/addToCart/{{furniture.id}}" class="btn furnitureCartButton" style="padding-top: 10px; padding-bottom: 10px;"><i class="fas fa-plus"></i> Add To Cart</a>
         </div>
@@ -138,7 +138,7 @@
     {{#if review}}
     <p class='cd-1'>{{reviewLength}} review(s)</p>
     {{#each review}}
-    <div class="card card-body mb-2">
+    <div class="card card-body md-2">
         <div class="d-flex">
             <span>{{this.user.dataValues.name}}</span>
              {{#ifCond rating '==' 0}}
@@ -224,17 +224,16 @@
             <img id="image" src="/img/no-image.jpg" alt="" class="border img-thumbnail img-fluid" style="width:100%">
             <div class="container">
                 <br>
-                <input type="file" id="reviewImageUpload" name="reviewImageUpload"
-                    accept="image/png, image/jpeg, image/jpg, image/gif, image/webp">
+                <input class="w-100" type="file" id="reviewImageUpload" name="reviewImageUpload" accept="image/png, image/jpeg, image/jpg, image/gif, image/webp">
 
                 {{!—- Hidden field to submit URL of image to the server --}}
                 <input id="imageURL" type="hidden" name="imageURL">
-                <div class="font-weight-bold text-danger small" id="imageErr" style="display:none"></div>
+                <div class="col-sm-12 text-danger small" id="imageErr" style="display:none"></div>
             </div>
 
         </div>
         <br>
-        <input class="btn furnitureCartButton col-2" type="submit" value="Submit">
+        <input class="btn furnitureCartButton col-sm-12 col-md-2" type="submit" value="Submit">
 
     </form>
     {{!-- Else --}}

@@ -6,9 +6,9 @@
         Search Results for: "{{searchInputEnter}}", {{resultsFound}} results found.
     </div>
 
-    <div class="d-flex">
-        <div class="col-md-3 pt-2">
-            <div class="mb-4">
+    <div>
+        <div class="pt-2 d-flex flex-wrap">
+            <div class="mb-4 col-sm-12 col-md-4">
                 <h5 class="font-weight-bold border-bottom">Themes</h5>
                 <div class="btn-group-toggle" id="furniture-search-themes" data-toggle="buttons">
                     {{#each themes}}
@@ -19,7 +19,7 @@
                 </div>
             </div>
             
-            <div class="mb-4">
+            <div class="mb-4 col-sm-12 col-md-4">
                 <h5 class="font-weight-bold border-bottom">Categories</h5>
                 <div class="btn-group-toggle" id="furniture-search-categories" data-toggle="buttons">
                     {{#each categories}}
@@ -29,14 +29,10 @@
                     {{/each}}
                 </div>
             </div>
-
-        </div>
-        <hr>
-
-        <div class="col-md-9 pt-2">
+            
             {{!-- Sort Order --}}
-            <div class="my-3 container d-flex justify-content-end">
-                Sort Order: 
+            <div class="mb-4 col-sm-12 col-md-4">
+                <h5 class="font-weight-bold border-bottom">Sort Order</h5>
                 <select class="ml-1" id="sortOrderSelect" onchange="refreshPage()">
                     <option value="recent" {{#ifCond sort "==" "recent"}}selected{{/ifCond}}>Recent</option>
                     <option value="cost-ASC" {{#ifCond sort "==" "cost-ASC"}}selected{{/ifCond}}>Price - Ascending</option>
@@ -45,7 +41,11 @@
                     <option value="rating-ASC" {{#ifCond sort "==" "rating-ASC"}}selected{{/ifCond}}>Rating - Ascending</option>
                 </select>
             </div>
-            <hr>
+
+        </div>
+        <hr>
+
+        <div>
 
             {{!-- Furnitures --}}
             {{#if furnitures}}
@@ -53,7 +53,7 @@
 
                 {{#each furnitures}}
                 
-                    <div class="p-2 col-sm-12 col-md-6 col-lg-4">
+                    <div class="p-2 col-sm-6 col-md-4 col-lg-3">
                         <div class="card" style="height:100%">
                             <div class="position-relative furnitureSearchImage supercenter">
                                 <btn class="furnitureDetailsButton" data-toggle="modal" data-target="#modal{{id}}">Quick View</btn>
@@ -70,13 +70,13 @@
                                         <div class="modal-content">
                                             <div class="modal-body">
                                                 
-                                                <div class="d-flex h-100">
+                                                <div class="d-flex flex-wrap h-100">
 
-                                                    <div class="border col-6 supercenter">
+                                                    <div class="border col-sm-12 col-md-6 supercenter">
                                                         <img src="{{imageURL}}" alt="Image unavailable">
                                                     </div>
 
-                                                    <div class="border col-6 p-4 d-flex flex-column h-100">
+                                                    <div class="border col-sm-12 col-md-6 p-4 d-flex flex-column h-100">
                                                         <h5 class="font-weight-bold border-bottom pb-2 mb-4">{{furnitureName}}</h5>
 
                                                         <div class="overflow-auto">
@@ -213,6 +213,7 @@
         }) //get search value
 
         productsDiv = document.getElementById('search-products-items')
+        themesDiv = document.getElementById('search-theme-items')
         categoriesDiv = document.getElementById('search-category-items')
         //categories, products
         //no category found 
@@ -224,10 +225,11 @@
             res.json().then((data) => {
                 furnitureData = data['furniture']
                 categoryData = data['category']
+                themeData = data['theme']
                 productsDiv.innerHTML = ''
                 categoriesDiv.innerHTML = ''
+                themesDiv.innerHTML = ''
                 //Section 1: Making Category Tabs
-
                 if (furnitureData == []){furnitureData = ['']}
                 if (categoryData == []){categoryData = ['']}
 
@@ -258,6 +260,46 @@
                     eachItem.classList.add("search-items-each")
                     eachItem.innerHTML = "<strong>No category found</strong>";
                     categoriesDiv.appendChild(eachItem);
+                }
+
+                //Section 1.5: Making theme tabs
+                if (furnitureData == []){furnitureData = ['']}
+                if (themeData == []){themeData = ['']}
+
+                var searchData = searchInput.searchInput
+                if (themeData.length != 0){
+                    themeData.forEach((theme)=>{
+                        /*Make the matching letters bold:*/
+                        var boldedText = theme                    
+                        for (i in searchData){
+                            word = searchData[i]
+                            if (boldedText.toLowerCase().startsWith(word.toLowerCase())){
+                                boldedText = "<b class='font-weight-bold'>" + boldedText.substring(0, word.length) + "</b>" + boldedText.substring(word.length)
+                                break
+                            }
+                        }                     
+
+                        eachItem = document.createElement("DIV"); //each item
+                        eachItem.classList.add("align-items-center")
+                        eachItem.classList.add("search-items-each")
+
+                        textContainer = "<div class='search-items-text'>" + boldedText + "</div>"
+                        eachItem.innerHTML = textContainer
+
+                        //Link it
+                        eachItemLink = document.createElement("a");
+                        eachItemLink.setAttribute("href", "/furniture/themes/"+theme)
+                        eachItemLink.appendChild(eachItem)
+
+                        //Append it
+                        themesDiv.appendChild(eachItemLink);
+                    })
+
+                } else {  
+                    eachItem = document.createElement("DIV");
+                    eachItem.classList.add("search-items-each")
+                    eachItem.innerHTML = "<strong>No theme found</strong>";
+                    themesDiv.appendChild(eachItem);
                 }
 
                 //Section 2: Making furniture tabs
@@ -312,12 +354,13 @@
                         eachItem.classList.add("d-flex")
                         eachItem.classList.add("align-items-center")
                         eachItem.classList.add("search-items-each")
+                        eachItem.classList.add("flex-wrap")
 
 
                         //add image and text
                         image = "<img src='" + object.imageURL + "' alt='' style='max-width: 100%; max-height: 100%'>"
-                        imageContainer = "<div class='col-3'>" + image + "</div>"
-                        textContainer = "<div class='col-9 search-items-text'>" + boldedTest + "</div>"
+                        imageContainer = "<div class='col-sm-12 col-md-3 searchImageToDelete'>" + image + "</div>"
+                        textContainer = "<div class='col-sm-12 col-md-9 search-items-text'>" + boldedTest + "</div>"
                         eachItem.innerHTML = imageContainer + textContainer
                         eachItemLink = document.createElement("a"); //each item
                         eachItemLink.setAttribute("href", "/furniture/item/"+object.id)
@@ -325,7 +368,7 @@
                         productsDiv.appendChild(eachItemLink);
 
                         //counter at bottom
-                        searchCounter.value = "See all (" + data['furnitureCount'] + ") results matching '" + document.getElementById("searchInput").value +"'"
+                        searchCounter.textContent = "See all (" + data['furnitureCount'] + ") results matching '" + document.getElementById("searchInput").value +"'"
                     })
 
                 } else {  

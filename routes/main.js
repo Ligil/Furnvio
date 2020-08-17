@@ -18,8 +18,15 @@ const tempOrder = require('../models/tempOrder');
 
 //SOME ROUTES
 router.get('/', (req, res) => {
-	const title = 'BRANDNAME';
-	res.render('home', { title: title })
+	Furniture.findAll({
+		include: [{ model: Themes, attributes: ['theme'] }, { model: Categories, attributes: ['category'] }],
+		order: [['id', 'DESC']],
+		limit: 6
+	}).then(furnitureResult => {
+
+		const title = 'BRANDNAME';
+		res.render('home', { title: title, newest: furnitureResult })
+	});
 });
 router.get('/logout', (req, res) => {
 	req.logout();
@@ -185,7 +192,7 @@ router.get('/cart', ensureAuthenticated, (req, res) => {
 //FOR SEARCHING ITEMS IN NAVBAR 
 router.post('/searchValue', (req, res) => {
 	if (req.body.searchInput == '') {
-		res.json({furniture: [], category: []})
+		res.json({furniture: [], category: [], theme: []})
 	} else {
 		let searchVals = req.body.searchInput;
 
