@@ -3,8 +3,10 @@ const router = express.Router();
 
 //Models
 const User = require('../models/User');
-const Video = require('../models/Video'); 
+const Video = require('../models/Video');
 const Feedback = require('../models/Feedback');
+const Order = require('../models/Order');
+
 
 const Furniture = require('../models/Furniture');
 const Themes = require('../models/Themes');
@@ -13,10 +15,10 @@ const FurnitureToThemes = require('../models/FurnitureThemes');
 const FurnitureToCategories = require('../models/FurnitureCategories');
 //Extras
 const alertMessage = require('../helpers/messenger');
-const {ensureAuthenticated, ensureAdmin} = require('../helpers/auth')
+const { ensureAuthenticated, ensureAdmin } = require('../helpers/auth')
 
 const fs = require('fs');
-const {imageUpload, themeImageUpload, categoryImageUpload} = require('../helpers/imageUpload');
+const { imageUpload, themeImageUpload, categoryImageUpload } = require('../helpers/imageUpload');
 
 const { removeJoinMetaData } = require('../helpers/removeMeta');
 const discountCode = require('../models/discountCode');
@@ -24,18 +26,18 @@ const discountCode = require('../models/discountCode');
 //USERS - Retrieve Users
 router.get('/listUsers', ensureAuthenticated, (req, res) => {
     User.findAll({ //find all users from models/user (user schema)
-        order: [ ['id', 'ASC'] ],
+        order: [['id', 'ASC']],
         raw: true
     })
-    .then((users) => {
-		const title = 'BRANDNAME - Admin - Show Users';
-        res.render('admin/showUsers', {
-			title: title,
-            users: users
-        });
-    })
-    .catch(err => console.log(err));
-}); 
+        .then((users) => {
+            const title = 'BRANDNAME - Admin - Show Users';
+            res.render('admin/showUsers', {
+                title: title,
+                users: users
+            });
+        })
+        .catch(err => console.log(err));
+});
 
 //USERS - Edit user
 router.get('/userEdit/:id', ensureAuthenticated, (req, res) => {
@@ -48,33 +50,33 @@ router.get('/userEdit/:id', ensureAuthenticated, (req, res) => {
 
 //USERS - Edit user PUT (save)
 router.put('/saveEditedUser/:id', ensureAuthenticated, (req, res) => {
-	let userId = req.params.id;
-	let {name, verified, admin} = req.body;
+    let userId = req.params.id;
+    let { name, verified, admin } = req.body;
 
-	User.update({
-		name,
-		verified, 
-		admin
+    User.update({
+        name,
+        verified,
+        admin
     }, {
         where: { id: userId }
     }).then(() => {
         res.redirect('/admin/listUsers');
     }).catch(err => console.log(err));
 
-}); 
+});
 
 //FURNITURE - Retrieve furniture
 router.get('/retrieveFurniture', ensureAdmin, (req, res) => {
     Furniture.findAll({
-        include: [{model: Themes, attributes: ['theme']},
-                  {model: Categories, attributes: ['category'], as: 'categories'}],
+        include: [{ model: Themes, attributes: ['theme'] },
+        { model: Categories, attributes: ['category'], as: 'categories' }],
         order: [['id', 'ASC']]
     }).then((furnitures) => {
-        Themes.findAll({ 
+        Themes.findAll({
         }).then(themes => {
             Categories.findAll({
             }).then(categories => {
-                
+
                 res.render('admin/retrieveFurniture', {
                     furnitures: furnitures,
                     themes,
@@ -90,17 +92,17 @@ router.get('/retrieveFurniture', ensureAdmin, (req, res) => {
 //FURNITURE - add furniture
 router.get('/addFurniture', ensureAdmin, (req, res) => {
     Themes.aggregate('theme', 'DISTINCT', { plain: false, order: [["theme", "ASC"]] })
-    .then(themes => {
-        finalThemes = themes.map(object => object["DISTINCT"]);
-        Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
-        .then(categories => {
-            finalCategories = categories.map(object => object["DISTINCT"]);
-            res.render('admin/addFurniture', {
-                themes: finalThemes,
-                categories: finalCategories
-            });
+        .then(themes => {
+            finalThemes = themes.map(object => object["DISTINCT"]);
+            Categories.aggregate('category', 'DISTINCT', { plain: false, order: [["category", "ASC"]] })
+                .then(categories => {
+                    finalCategories = categories.map(object => object["DISTINCT"]);
+                    res.render('admin/addFurniture', {
+                        themes: finalThemes,
+                        categories: finalCategories
+                    });
+                });
         });
-    });
 });
 
 //FURNITURE - add furniture POST (save)
@@ -131,11 +133,11 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
         lastEditedBy,
         rating,
         actualrating
-    }) 
-    .then(furniture => { return furniture })
+    })
+        .then(furniture => { return furniture })
 
-    let themeFindCreate = await function(){
-        for (indexVal in themeList){
+    let themeFindCreate = await function () {
+        for (indexVal in themeList) {
             var themeName = themeList[indexVal];
             Themes.findOrCreate({
                 where: { theme: themeName }
@@ -144,9 +146,9 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
             })
         }
     }
-    
-    let categoryFindCreate = await function(){
-        for (indexVal in categoryList){
+
+    let categoryFindCreate = await function () {
+        for (indexVal in categoryList) {
             var categoryName = categoryList[indexVal];
             Categories.findOrCreate({
                 where: { category: categoryName }
@@ -160,32 +162,34 @@ router.post('/addFurniture', ensureAdmin, async (req, res) => {
 
     keys = Object.keys(req.body)
     // Filter themes
-    themeList = keys.filter( function(key) {return key.startsWith("Theme:")
-    }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
+    themeList = keys.filter(function (key) {
+        return key.startsWith("Theme:")
+    }).map(function (key2) { return key2.substring(key2.indexOf(":") + 1) });
     //Filter Categories
-    categoryList = keys.filter( function(key) {return key.startsWith("Category:")
-    }).map( function(key2) {return key2.substring(key2.indexOf(":") + 1)});
+    categoryList = keys.filter(function (key) {
+        return key.startsWith("Category:")
+    }).map(function (key2) { return key2.substring(key2.indexOf(":") + 1) });
 
     themeFindCreate()
     categoryFindCreate()
 
-    alertMessage(res, 'success', 'Successfully added furniture '+ furniture.furnitureName +' ID ' + furniture.id+'!', 'fas fa-exclamation-circle', true);
+    alertMessage(res, 'success', 'Successfully added furniture ' + furniture.furnitureName + ' ID ' + furniture.id + '!', 'fas fa-exclamation-circle', true);
     res.redirect('/admin/retrieveFurniture');
 });
 
 //FURNITURE - Upload image for add/edit furniture
 router.post('/furnitureUpload', ensureAdmin, (req, res) => {
-    if (!fs.existsSync('./public/furnitureUploads/')){
+    if (!fs.existsSync('./public/furnitureUploads/')) {
         fs.mkdirSync('./public/furnitureUploads/');
     }
     imageUpload(req, res, (err) => {
         if (err) {
-            res.json({file: '/img/no-image.jpg', err: err});
+            res.json({ file: '/img/no-image.jpg', err: err });
         } else {
             if (req.file === undefined) {
-                res.json({file: '/img/no-image.jpg', err: err});
+                res.json({ file: '/img/no-image.jpg', err: err });
             } else {
-                res.json({file: `/furnitureUploads/${req.file.filename}`});
+                res.json({ file: `/furnitureUploads/${req.file.filename}` });
             }
         }
     });
@@ -194,8 +198,8 @@ router.post('/furnitureUpload', ensureAdmin, (req, res) => {
 //FURNITURE - Edit Furniture 
 router.get('/editFurniture/:id', ensureAdmin, (req, res) => {
     Furniture.findOne({
-        include: [{model: Themes, as: 'themes', attributes: ['theme']},
-                    {model: Categories, as: 'categories', attributes: ['category']}],
+        include: [{ model: Themes, as: 'themes', attributes: ['theme'] },
+        { model: Categories, as: 'categories', attributes: ['category'] }],
         where: { id: req.params.id },
     }).then((furniture) => {
         furniture.categories = removeJoinMetaData(furniture.categories)
@@ -212,9 +216,9 @@ router.get('/editFurniture/:id', ensureAdmin, (req, res) => {
                     categories: categories
                 });
 
+                    });
             });
-        });
-    }).catch(err => console.log(err)); 
+    }).catch(err => console.log(err));
 });
 
 //FURNITURE - Edit Furniture PUT (save)
@@ -230,20 +234,20 @@ router.put('/saveEditFurniture/:id', ensureAdmin, (req, res) => {
     let lastEditedBy = req.user.id;
 
     Furniture.update({
-            furnitureName,
-            cost,
-            description,
-            lengthmm: length,
-            widthmm: width,
-            heightmm: height,
-            imageURL,
-            lastEditedBy
-        }, {
+        furnitureName,
+        cost,
+        description,
+        lengthmm: length,
+        widthmm: width,
+        heightmm: height,
+        imageURL,
+        lastEditedBy
+    }, {
         where: { id: req.params.id },
         plain: true
     })
 
-    FurnitureToThemes.destroy({  where: { furnitureId: req.params.id } })    
+    FurnitureToThemes.destroy({ where: { furnitureId: req.params.id } })
     FurnitureToCategories.destroy({ where: { furnitureId: req.params.id } })
 
     Furniture.findOne({
@@ -283,12 +287,12 @@ router.put('/saveEditFurniture/:id', ensureAdmin, (req, res) => {
 
 //FURNITURE - Delete Furniture 
 router.get('/deleteFurniture/:id', ensureAdmin, (req, res) => {
-	Furniture.findOne({
+    Furniture.findOne({
         where: {
             id: req.params.id,
         }
     }).then((furniture) => {
-        if (furniture == null){
+        if (furniture == null) {
             //req.logout();
             alertMessage(res, 'danger', 'Furniture does not exist in database', 'fas fa-exclamation-circle', true);
             res.redirect('/admin/retrieveFurniture');
@@ -300,12 +304,12 @@ router.get('/deleteFurniture/:id', ensureAdmin, (req, res) => {
                 where: {
                     id: furniture.id
                 }
-            }).then((furniture2) =>{ //furniture2 returns int(1) maybe because success boolean?
+            }).then((furniture2) => { //furniture2 returns int(1) maybe because success boolean?
                 alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
                 res.redirect('/admin/retrieveFurniture');
             })
         }
-	});
+    });
 });
 
 
@@ -337,7 +341,7 @@ router.get('/editTheme/:id', ensureAdmin, (req, res) => {
         res.render('admin/editTheme', {
             theme
         });
-    }).catch(err => console.log(err)); 
+    }).catch(err => console.log(err));
 });
 
 //THEME - Edit Theme PUT (save)
@@ -347,30 +351,30 @@ router.put('/saveEditTheme/:id', ensureAdmin, (req, res) => {
     let imageURL = req.body.imageURL;
 
     Themes.update({
-            theme: themeName,
-            themeDescription,
-            themeImageURL: imageURL
-        }, {
+        theme: themeName,
+        themeDescription,
+        themeImageURL: imageURL
+    }, {
         where: { id: req.params.id }
     })
 
     res.redirect('/admin/retrieveFurniture');
-}); 
+});
 
 //THEMES - Upload image for add/edit theme
 router.post('/themeUpload', ensureAdmin, (req, res) => {
-    if (!fs.existsSync('./public/themeUploads/')){
+    if (!fs.existsSync('./public/themeUploads/')) {
         fs.mkdirSync('./public/themeUploads/');
     }
     themeImageUpload(req, res, (err) => {
         console.log(err)
         if (err) {
-            res.json({file: '/img/no-image.jpg', err: err});
+            res.json({ file: '/img/no-image.jpg', err: err });
         } else {
             if (req.file === undefined) {
-                res.json({file: '/img/no-image.jpg', err: err});
+                res.json({ file: '/img/no-image.jpg', err: err });
             } else {
-                res.json({file: `/themeUploads/${req.file.filename}`});
+                res.json({ file: `/themeUploads/${req.file.filename}` });
             }
         }
     });
@@ -378,24 +382,24 @@ router.post('/themeUpload', ensureAdmin, (req, res) => {
 
 //THEME - Delete Theme
 router.get('/deleteTheme/:id', ensureAdmin, (req, res) => {
-	Themes.findOne({
+    Themes.findOne({
         where: {
             id: req.params.id,
         }
     }).then((theme) => {
-        if (theme == null){
+        if (theme == null) {
             alertMessage(res, 'danger', 'Theme does not exist in database', 'fas fa-exclamation-circle', true);
             res.redirect('/admin/retrieveFurniture');
             return
         } else {
-            FurnitureToThemes.destroy({ where: {themeId: theme.id}})
-            Themes.destroy({ where: {id: theme.id}})
-            .then(theme => {
-                alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
-                res.redirect('/admin/retrieveFurniture');
-            })
+            FurnitureToThemes.destroy({ where: { themeId: theme.id } })
+            Themes.destroy({ where: { id: theme.id } })
+                .then(theme => {
+                    alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
+                    res.redirect('/admin/retrieveFurniture');
+                })
         }
-	});
+    });
 });
 
 //CATEGORY - Add Category
@@ -426,7 +430,7 @@ router.get('/editCategory/:id', ensureAdmin, (req, res) => {
         res.render('admin/editCategory', {
             category
         });
-    }).catch(err => console.log(err)); 
+    }).catch(err => console.log(err));
 });
 
 //CATEGORY - Edit Category PUT (save)
@@ -436,29 +440,29 @@ router.put('/saveEditCategory/:id', ensureAdmin, (req, res) => {
     let imageURL = req.body.imageURL;
 
     Categories.update({
-            category: categoryName,
-            categoryDescription,
-            categoryImageURL: imageURL
-        }, {
+        category: categoryName,
+        categoryDescription,
+        categoryImageURL: imageURL
+    }, {
         where: { id: req.params.id }
     })
 
     res.redirect('/admin/retrieveFurniture');
-}); 
+});
 
 //CATEGORIES - Upload image for add/edit category
 router.post('/categoryUpload', ensureAdmin, (req, res) => {
-    if (!fs.existsSync('./public/categoryUploads/')){
+    if (!fs.existsSync('./public/categoryUploads/')) {
         fs.mkdirSync('./public/categoryUploads/');
     }
     categoryImageUpload(req, res, (err) => {
         if (err) {
-            res.json({file: '/img/no-image.jpg', err: err});
+            res.json({ file: '/img/no-image.jpg', err: err });
         } else {
             if (req.file === undefined) {
-                res.json({file: '/img/no-image.jpg', err: err});
+                res.json({ file: '/img/no-image.jpg', err: err });
             } else {
-                res.json({file: `/categoryUploads/${req.file.filename}`});
+                res.json({ file: `/categoryUploads/${req.file.filename}` });
             }
         }
     });
@@ -467,24 +471,24 @@ router.post('/categoryUpload', ensureAdmin, (req, res) => {
 
 //Category - Delete Category
 router.get('/deleteCategory/:id', ensureAdmin, (req, res) => {
-	Categories.findOne({
+    Categories.findOne({
         where: {
             id: req.params.id,
         }
     }).then((category) => {
-        if (category== null){
+        if (category == null) {
             alertMessage(res, 'danger', 'Category does not exist in database', 'fas fa-exclamation-circle', true);
             res.redirect('/admin/retrieveFurniture');
             return
         } else {
-            FurnitureToCategories.destroy({ where: {categoryId: category.id}})
-            Categories.destroy({ where: {id: category.id}})
-            .then(category => {
-                alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
-                res.redirect('/admin/retrieveFurniture');
-            })
+            FurnitureToCategories.destroy({ where: { categoryId: category.id } })
+            Categories.destroy({ where: { id: category.id } })
+                .then(category => {
+                    alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
+                    res.redirect('/admin/retrieveFurniture');
+                })
         }
-	});
+    });
 });
 
 
@@ -494,13 +498,13 @@ router.get('/deleteCategory/:id', ensureAdmin, (req, res) => {
 //FEEDBACK - Answer feedback
 router.get('/answerFeedback/:id', ensureAuthenticated, (req, res) => {
     Feedback.findByPk(req.params.id)
-	.then((feedback) => {
-		id = req.params.id;
-        res.render('question/answer', {
-			feedback,
-			id
-        });
-    }).catch(err => console.log(err)); // To catch no video ID
+        .then((feedback) => {
+            id = req.params.id;
+            res.render('question/answer', {
+                feedback,
+                id
+            });
+        }).catch(err => console.log(err)); // To catch no video ID
 });
 
 
@@ -508,15 +512,15 @@ router.get('/answerFeedback/:id', ensureAuthenticated, (req, res) => {
 //TEST
 //ensure admin test
 router.get('/ensureAdmin', ensureAdmin, (req, res) => {
-	alertMessage(res, 'success', 'Ensure Admin works!', 'fas fa-exclamation-circle', true);
-	res.redirect('/')
+    alertMessage(res, 'success', 'Ensure Admin works!', 'fas fa-exclamation-circle', true);
+    res.redirect('/')
 })
 
 //do eventually
 router.get('/passwordAgeAdminreset', (req, res) => {
-	const title = 'BRANDNAME - Admin - ??';
-	res.render('admin/showUsers', {title: title}) 
-}); 
+    const title = 'BRANDNAME - Admin - ??';
+    res.render('admin/showUsers', { title: title })
+});
 
 
 router.get('/discount', ensureAdmin, (req, res) => {
@@ -567,7 +571,7 @@ router.get('/discount/edit/:id', ensureAdmin, (req, res) => {
         res.render('admin/EditDiscountC', {
             code
         });
-    }).catch(err => console.log(err)); 
+    }).catch(err => console.log(err));
 });
 
 router.post('/discount/edit/:id', ensureAdmin, (req, res) => {
@@ -600,7 +604,7 @@ router.post('/discount/edit/:id', ensureAdmin, (req, res) => {
 })
 
 router.get('/discount/delete/:id', ensureAdmin, (req, res) => {
-	discountCode.findOne({
+    discountCode.findOne({
         where: {
             id: req.params.id
         }
@@ -609,13 +613,66 @@ router.get('/discount/delete/:id', ensureAdmin, (req, res) => {
             where: {
                 id: code.id
             }
-        }).then((address2) =>{ 
+        }).then((address2) => {
             alertMessage(res, 'success', 'Successful delete', 'fas fa-exclamation-circle', true);
             res.redirect('/admin/discount');
         })
 
-	});
+    });
 });
 
+router.get('/retrieveorders', ensureAdmin, (req, res) => {
+    Order.findAll()
+        .then((orders) => {
+            const title = 'Furnvio - My Orders';
+            res.render('admin/RetrieveOrders', {
+                orders,
+                title: title
+            });
+        })
+        .catch(err => console.log(err));
+});
 
+router.get('/retrieveorders/:id', ensureAdmin, (req, res) => {
+    Order.findOne({
+        where: { id: req.params.id }
+    })
+        .then((order) => {
+            const title = 'Furnvio - My Orders Info';
+            var totalTotalPrice = 0.00
+            let object = order["order"]
+            for (i in object) {
+                orderObject = object[i];
+                totalPrice = parseFloat(orderObject['furniture.cost']) * orderObject.quantity;
+                object[i]['totalPrice'] = totalPrice;
+                totalTotalPrice += totalPrice;
+            }
+            res.render('admin/RetrieveOrdersInfo', {
+                orders: object,
+                title: title,
+                totalprice: totalTotalPrice
+            });
+        })
+        .catch(err => console.log(err));
+});
+
+router.post('/updateorders', (req, res) => {
+	var data = req.body;
+	for (dataId in data) {
+        console.log(data)
+
+        Order.update({
+        	orderStatus: data[dataId]
+        }, {
+        	where: {
+        		id: dataId
+        	}
+        })
+    };
+    alertMessage(res, 'success', 'Successfully updated order status', 'fas faexclamation-circle', true);
+	res.status(200).json({
+        message: "Hello"
+        
+	})
+});
 module.exports = router;
