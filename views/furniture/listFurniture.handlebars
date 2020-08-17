@@ -37,8 +37,8 @@
                     <option value="recent" {{#ifCond sort "==" "recent"}}selected{{/ifCond}}>Recent</option>
                     <option value="cost-ASC" {{#ifCond sort "==" "cost-ASC"}}selected{{/ifCond}}>Price - Ascending</option>
                     <option value="cost-DESC" {{#ifCond sort "==" "cost-DESC"}}selected{{/ifCond}}>Price - Descending</option>
-                    <option value="rating-DESC" {{#ifCond sort "==" "rating-DESC"}}selected{{/ifCond}}>Rating - Descending</option>
-                    <option value="rating-ASC" {{#ifCond sort "==" "rating-ASC"}}selected{{/ifCond}}>Rating - Ascending</option>
+                    <option value="actualRating-DESC" {{#ifCond sort "==" "actualRating-DESC"}}selected{{/ifCond}}>Rating - Descending</option>
+                    <option value="actualRating-ASC" {{#ifCond sort "==" "actualRating-ASC"}}selected{{/ifCond}}>Rating - Ascending</option>
                 </select>
             </div>
 
@@ -63,7 +63,51 @@
                             </div>
                             <div class="card-body">
                                 <p class="font-weight-bold">{{furnitureName}}</p>
-
+                                <div class = "md-2 align-text-bottom">
+                                    {{#ifCond rating '==' 0}}
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 1}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 2}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star "></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 3}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 4}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 5}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    {{/ifCond}}
+                                </div>
+                                ({{actualrating}} out of 5)
                                 {{!-- Modal Section --}}
                                 <div class="modal fade" id="modal{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-xl" role="document">

@@ -23,9 +23,19 @@ router.get('/', (req, res) => {
 		order: [['id', 'DESC']],
 		limit: 6
 	}).then(furnitureResult => {
+		Themes.findAll({
+			order: [sequelize.fn('RAND', '')],
+			limit: 3
+		}).then(themes => {
+			Categories.findAll({
+				order: [sequelize.fn('RAND', '')],
+				limit: 3
+			}).then(categories => {
+				const title = 'BRANDNAME';
+				res.render('home', { title: title, newest: furnitureResult, themes, categories })
+			})
+		})
 
-		const title = 'BRANDNAME';
-		res.render('home', { title: title, newest: furnitureResult })
 	});
 });
 router.get('/logout', (req, res) => {

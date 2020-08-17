@@ -27,6 +27,14 @@ a {
   color: #d4af37
 }
 
+.lazyText{
+  color: white
+}
+.lazyText:hover{
+  color: white
+}
+
+
 #overlay {
   display:none;
   position: absolute;    

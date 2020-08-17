@@ -67,7 +67,7 @@ router.get('/search', (req, res) => {
 
         //Sort Order
         var sortOrder = query['order'] || "recent"
-        var sortOrderArray = ["recent", "cost-ASC", "cost-DESC", "rating-DESC", "rating-ASC"]
+        var sortOrderArray = ["recent", "cost-ASC", "cost-DESC", "actualRating-DESC", "actualRating-ASC"]
         var sortRES = sortOrder
         if (!(sortOrderArray.includes(sortOrder))) {
             sortOrder = "id-DESC"
@@ -273,7 +273,7 @@ router.get('/item/:id', (req, res) => {
             }).then(review=> {
                 let reviewtotal = 0;
                 let actualtotal = 0;
-                if (reviewtotal.length != 0) {
+                if (review.length != 0) {
                     review.forEach(obj => {
                         reviewtotal += obj.dataValues.rating;
                         obj.dataValues.time = moment(obj.dataValues.time).format('Do MMMM YYYY h:mm A');
@@ -297,7 +297,7 @@ router.get('/item/:id', (req, res) => {
 });
 
 
-router.post('/item/reviewSubmit/:furnitureId', (req, res) => {
+router.post('/item/reviewSubmit/:furnitureId', ensureAuthenticated, (req, res) => {
     let date_ob = new Date();
     let { star, reviewText, imageURL } = req.body;
     let furnitureId = req.params.furnitureId;
@@ -315,12 +315,17 @@ router.post('/item/reviewSubmit/:furnitureId', (req, res) => {
             where: { furnitureId: req.params.furnitureId }
         }).then(review=> {
             let reviewtotal = 0;
-            review.forEach(obj => {
-                reviewtotal += obj.dataValues.rating;
-            });
-            reviewtotal = Math.round(reviewtotal/review.length * 10) / 10;
+            let actualtotal = 0;
+            if (review.length != 0) {
+                review.forEach(obj => {
+                    reviewtotal += obj.dataValues.rating;
+                });
+                actualtotal = Math.round(reviewtotal/review.length * 10)/10
+                reviewtotal = Math.floor(reviewtotal/review.length);
+            }
             Furniture.update({
-                rating: reviewtotal
+                rating: reviewtotal,
+                actualrating: actualtotal,
             }, {
                 where:{ id:req.params.furnitureId },
                 plain: true
