@@ -522,7 +522,6 @@ router.get('/passwordAgeAdminreset', (req, res) => {
 router.get('/discount', ensureAdmin, (req, res) => {
     discountCode.findAll({})
     .then((discounts) => {
-        console.log(discounts)
         res.render('admin/discountC', {
             discounts: discounts
         });
@@ -538,9 +537,10 @@ router.post('/AddDiscount', ensureAdmin, (req, res) => {
     let discountcode = req.body.DiscountC;
     let perDis = req.body.perDis || 0;
     let subDis = req.body.subDis || 0;
-    discountCode.findOne({where:discountcode})
+    discountCode.findOne({where:{discountcode}})
     .then((code) => {
         if(code){
+            alertMessage(res, 'danger', 'Discount Code already exist', 'fas fa-exclamation-circle', true);
             res.redirect('/admin/AddDiscount')
         } else {
             discountCode.create({
@@ -573,10 +573,13 @@ router.get('/discount/edit/:id', ensureAdmin, (req, res) => {
 router.post('/discount/edit/:id', ensureAdmin, (req, res) => {
     let discountcode = req.body.DiscountC;
     let perDis = req.body.perDis;
-    let subDis = req.body.subDis;discountCode.findOne({where:discountcode})
+    let subDis = req.body.subDis;
+    
     let id = req.params.id
+    discountCode.findOne({where:{discountcode}})
     .then((code) => {
-        if(code){
+        if(code && code.id != id){
+            alertMessage(res, 'danger', 'Discount Code already exist', 'fas fa-exclamation-circle', true);
             res.redirect('/admin/discount/edit/'+id)
         } else {   
             discountCode.update({
