@@ -1,0 +1,67 @@
+{{!-- <style>
+    td {
+        max-width: 200px;
+    }
+</style>
+<h1 class="display-4">Question List</h1>
+<div>
+    <table class="table table-striped" id="MyTable">
+        <thead>
+            <tr>
+                <th>Order Id</th>
+                <th>Total Price</th>
+                <th>Order Status</th>
+                <th>Order</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr>
+                <td>{{ id }}</td>
+                <td>S${{numberFormat totalPrice}}</td>
+                <td>{{ orderStatus }}</td>
+                <td><a href="/user/myorders/{{id}}">Click Here For Order Info</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div> --}}
+
+<h1 class="display-4">Order Information</h1>
+
+<i class="fas fa-arrow-left"><a class = "text-dark" href="/admin/retrieveorders">Back</a></i>
+
+{{#each orders}}
+<div>
+    <div class="d-flex w-100" style="padding: 0px">
+        <div class="col-sm-8">
+            <hr>
+        </div>
+        <div class="col-sm-4 light-blue lighten-5">
+            <br>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <div class="d-flex col-sm-8">
+            <div class="col-12 col-sm-12 col-md-3 text-center">
+                <img class="img-responsive" src="{{'furniture.imageURL'}}" alt="prewiew" width="120" height="80">
+            </div>
+
+            <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-5 pull-right indigo-text">
+                <h5 class="product-name mx-auto"><strong>{{'furniture.furnitureName'}}</strong></h4>
+            </div>
+        </div>
+
+        <div class="light-blue lighten-5 indigo-text card-body" style="padding: 0px;">
+            <div class="text-sm-center text-md-right d-flex justify-content-center" style="height: 80px; padding:10px;">
+                <p>S${{'furniture.cost'}} &nbsp; x {{quantity}} = &nbsp; + S${{numberFormat totalPrice}}</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{/each}}
+<div class="border-bottom" style="margin: 5px">
+    <b class="pull-right">Total price: S${{numberFormat totalprice}}</b>
+</div>

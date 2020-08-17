@@ -142,7 +142,8 @@ router.post('/stripe', (req, res) => {
                                 addressId,
                                 paymentId,
                                 totalPrice,
-                                order: cart
+                                order: cart,
+                                orderStatus: "Pending"
                             }),
                                 tempOrder.destroy({where: {userId: req.user.id}}),
                                 Cart.destroy({where: {userId: req.user.id}}),
@@ -152,7 +153,7 @@ router.post('/stripe', (req, res) => {
                     })
                 });
         });
-                                orderStatus: "Pending"
+                                
 });
 
 
@@ -211,7 +212,8 @@ router.get('/success/:id', (req, res) => {
                                     addressId,
                                     paymentId,
                                     totalPrice,
-                                    order: cart
+                                    order: cart,
+                                    orderStatus: "pending"
                                 })
                                 tempOrder.destroy({
                                     where: {
@@ -225,17 +227,17 @@ router.get('/success/:id', (req, res) => {
                                 })
                                 sendPurchaseEmail(email, totalPrice)
                                 alertMessage(res, 'info', 'Payment has been processed. Thank you for purchasing', 'fas fa-exclamation-circle', true);
-                                res.redirect('/');
+                                res.redirect('/user/myorders');
                             })
                         }
                     });
                 } else {
                     alertMessage(res, 'info', 'Payment has been processed. Thank you for purchasing', 'fas fa-exclamation-circle', true);
-                    res.redirect('/');
+                    res.redirect('/user/myorders');
                 }
             })
         });
-                                orderStatus: "pending"
+                                
 });
 
 function sendPurchaseEmail(email, price) {

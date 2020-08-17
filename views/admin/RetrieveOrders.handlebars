@@ -1,0 +1,68 @@
+<style>
+    td {
+        max-width: 200px;
+    }
+</style>
+<h1 class="display-4">Order List</h1>
+<div>
+    <table class="table table-striped" id="MyTable">
+        <thead>
+            <tr>
+                <th>Order Id</th>
+                <th>User Id</th>
+                <th>Payment Id</th>
+                <th>Total Price</th>
+                <th>Change Order Status</th>
+                <th>Order</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr>
+                <td>{{ id }}</td>
+                <td>{{ userId }}</td>
+                <td>{{ paymentId }}</td>
+                <td>S${{numberFormat totalPrice}}</td>
+                <td><input class="orderstatus" id="{{id}}" value="{{ orderStatus }}" type="text"></td>
+                {{!-- <td>
+                    <select class="orderstatus" id="{{id}}" value="{{ orderStatus }}">
+                        <option value="Pending">Pending</option>
+                        <option value="In Warehouse">In Warehouse</option>
+                        <option value="On route">On route</option>
+                        <option value="Delivered">Delivered</option>
+                    </select>
+                </td> --}}
+
+                <td><a href="/admin/retrieveorders/{{id}}">Click Here For Order Info</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <a onclick="updateorders()" class="btn p-3 mb-2 bg-success text-white pull-right">Update Order Status</a>
+</div>
+
+<script>
+    function updateorders() {
+        var items = document.getElementsByClassName('orderstatus')
+        var data = {}
+        for (information of items) {
+            data[parseInt(information.id)] = information.value
+        }
+        console.log(data)
+        fetch('http://localhost:5000/admin/updateorders', {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+</script>
