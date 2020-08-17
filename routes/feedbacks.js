@@ -113,6 +113,7 @@ router.put('/saveAnsweredFeedback/:id', ensureAuthenticated, (req, res) => {
 
 }); 
 
+
 //FEEDBACK - Delete Feedback 
 router.get('/deleteFeedback/:id', ensureAuthenticated, (req, res) => {
 	Feedback.findOne({
@@ -133,7 +134,7 @@ router.get('/deleteFeedback/:id', ensureAuthenticated, (req, res) => {
             }
         }).then((feedbacks) =>{ 
             alertMessage(res, 'success', 'Successfuly Deleted', 'fas fa-exclamation-circle', true);
-            res.redirect('/rfeedback');
+            res.redirect('../rfeedback');
 		})
 	}
 	});
@@ -157,5 +158,22 @@ router.get('/rfeedback', ensureAuthenticated, (req, res) => {
 	})
 	.catch(err => console.log(err));
 });
+
+router.get('/unfeatureFeedback/:id', ensureAdmin, (req, res) => {
+	let id = req.params.id;
+	let featured = 0;
+	Feedback.update({
+		featured: featured
+    }, {
+        where: {
+            id: id
+        }
+        }).then(() => {
+			alertMessage(res, 'success', 'Question Unfeatured!', 'fas fa-exclamation-circle', true);
+            res.redirect('../adminfeaturedfeedback');
+        }).catch(err => console.log(err));
+
+}); 
+
 
 module.exports = router;

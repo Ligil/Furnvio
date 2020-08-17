@@ -1,0 +1,237 @@
+<div class="card mt-2 py-4">
+    <div class="card-body supercenter d-flex flex-column" style="text-align: center">
+        <h1 class="card-title m-0">Welcome to</h1>
+        <div class="fade-in supercenter w-100">
+            <img src="/img/FURNVIOLOGO.png">
+        </div>
+        {{#if user}}
+            <p>Hello {{user.name}}!</p>
+        {{/if}}
+    </div>
+</div>
+
+
+<div class="card mt-4 py-4">
+    <div class="card-body">
+        <h3 class="border-bottom">Newest Additions!</h3>
+        {{#if newest}}
+        <div class="d-flex flex-wrap">
+
+            {{#each newest}}
+            
+                <div class="p-2 col-sm-6 col-md-4 col-lg-2">
+                    <div class="card" style="height:100%">
+                        <div class="position-relative furnitureSearchImage supercenter">
+                            <btn class="furnitureDetailsButton" data-toggle="modal" data-target="#modal{{id}}">Quick View</btn>
+                            <a href="/furniture/item/{{id}}" >
+                                <img id="image" src="{{imageURL}}" alt="" class="img-fluid mt-1" style="width:100%; max-height: 600px;">
+                            </a>
+                        </div>
+                        <div class="card-body h-100">
+                            <p class="font-weight-bold" style="font-size: 12px">{{furnitureName}}</p>
+                            <div class = "md-2 text-left">
+                                    {{#ifCond rating '==' 0}}
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 1}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 2}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star "></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 3}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 4}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                    {{/ifCond}}
+                                    {{#ifCond rating '==' 5}}
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    {{/ifCond}}
+                                </div>
+                                ({{actualrating}} out of 5)
+                            {{!-- Modal Section --}}
+                            <div class="modal fade" id="modal{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            
+                                            <div class="d-flex flex-wrap h-100">
+
+                                                <div class="border col-sm-12 col-md-6 supercenter">
+                                                    <img src="{{imageURL}}" alt="Image unavailable">
+                                                </div>
+
+                                                <div class="border col-sm-12 col-md-6 p-4 d-flex flex-column h-100">
+                                                    <h5 class="font-weight-bold border-bottom pb-2 mb-4">{{furnitureName}}</h5>
+
+                                                    <div class="overflow-auto">
+                                                        <div class="d-flex border-bottom pb-1 mb-4">
+                                                            <div class="col-5">
+                                                                <p class="font-italic">ID: <span class="text-info">{{id}}</span></p>
+                                                            </div class="col-5">
+                                                            <div>
+                                                                <p class="font-italic">Cost: <span class="text-info">${{cost}}</span></p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="container border-bottom pb-1 mb-4">
+                                                            <p class="font-italic">Dimensions: (L x W x H): </p>
+                                                            <p class="text-info">{{lengthmm}}mm x {{widthmm}}mm x {{heightmm}}mm</p>
+                                                        </div>
+                                                        
+                                                        
+                                                        <div>
+                                                            <p class="font-italic my-1 col-12">Themes</p>
+                                                            <div class="d-flex container border-bottom pb-1 mb-4">
+                                                                {{#each themes}}
+                                                                    <a href="/furniture/themes/{{this.dataValues.theme}}" class="btn btn-sm" id="{{this}}">
+                                                                        {{this.dataValues.theme}}
+                                                                    </a>
+                                                                {{/each}}
+                                                            </div>
+                                                        </div>				
+
+                                                        <div>
+                                                            <p class="font-italic col-12">Categories</p>
+                                                            <div class="d-flex container border-bottom pb-1 mb-4">
+                                                                {{#each categories}}
+                                                                    <a href="/furniture/categories/{{this.dataValues.category}}" class="btn btn-sm" id="{{this}}">
+                                                                        {{this.dataValues.category}}
+                                                                    </a>
+                                                                {{/each}}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-4">
+                                                            <p class="font-italic col-12">Description</p>
+                                                            <div class="border container rounded p-2">
+                                                                {{description}}
+                                                            </div>
+                                                        </div>
+
+                                                        {{!-- Add to Cart button --}}
+                                                        <a href="/addToCart/{{id}}" class="btn furnitureCartButton" style="padding-top: 5px; padding-bottom: 5px;"><i class="fas fa-plus"></i> Add To Cart</a>
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {{/each}}
+
+        </div>
+        {{else}}
+        <h2 class="background"><span>No New Furniture</span></h2>
+        {{/if}}
+        <div class="container">
+            <h3 class="detailText my-auto">Newest ---> Latest</h3>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-wrap mt-2">
+    {{!-- Themes --}}
+    <div class="p-2 col-sm-12 col-md-6">
+        <div class="card card-body ">
+
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    {{#each themes}}
+                    <div class="carousel-item {{#ifCond @index '==' 0}}active{{/ifCond}}">
+                        <img class="d-block w-100" src="{{this.themeImageURL}}" alt="{{this.theme}} slide" style="heigth:inherit;">
+                        <div class="carousel-caption d-none d-md-block p-2 mb-4" style="background-color:#a1a1a1; opacity: 0.98">
+                            <h5>{{this.theme}}</h5>
+                            <p class="mb-0">{{this.themeDescription}}</p>
+                            <a class="mb-4 underlineHover lazyText" href="/furniture/themes/{{this.theme}}">Click here to view</a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    {{!-- Categories --}}
+    <div class="p-2 col-sm-12 col-md-6">
+        <div class="card card-body">
+
+            <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators2" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators2" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators2" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    {{#each categories}}
+                    
+                    <div class="carousel-item {{#ifCond @index '==' 0}}active{{/ifCond}}">
+                        <img class="d-block w-100" src="{{this.categoryImageURL}}" alt="{{this.category}} slide" style="vertical-align: middle;">
+                        <div class="carousel-caption d-none d-md-block p-2 mb-4" style="background-color:#a1a1a1; opacity: 0.98">
+                            <h5>{{this.category}}</h5>
+                            <p class="mb-0">{{this.categoryDescription}}</p>    
+                            <a class="mb-4 underlineHover lazyText" href="/furniture/categories/{{this.category}}">Click here to view</a>
+                            <br>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
