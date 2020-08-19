@@ -223,7 +223,7 @@ $('#searchInput').on('keyup', function(){
                     productsDiv.appendChild(eachItemLink);
 
                     //counter at bottom
-                    searchCounter.value = "See all (" + data['furnitureCount'] + ") results matching '" + document.getElementById("searchInput").value +"'"
+                    searchCounter.innerText = "See all (" + data['furnitureCount'] + ") results matching '" + document.getElementById("searchInput").value +"'"
                 })
 
             } else {  
@@ -232,7 +232,7 @@ $('#searchInput').on('keyup', function(){
                 eachItem.innerHTML = "<strong>No items found</strong>";
                 productsDiv.appendChild(eachItem);
 
-                searchCounter.textContent = "No Results"
+                searchCounter.innerText = "No Results"
             }
 
         })

@@ -13,11 +13,11 @@
                     <div class="row form-group mb-4">
                         <div class="col-sm-4">
                             <label class="font-italic" for="subDis">For subtracting based discount</label>
-                            <input type="number" class="form-control" id="subDis" name="subDis" rows="7" placeholder="e.g.100 = $100 off">
+                            <input type="number" min='0' step="0.01" class="form-control" id="subDis" name="subDis" rows="7" placeholder="e.g.100 = $100 off">
                         </div>
                         <div class="col-sm-4">
                             <label class="font-italic" for="perDis">For percentage based discount</label>
-                            <input type="number" class="form-control" id="perDis" name="perDis" rows="7" placeholder="e.g.0.90 = 10% off">
+                            <input type="number" min='0' step="0.01" class="form-control" id="perDis" name="perDis" rows="7" placeholder="e.g.0.90 = 10% off">
                         </div>
                         <div class="col-sm-1"></div>
                         <div class="col-sm-2 mt-3 ">

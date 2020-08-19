@@ -414,7 +414,7 @@
                         productsDiv.appendChild(eachItemLink);
 
                         //counter at bottom
-                        searchCounter.textContent = "See all (" + data['furnitureCount'] + ") results matching '" + document.getElementById("searchInput").value +"'"
+                        searchCounter.innerText = "See all (" + data['furnitureCount'] + ") results matching '" + document.getElementById("searchInput").value +"'"
                     })
 
                 } else {  
@@ -423,7 +423,7 @@
                     eachItem.innerHTML = "<strong>No items found</strong>";
                     productsDiv.appendChild(eachItem);
 
-                    searchCounter.value = "No Results"
+                    searchCounter.innerText = "No Results"
                 }
 
             })

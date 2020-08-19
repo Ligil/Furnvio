@@ -271,7 +271,7 @@ router.get('/checkout', ensureAuthenticated, (req, res) => {
         raw: true
     })
         .then((addresses) => {
-            tempOrder.findOne({wher :{userId: req.user.id}})
+            tempOrder.findOne({where :{userId: req.user.id}})
             .then((temp) => {
                 res.render('checkout', {
                     addresses: addresses,
@@ -313,14 +313,14 @@ router.post('/checkDis', (req, res) => {
                             if(discount == null){
                                 res.json({response:2})
                             } else {
-                                if(discount['perDis'] != null || discount['perDis'] != 0){
+                                if(discount['perDis'] != null && discount['perDis'] != 0){
                                     let price = temp.totalprice
                                     price = price * discount['perDis']
                                     tempOrder.update({totalprice: price}, {where: {userId: req.user.id}})
                                     alertMessage(res, 'success', 'Successfully used discount code', 'fas fa-exclamation-circle', true);
                                     res.json({response:1})
                                 }
-                                if(discount['subDis'] != null || discount['subDis'] != 0){
+                                if(discount['subDis'] != null && discount['subDis'] != 0){
                                     let price = temp.totalprice
                                     price = price - discount['subDis']
                                     tempOrder.update({totalprice: price}, {where: {userId: req.user.id}})
